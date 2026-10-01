@@ -48,19 +48,23 @@ function renderSite(site: SiteSection): string {
     "content_keywords",
     "geo_ai",
     "entity_brand",
+    "authority",
     "conversion",
+    "measurement",
     "cross_site",
     "ops_checklist",
-  ] as const;
+  ];
   const labels: Record<string, string> = {
     pre_launch: "A. Pre-launch / first actions",
     technical: "B. Technical",
     content_keywords: "C. Content and keyword fit",
     geo_ai: "D. GEO: how AI search sees the brand",
     entity_brand: "E. Entity and brand",
-    conversion: "F. Conversion",
-    cross_site: "G. Cross-site",
-    ops_checklist: "H. Ops checklist",
+    authority: "F. Authority off the site",
+    conversion: "G. Conversion",
+    measurement: "H. Measurement",
+    cross_site: "I. Cross-site",
+    ops_checklist: "J. Ops",
   };
 
   const byCat = new Map<string, Finding[]>();

@@ -1,4 +1,5 @@
 title: "Demo audit — example.com"
+depth: scan
 notes: "Sanity-check config against a public demo host. Replace with a real client config."
 sites:
   - id: example

@@ -2,6 +2,8 @@
 
 Use this whether you run the CLI or audit by hand. Mark each row with evidence (URL, screenshot, SERP date).
 
+Depth: `scan` covers section A and the obvious rows in B and F. `standard` adds C, D, and the conversion rows. `deep` adds measurement, field vitals, redirect chains, orphans, competitors, Wikidata, and the four-engine AI probe.
+
 ## 0. Scope
 
 - [ ] Production URL(s) and staging URL(s)

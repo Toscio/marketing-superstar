@@ -16,6 +16,8 @@ export const PrioritySchema = z.enum([
 
 export const PriorityLevelSchema = z.enum(["P0", "P1", "P2"]);
 
+export const AuditDepthSchema = z.enum(["scan", "standard", "deep"]);
+
 export const FindingCategorySchema = z.enum([
   "pre_launch",
   "technical",
@@ -25,6 +27,8 @@ export const FindingCategorySchema = z.enum([
   "conversion",
   "cross_site",
   "ops_checklist",
+  "measurement",
+  "authority",
 ]);
 
 export const FindingSchema = z.object({
@@ -90,7 +94,10 @@ export const TimelineRowSchema = z.object({
 });
 
 export const AuditReportSchema = z.object({
-  schemaVersion: z.literal("1.0.0"),
+  schemaVersion: z.literal("1.1.0"),
+  depth: AuditDepthSchema,
+  /** Rule packs that ran: core, standard, deep */
+  coverage: z.array(z.string()).default([]),
   title: z.string(),
   eyebrow: z.string(),
   lede: z.string(),
@@ -129,10 +136,52 @@ export const SiteConfigSchema = z.object({
   relatedSiteIds: z.array(z.string()).default([]),
 });
 
+export const SearchQuerySchema = z.object({
+  query: z.string(),
+  clicks: z.number().optional(),
+  impressions: z.number().optional(),
+  position: z.number().optional(),
+});
+
+export const LandingPageSchema = z.object({
+  url: z.string(),
+  sessions: z.number().optional(),
+  conversions: z.number().optional(),
+});
+
+export const GeoAnswerSchema = z.object({
+  siteId: z.string().optional(),
+  engine: z.enum(["chatgpt", "perplexity", "ai_overview", "copilot", "other"]),
+  question: z.string(),
+  answer: z.string(),
+  citedUrls: z.array(z.string()).default([]),
+  liftedSentence: z.string().optional(),
+  capturedAt: z.string().optional(),
+});
+
+export const MeasurementSchema = z.object({
+  /** Someone can open Search Console for this property. */
+  searchConsole: z.boolean().default(false),
+  /** Someone can open analytics (GA4 or equivalent). */
+  analytics: z.boolean().default(false),
+  /** Person who will act on the findings. */
+  owner: z.string().optional(),
+  /** Paste a small Search Console query export. Volumes stay out of the crawl. */
+  queries: z.array(SearchQuerySchema).default([]),
+  landingPages: z.array(LandingPageSchema).default([]),
+  /** Paths seen in a bot log, when one is available. */
+  botPaths: z.array(z.string()).default([]),
+});
+
 export const AuditConfigSchema = z.object({
   title: z.string(),
   client: z.string().optional(),
+  /** How far to go. scan = quick, standard = typical engagement, deep = full review. */
+  depth: AuditDepthSchema.default("standard"),
   sites: z.array(SiteConfigSchema).min(1),
+  measurement: MeasurementSchema.default({}),
+  /** Recorded AI-search answers. Deep audits compare citations to the crawl. */
+  geoAnswers: z.array(GeoAnswerSchema).default([]),
   collectors: z
     .object({
       crawl: z.boolean().default(true),
@@ -154,6 +203,9 @@ export type TimelineRow = z.infer<typeof TimelineRowSchema>;
 export type AuditReport = z.infer<typeof AuditReportSchema>;
 export type SiteConfig = z.infer<typeof SiteConfigSchema>;
 export type AuditConfig = z.infer<typeof AuditConfigSchema>;
+export type AuditDepth = z.infer<typeof AuditDepthSchema>;
+export type Measurement = z.infer<typeof MeasurementSchema>;
+export type GeoAnswer = z.infer<typeof GeoAnswerSchema>;
 
 export const LEVEL_ORDER: Record<PriorityLevel, number> = {
   P0: 0,

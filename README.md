@@ -9,7 +9,7 @@ Each audit run writes three files:
 | File | Audience |
 |------|----------|
 | `report.html` | Humans — same reading layout as the reference review (What / Why / Fix / Effort + priority tags) |
-| `report.json` | Machines — `schemaVersion: 1.0.0` (see `schemas/audit-report.schema.json`) |
+| `report.json` | Machines — `schemaVersion: 1.1.0` (see `schemas/audit-report.schema.json`) |
 | `AGENT_QUEUE.md` | Implementing agents — P0→P2 ordered list with `agentAction` hints and artifacts |
 
 ## Quick start
@@ -22,6 +22,18 @@ npm run example
 ```
 
 That writes `examples/report-shape/` (`report.html`, `report.json`, `AGENT_QUEUE.md`) without fetching any URL.
+
+## Depth
+
+Set `depth` in the config, or pass `--depth` on the CLI.
+
+| Depth | When | What it covers |
+|-------|------|----------------|
+| `scan` | A quick look | Indexation, titles, headings, sitemap, `llms.txt` presence, obvious conversion breaks. About 8 pages. |
+| `standard` | A typical engagement | Scan, plus duplicates, thin pages, intent, article trust, internal links, security headers, canonical mismatches, homepage action and proof. About 40 pages. |
+| `deep` | A full review | Standard, plus redirect chains, orphans, click depth, sitemap/noindex conflicts, competitor headings, Wikidata, a search baseline, bot paths, and a four-engine AI probe to repeat later. About 120 pages. |
+
+Paste Search Console rows into `measurement.queries` and recorded AI answers into `geoAnswers`. Field Core Web Vitals run on deep when `CRUX_API_KEY` is set.
 
 When you are asked to audit a real site, copy `configs/demo-site.yaml` and run:
 

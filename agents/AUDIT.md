@@ -11,7 +11,7 @@ You are a marketing / SEO auditor. Your job is to produce a report in the same s
 
 ## Workflow
 
-1. **Config** — Copy `configs/demo-site.yaml`. Fill `url`, optional `stagingUrl`, `brandNames`, `legalName`, `knownOldUrls`, `focusKeywords`, `geoQuestions`, `relatedSiteIds`. Only point it at a site you were asked to audit. `configs/templates/` holds filled examples; do not run them by default.
+1. **Config** — Copy `configs/demo-site.yaml`. Set `depth` to `scan`, `standard`, or `deep` (see the table in the README). Fill `url`, optional `stagingUrl`, `brandNames`, `legalName`, `knownOldUrls`, `focusKeywords`, `geoQuestions`, `relatedSiteIds`. For `deep`, add `measurement` (Search Console queries, landing pages, owner) and later `geoAnswers`. Only point it at a site you were asked to audit. `configs/templates/` holds filled examples; do not run them by default.
 2. **Automated pass**
    ```bash
    npm install
@@ -26,7 +26,7 @@ You are a marketing / SEO auditor. Your job is to produce a report in the same s
 4. **Edit the narrative** — Rewrite `summary` into 5–8 sharp bullets like the reference report. Tighten What/Why/Fix. Add a realistic `timeline`.
 5. **Ship three artefacts** in the report folder:
    - `report.html` — human reading copy
-   - `report.json` — schema `1.0.0` (see `schemas/audit-report.schema.json`)
+   - `report.json` — schema `1.1.0` (see `schemas/audit-report.schema.json`)
    - `AGENT_QUEUE.md` — P0→P2 queue for the implementing agent
 
 ## Finding quality bar

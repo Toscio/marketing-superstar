@@ -1,5 +1,6 @@
 import type { CrawlResult, PageSnapshot } from "./crawl.js";
-import type { Finding, SiteConfig, Stat } from "../types.js";
+import type { AuditDepth, Finding, GeoAnswer, Measurement, SiteConfig, Stat } from "../types.js";
+import { extraFindings } from "./depth-rules.js";
 
 function jsonLdTypes(nodes: unknown[]): string[] {
   const types = new Set<string>();
@@ -44,7 +45,12 @@ export type AnalysisBundle = {
   appendix: Array<{ title: string; kind: "pre" | "markdown" | "json"; content: string }>;
 };
 
-export function analyzeSite(site: SiteConfig, crawl: CrawlResult): AnalysisBundle {
+export function analyzeSite(
+  site: SiteConfig,
+  crawl: CrawlResult,
+  ctx: { depth?: AuditDepth; measurement?: Measurement; geoAnswers?: GeoAnswer[] } = {},
+): AnalysisBundle {
+  const depth = ctx.depth ?? "standard";
   const findings: Finding[] = [];
   const alreadyDoneWell: string[] = [];
   const appendix: AnalysisBundle["appendix"] = [];
@@ -324,7 +330,7 @@ export function analyzeSite(site: SiteConfig, crawl: CrawlResult): AnalysisBundl
     alreadyDoneWell.push(`Structured data includes organisation-like types: ${types.filter((t) => ["Organization", "ProfessionalService", "LocalBusiness"].includes(t)).join(", ") || types.slice(0, 5).join(", ")}.`);
     const homeLd = home?.jsonLd ?? [];
     const blob = JSON.stringify(homeLd);
-    if (!/"sameAs"\s*:/.test(blob)) {
+    if (depth !== "scan" && !/"sameAs"\s*:/.test(blob)) {
       findings.push({
         id: `${site.id}-schema-sameas`,
         priority: "IMPORTANT",
@@ -372,8 +378,8 @@ export function analyzeSite(site: SiteConfig, crawl: CrawlResult): AnalysisBundl
     }
   }
 
-  // --- OG image ---
-  if (home && (!home.ogImage || home.twitterCard === "summary")) {
+  // --- OG image (standard and deep) ---
+  if (depth !== "scan" && home && (!home.ogImage || home.twitterCard === "summary")) {
     findings.push({
       id: `${site.id}-og-image`,
       priority: "NICE_TO_HAVE",
@@ -414,7 +420,7 @@ export function analyzeSite(site: SiteConfig, crawl: CrawlResult): AnalysisBundl
   }
 
   // --- Focus keywords context finding ---
-  if (site.focusKeywords.length) {
+  if (depth !== "scan" && site.focusKeywords.length) {
     findings.push({
       id: `${site.id}-keyword-context`,
       priority: "CONTEXT",
@@ -435,33 +441,8 @@ export function analyzeSite(site: SiteConfig, crawl: CrawlResult): AnalysisBundl
     });
   }
 
-  // --- GEO questions ---
-  if (site.geoQuestions.length) {
-    findings.push({
-      id: `${site.id}-geo-checks`,
-      priority: "CHECK",
-      level: "P1",
-      category: "geo_ai",
-      title: "How AI search sees the brand (manual / API pass)",
-      effort: "30–60 min",
-      what: "Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.",
-      why: "Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.",
-      fix: "Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.",
-      evidence: site.geoQuestions,
-      relatedUrls: [],
-      artifacts: [
-        {
-          name: "geo-questions.md",
-          kind: "checklist",
-          content: site.geoQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n"),
-        },
-      ],
-      agentAction: { type: "manual_check", notes: "Fill GEO answers into the report" },
-    });
-  }
-
   // --- Brand search ---
-  if (site.brandNames.length) {
+  if (depth !== "scan" && site.brandNames.length) {
     findings.push({
       id: `${site.id}-brand-search`,
       priority: "IMPORTANT",
@@ -506,6 +487,24 @@ export function analyzeSite(site: SiteConfig, crawl: CrawlResult): AnalysisBundl
       });
     }
   }
+
+  const extra = extraFindings({
+    site,
+    crawl,
+    depth,
+    measurement: ctx.measurement ?? {
+      searchConsole: false,
+      analytics: false,
+      queries: [],
+      landingPages: [],
+      botPaths: [],
+    },
+    geoAnswers: ctx.geoAnswers ?? [],
+  });
+  findings.push(...extra.findings);
+  alreadyDoneWell.push(...extra.alreadyDoneWell);
+  stats.push(...extra.stats);
+  appendix.push(...extra.appendix);
 
   return { stats, alreadyDoneWell, findings, appendix };
 }

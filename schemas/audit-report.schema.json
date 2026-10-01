@@ -5,7 +5,9 @@
   "type": "object",
   "required": ["schemaVersion", "title", "generatedAt", "summary", "sites", "agentQueue"],
   "properties": {
-    "schemaVersion": { "const": "1.0.0" },
+    "schemaVersion": { "const": "1.1.0" },
+    "depth": { "enum": ["scan", "standard", "deep"] },
+    "coverage": { "type": "array", "items": { "type": "string" } },
     "title": { "type": "string" },
     "eyebrow": { "type": "string" },
     "lede": { "type": "string" },

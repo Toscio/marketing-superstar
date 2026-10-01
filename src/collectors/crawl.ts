@@ -1,5 +1,12 @@
 import * as cheerio from "cheerio";
-import { absoluteUrl, fetchPage, normalizePath, sameOrigin, type FetchResult } from "../http.js";
+import {
+  absoluteUrl,
+  fetchPage,
+  normalizePath,
+  sameOrigin,
+  traceRedirects,
+  type FetchResult,
+} from "../http.js";
 
 export type PageSnapshot = {
   url: string;
@@ -17,6 +24,42 @@ export type PageSnapshot = {
   hasLlmsMention: boolean;
   lang: string | null;
   formActions: string[];
+  wordCount: number;
+  excerpt: string;
+  h2: string[];
+  linkTexts: string[];
+  imageCount: number;
+  imagesMissingAlt: number;
+  hasDate: boolean;
+  hasAuthor: boolean;
+  trackers: string[];
+  cmp: string | null;
+  finalUrl?: string;
+  xRobotsTag?: string | null;
+};
+
+export type RedirectChain = {
+  from: string;
+  hops: Array<{ url: string; status: number }>;
+};
+
+export type CompetitorSnapshot = {
+  url: string;
+  title: string | null;
+  h1: string[];
+};
+
+export type WikidataHit = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export type FieldVitals = {
+  lcpMs: number | null;
+  inpMs: number | null;
+  cls: number | null;
+  formFactor: string;
 };
 
 export type CrawlResult = {
@@ -33,6 +76,11 @@ export type CrawlResult = {
   /** Response headers for notable paths (robots, home, llms, first sitemap) */
   notableHeaders: Record<string, Record<string, string>>;
   errors: string[];
+  redirectChains: RedirectChain[];
+  competitorPages: CompetitorSnapshot[];
+  wikidataQuery: string | null;
+  wikidataHits: WikidataHit[];
+  fieldVitals: FieldVitals | null;
 };
 
 function parseJsonLd(raw: string): unknown[] {
@@ -78,12 +126,46 @@ export function snapshotFromHtml(url: string, status: number, html: string): Pag
     .filter(Boolean);
 
   const internalLinks = new Set<string>();
+  const linkTexts: string[] = [];
   $("a[href]").each((_, el) => {
     const href = $(el).attr("href");
+    const text = $(el).text().replace(/\s+/g, " ").trim();
+    if (text) linkTexts.push(text.slice(0, 80));
     if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
     const abs = absoluteUrl(url, href);
     if (!abs || !sameOrigin(url, abs)) return;
     internalLinks.add(abs.split("#")[0]!);
+  });
+
+  const bodyText = $("body").text().replace(/\s+/g, " ").trim();
+  const scriptSrcs = $("script[src]")
+    .map((_, el) => $(el).attr("src") || "")
+    .get()
+    .join(" ")
+    .toLowerCase();
+  const htmlLower = html.toLowerCase();
+  const trackers = ["gtag", "googletagmanager", "google-analytics", "plausible", "umami", "segment", "hotjar"]
+    .filter((name) => scriptSrcs.includes(name) || htmlLower.includes(name));
+  const cmpName = ["cookiebot", "onetrust", "cookieyes", "usercentrics", "iubenda", "quantcast"].find(
+    (name) => scriptSrcs.includes(name) || htmlLower.includes(name),
+  );
+  const jsonLdBlob = JSON.stringify(jsonLd);
+  const hasDate = Boolean(
+    $("time[datetime]").length ||
+      $('meta[property="article:published_time"]').length ||
+      /datePublished/.test(jsonLdBlob),
+  );
+  const hasAuthor = Boolean(
+    $('[rel="author"]').length ||
+      $('meta[name="author"]').length ||
+      /"author"/.test(jsonLdBlob) ||
+      $('[class*="author"], [class*="byline"]').length,
+  );
+  const images = $("img");
+  let imagesMissingAlt = 0;
+  images.each((_, el) => {
+    const alt = $(el).attr("alt");
+    if (alt == null || alt.trim() === "") imagesMissingAlt += 1;
   });
 
   return {
@@ -102,6 +184,50 @@ export function snapshotFromHtml(url: string, status: number, html: string): Pag
     hasLlmsMention: /llms\.txt/i.test(html),
     lang,
     formActions,
+    wordCount: bodyText ? bodyText.split(/\s+/).length : 0,
+    excerpt: bodyText.slice(0, 400),
+    h2: $("h2")
+      .map((_, el) => $(el).text().replace(/\s+/g, " ").trim())
+      .get()
+      .filter(Boolean)
+      .slice(0, 12),
+    linkTexts: linkTexts.slice(0, 40),
+    imageCount: images.length,
+    imagesMissingAlt,
+    hasDate,
+    hasAuthor,
+    trackers,
+    cmp: cmpName ?? null,
+  };
+}
+
+export function emptySnapshot(url: string, status: number): PageSnapshot {
+  return {
+    url,
+    status,
+    title: null,
+    metaDescription: null,
+    canonical: null,
+    robotsMeta: null,
+    h1: [],
+    hreflang: [],
+    ogImage: null,
+    twitterCard: null,
+    jsonLd: [],
+    internalLinks: [],
+    hasLlmsMention: false,
+    lang: null,
+    formActions: [],
+    wordCount: 0,
+    excerpt: "",
+    h2: [],
+    linkTexts: [],
+    imageCount: 0,
+    imagesMissingAlt: 0,
+    hasDate: false,
+    hasAuthor: false,
+    trackers: [],
+    cmp: null,
   };
 }
 
@@ -131,7 +257,12 @@ async function discoverSitemaps(origin: string, robotsTxt: string | null): Promi
 
 export async function crawlSite(
   seed: string,
-  options: { maxPages?: number; extraUrls?: string[]; rewriteSitemapHostToSeed?: boolean } = {},
+  options: {
+    maxPages?: number;
+    extraUrls?: string[];
+    rewriteSitemapHostToSeed?: boolean;
+    traceRedirects?: boolean;
+  } = {},
 ): Promise<CrawlResult> {
   const maxPages = options.maxPages ?? 25;
   const errors: string[] = [];
@@ -237,23 +368,7 @@ export async function crawlSite(
       res = await fetchPage(next);
     } catch (e) {
       errors.push(`${next}: ${e instanceof Error ? e.message : String(e)}`);
-      pages.push({
-        url: next,
-        status: 0,
-        title: null,
-        metaDescription: null,
-        canonical: null,
-        robotsMeta: null,
-        h1: [],
-        hreflang: [],
-        ogImage: null,
-        twitterCard: null,
-        jsonLd: [],
-        internalLinks: [],
-        hasLlmsMention: false,
-        lang: null,
-        formActions: [],
-      });
+      pages.push(emptySnapshot(next, 0));
       continue;
     }
 
@@ -268,12 +383,27 @@ export async function crawlSite(
     const snap = snapshotFromHtml(res.finalUrl || next, res.status, res.body);
     // Keep requested URL for 404 tracking
     snap.url = next;
+    snap.finalUrl = res.finalUrl;
+    snap.xRobotsTag = res.headers["x-robots-tag"] ?? null;
     pages.push(snap);
 
     for (const link of snap.internalLinks) {
       if (pages.length + queue.length >= maxPages * 2) break;
       const k = new URL(link).origin + normalizePath(link);
       if (!seen.has(k)) queue.push(link);
+    }
+  }
+
+  const redirectChains: RedirectChain[] = [];
+  if (options.traceRedirects) {
+    const toTrace = [seed, ...(options.extraUrls ?? [])].slice(0, 12);
+    for (const url of toTrace) {
+      try {
+        const hops = await traceRedirects(url);
+        if (hops.length) redirectChains.push({ from: url, hops });
+      } catch (e) {
+        errors.push(`redirect ${url}: ${e instanceof Error ? e.message : String(e)}`);
+      }
     }
   }
 
@@ -289,5 +419,10 @@ export async function crawlSite(
     llmsStatus,
     notableHeaders,
     errors,
+    redirectChains,
+    competitorPages: [],
+    wikidataQuery: null,
+    wikidataHits: [],
+    fieldVitals: null,
   };
 }

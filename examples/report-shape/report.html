@@ -54,27 +54,22 @@ footer{font-size:.85rem;color:var(--muted)}
 <body>
 <div class="wrap">
 <header style="display:flex;flex-direction:column;gap:12px">
-  <div class="eyebrow">Search &amp; marketing audit · 2026-10-01</div>
+  <div class="eyebrow">Search &amp; marketing audit · Deep · 2026-10-01</div>
   <h1>Northline: SEO and AI-search review</h1>
   <p class="lede">Fictional sample. Each item says what to change, why it matters, how to fix it and roughly how long it takes. Read-only.</p>
   <p class="meta">Checked: https://staging.northline.example/ (staging), https://northline.example/. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).</p>
 </header>
-<section class="box"><h3>Summary</h3><ol><li>**Northline:** 5 P0 item(s), 11 findings total, 1 strengths noted.</li><li>Northline — Publish a sitemap and point robots.txt at it: Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.</li><li>Northline — Publish llms.txt: /llms.txt returns 404.</li><li>Northline — Keep the staging host out of the index: Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).</li><li>Each finding says what to change, why it matters, how to fix it and roughly how long it takes. Checks are read-only: no forms submitted, no load tests.</li></ol></section>
+<section class="box"><h3>Summary</h3><ol><li>**Northline:** 4 P0 item(s), 23 findings total, 0 strengths noted.</li><li>Northline — Publish llms.txt: /llms.txt returns 404.</li><li>Northline — Keep the staging host out of the index: Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).</li><li>Northline — Redirect the old URLs: 2 known legacy URL(s) need permanent redirects (301) onto the current IA. Examples: /old-services/, /book-a-call/</li><li>Each finding says what to change, why it matters, how to fix it and roughly how long it takes. Checks are read-only: no forms submitted, no load tests.</li></ol></section>
 
 <h2>Northline <span class="meta">(https://northline.example/)</span></h2>
-<div class="stats"><div class="stat"><b>1</b><span>pages crawled successfully (of 3)</span></div>
-<div class="stat"><b>none</b><span>URLs discovered via sitemap</span></div>
+<div class="stats"><div class="stat"><b>2</b><span>pages crawled successfully (of 4)</span></div>
+<div class="stat"><b>2</b><span>URLs discovered via sitemap</span></div>
 <div class="stat"><b>missing</b><span>llms.txt</span></div>
-<div class="stat"><b>yes</b><span>homepage title present</span></div></div>
-<div class="box"><h3>Already done well</h3><ul><li>Unique titles, one H1 pattern, and canonicals look present on crawled pages.</li></ul></div>
+<div class="stat"><b>yes</b><span>homepage title present</span></div>
+<div class="stat"><b>1</b><span>Search Console queries in the baseline</span></div></div>
+
 <h3>A. Pre-launch / first actions</h3>
 <div class="group">
-<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Publish a sitemap and point robots.txt at it</h3><span class="eff">Effort: 30 min</span></div>
-<dl><dt>What</dt><dd>Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.</dd>
-<dt>Why</dt><dd>A sitemap is how Google and AI crawlers learn the URL set quickly, especially after a redesign or launch.</dd>
-<dt>Fix</dt><dd>Generate a sitemap (e.g. @astrojs/sitemap or equivalent), serve it at /sitemap-index.xml or /sitemap.xml, and add `Sitemap: &lt;absolute-url&gt;` to robots.txt. Submit it in Search Console after launch.</dd></dl>
-<p class="meta">Evidence: <code>robots status: 200</code>, <code>sitemap URL count: 0</code></p>
-</div>
 <div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Keep the staging host out of the index</h3><span class="eff">Effort: 15 min</span></div>
 <dl><dt>What</dt><dd>Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).</dd>
 <dt>Why</dt><dd>A canonical is a hint, not a rule. If anyone links to staging, Google may index it as a duplicate, and AI crawlers often ignore canonicals.</dd>
@@ -90,10 +85,16 @@ footer{font-size:.85rem;color:var(--muted)}
 </div>
 <h3>B. Technical</h3>
 <div class="group">
-<div class="item"><div class="head"><span class="tag P2">IN GOOD SHAPE</span><h3>Titles, descriptions, headings</h3><span class="eff">Effort: No action</span></div>
-<dl><dt>What</dt><dd>Crawled pages have titles, meta descriptions, and a single H1.</dd>
-<dt>Why</dt><dd>This is the technical baseline most consultancy sites still miss.</dd>
-<dt>Fix</dt><dd>Keep the pattern as new pages are added.</dd></dl>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Add Sitemap line to robots.txt</h3><span class="eff">Effort: 5 min</span></div>
+<dl><dt>What</dt><dd>A sitemap was found (undefined), but robots.txt does not declare it.</dd>
+<dt>Why</dt><dd>Crawlers that start at robots.txt will miss the sitemap.</dd>
+<dt>Fix</dt><dd>Add: Sitemap: undefined</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>Fix titles, meta descriptions and H1s</h3><span class="eff">Effort: 1–2 h</span></div>
+<dl><dt>What</dt><dd>1 page(s) missing meta description</dd>
+<dt>Why</dt><dd>Titles and a single clear H1 are the baseline for both classic SEO and AI citation snippets.</dd>
+<dt>Fix</dt><dd>Give every indexable page a unique title, a meta description, and exactly one H1 that matches the page intent.</dd></dl>
 
 </div>
 <div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>A proper social preview image</h3><span class="eff">Effort: 30 min</span></div>
@@ -101,6 +102,36 @@ footer{font-size:.85rem;color:var(--muted)}
 <dt>Why</dt><dd>Shared links on LinkedIn otherwise show a cropped logo or empty preview.</dd>
 <dt>Fix</dt><dd>Create one 1200×630 image (logo + headline), set as default og:image, use summary_large_image.</dd></dl>
 
+</div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Redirect chains or temporary redirects</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>1 URL(s) hop more than once or return 302. Example: 302 https://northline.example/old-services/ → 301 https://northline.example/services/ → 200 https://northline.example/services/.</dd>
+<dt>Why</dt><dd>Chains waste crawl and drop equity. A 302 on a retired URL tells search the move is temporary.</dd>
+<dt>Fix</dt><dd>Point each retired URL at its final target with a single 301.</dd></dl>
+<p class="meta">Evidence: <code>302→301→200</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Sitemap URLs with no internal link</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>1 crawled sitemap URL(s) are not linked from any other crawled page.</dd>
+<dt>Why</dt><dd>Orphans are hard for people and crawlers to discover, and they often mark a template that was never wired into navigation.</dd>
+<dt>Fix</dt><dd>Link them from a relevant hub, or remove them from the sitemap and noindex them.</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Sitemap lists noindex URLs</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>1 URL(s) are in the sitemap and also marked noindex.</dd>
+<dt>Why</dt><dd>The sitemap asks for indexing and the tag refuses it. Search Console will report the conflict.</dd>
+<dt>Fix</dt><dd>Remove noindex URLs from the sitemap, or remove noindex from URLs that should rank.</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P1">CHECK</span><h3>Field Core Web Vitals were not queried</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>No Chrome UX Report sample was attached to this run.</dd>
+<dt>Why</dt><dd>Lab Lighthouse is not a substitute for field LCP, INP, and CLS.</dd>
+<dt>Fix</dt><dd>Set CRUX_API_KEY and re-run at deep, or paste the CrUX origin numbers into the report.</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Bot log requests URLs the crawl does not return</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>1 logged path(s) are missing or 404 in this crawl. Examples: /old-services/.</dd>
+<dt>Why</dt><dd>That is what the crawler actually asked for, which a sitemap sample can miss.</dd>
+<dt>Fix</dt><dd>301 the ones that moved. Let the junk 404. Do not put them back into the sitemap.</dd></dl>
+<p class="meta">Evidence: <code>/old-services/</code></p>
 </div>
 </div>
 <h3>C. Content and keyword fit</h3>
@@ -111,6 +142,24 @@ footer{font-size:.85rem;color:var(--muted)}
 <dt>Fix</dt><dd>Pull monthly volumes (DataForSEO / Ads Keyword Planner) for the configured markets, then write problem-led pages that open with a two-sentence direct answer and link to the matching service.</dd></dl>
 <p class="meta">Evidence: <code>incident review</code>, <code>observability advisory</code></p>
 </div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Thin indexable pages</h3><span class="eff">Effort: 1–2 h</span></div>
+<dl><dt>What</dt><dd>1 indexable page(s) have under 80 words. Examples: https://staging.northline.example/ (5).</dd>
+<dt>Why</dt><dd>Thin URLs rarely match a search intent and dilute the crawl.</dd>
+<dt>Fix</dt><dd>Expand the page into a real answer, merge it into a stronger URL, or noindex it.</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>Focus themes are absent from titles and openings</h3><span class="eff">Effort: ongoing</span></div>
+<dl><dt>What</dt><dd>These configured themes do not appear in any crawled title, H1, or opening: incident review, observability advisory.</dd>
+<dt>Why</dt><dd>A theme that is not in the page is not a page yet. Volume data comes next, after the gap is visible.</dd>
+<dt>Fix</dt><dd>Decide which theme is a real page with an intent, and which is only a way you describe the work.</dd></dl>
+<p class="meta">Evidence: <code>incident review</code>, <code>observability advisory</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>What competing homepages lead with</h3><span class="eff">Effort: —</span></div>
+<dl><dt>What</dt><dd>https://other-northline.example/: Oil and gas software</dd>
+<dt>Why</dt><dd>The content gap is against the pages that already rank, not against a keyword list.</dd>
+<dt>Fix</dt><dd>For each focus theme, open the ranking URL and note the intent it satisfies before writing.</dd></dl>
+
+</div>
 </div>
 <h3>D. GEO: how AI search sees the brand</h3>
 <div class="group">
@@ -120,11 +169,11 @@ footer{font-size:.85rem;color:var(--muted)}
 <dt>Fix</dt><dd>Write public/llms.txt by hand: one paragraph on who the organisation is (legal name, place, founder, what it does and does not do), then links to key pages with one-line summaries.</dd></dl>
 <p class="meta">Evidence: <code>llms status: 404</code></p>
 </div>
-<div class="item"><div class="head"><span class="tag P1">CHECK</span><h3>How AI search sees the brand (manual / API pass)</h3><span class="eff">Effort: 30–60 min</span></div>
-<dl><dt>What</dt><dd>Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.</dd>
-<dt>Why</dt><dd>Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.</dd>
-<dt>Fix</dt><dd>Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.</dd></dl>
-<p class="meta">Evidence: <code>What is Northline Advisory?</code></p>
+<div class="item"><div class="head"><span class="tag P1">CHECK</span><h3>Record AI search across four engines</h3><span class="eff">Effort: 45 min, then again in 2–4 weeks</span></div>
+<dl><dt>What</dt><dd>Questions to ask in ChatGPT, Perplexity, Google AI Overview, and Copilot: What is Northline Advisory?.</dd>
+<dt>Why</dt><dd>The engines disagree, and a single answer goes stale after the site changes.</dd>
+<dt>Fix</dt><dd>Paste each answer into geoAnswers (engine, question, answer, citedUrls, liftedSentence). Re-run the same sheet after the fixes.</dd></dl>
+
 </div>
 </div>
 <h3>E. Entity and brand</h3>
@@ -142,7 +191,16 @@ footer{font-size:.85rem;color:var(--muted)}
 
 </div>
 </div>
-<h3>F. Conversion</h3>
+<h3>F. Authority off the site</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>No Wikidata item for the brand</h3><span class="eff">Effort: 1–2 h</span></div>
+<dl><dt>What</dt><dd>A Wikidata search for &quot;Northline&quot; returned no item.</dd>
+<dt>Why</dt><dd>Knowledge panels and several AI systems lean on a stable entity, not only on the website.</dd>
+<dt>Fix</dt><dd>If the organisation is notable enough, create one item with the legal name, official site, and same profiles the schema lists. Otherwise make those profiles consistent so a future item is unambiguous.</dd></dl>
+
+</div>
+</div>
+<h3>G. Conversion</h3>
 <div class="group">
 <div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>The contact form posts to mailto:</h3><span class="eff">Effort: 1 h</span></div>
 <dl><dt>What</dt><dd>Found mailto form action(s): https://staging.northline.example/ → mailto:hello@northline.example</dd>
@@ -150,12 +208,33 @@ footer{font-size:.85rem;color:var(--muted)}
 <dt>Fix</dt><dd>Post to a real form endpoint (HubSpot, Formspree, etc.) and show the email address as plain-text fallback.</dd></dl>
 <p class="meta">Evidence: <code>https://staging.northline.example/ → mailto:hello@northline.example</code></p>
 </div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Landing pages with visits and no conversions</h3><span class="eff">Effort: 2–4 h</span></div>
+<dl><dt>What</dt><dd>https://northline.example/services/ (80 sessions)</dd>
+<dt>Why</dt><dd>These URLs already receive demand. The gap is the page, not the crawl.</dd>
+<dt>Fix</dt><dd>Check the promise above the fold against the query that lands here, then the action and the proof.</dd></dl>
+
+</div>
+</div>
+<h3>H. Measurement</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">CHECK</span><h3>No analytics snippet on the homepage</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>The homepage HTML does not reference a common analytics tag.</dd>
+<dt>Why</dt><dd>Without a measurement baseline, later ranking work has no success metric.</dd>
+<dt>Fix</dt><dd>Confirm analytics is loaded (it may be injected after consent) and that someone can read landing-page conversions.</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>Search baseline</h3><span class="eff">Effort: —</span></div>
+<dl><dt>What</dt><dd>incident review (120 impressions, pos 18)</dd>
+<dt>Why</dt><dd>Recommendations should protect queries that already earn impressions.</dd>
+<dt>Fix</dt><dd>Keep these URLs stable. Re-check the same queries after the changes.</dd></dl>
+<p class="meta">Evidence: <code>incident review</code></p>
+</div>
 </div>
 
 <h2>Suggested order</h2><div class="tbl"><table><tr><th>When</th><th>Northline</th></tr>
-<tr><td>This week</td><td>Publish a sitemap and point robots.txt at it; Publish llms.txt; Keep the staging host out of the index; Redirect the old URLs; Add an Organization (or ProfessionalService) to the schema; The contact form posts to mailto:; Search demand and content fit; How AI search sees the brand (manual / API pass)</td></tr>
-<tr><td>Next 2 weeks</td><td>Win the brand search on purpose</td></tr>
-<tr><td>Month 1–3</td><td>Publish llms.txt; Search demand and content fit; How AI search sees the brand (manual / API pass)</td></tr>
+<tr><td>This week</td><td>Publish llms.txt; Keep the staging host out of the index; Redirect the old URLs; Add an Organization (or ProfessionalService) to the schema; Add Sitemap line to robots.txt; The contact form posts to mailto:; Search demand and content fit</td></tr>
+<tr><td>Next 2 weeks</td><td>Win the brand search on purpose; Thin indexable pages; No analytics snippet on the homepage; Focus themes are absent from titles and openings; Redirect chains or temporary redirects</td></tr>
+<tr><td>Month 1–3</td><td>Publish llms.txt; Search demand and content fit; Thin indexable pages</td></tr>
 </table></div>
 <h2>Appendix</h2><h3>Starter llms.txt for Northline</h3><pre># Northline
 
@@ -164,6 +243,7 @@ footer{font-size:.85rem;color:var(--muted)}
 
 ## Pages
 - [Northline | Advisory](https://staging.northline.example/): We help teams.
+- [Orphan](https://staging.northline.example/orphan/): Orphan
 </pre>
 <h3>Sample Organization schema for Northline</h3><pre>{
   &quot;@context&quot;: &quot;https://schema.org&quot;,
@@ -182,7 +262,23 @@ footer{font-size:.85rem;color:var(--muted)}
     }
   ]
 }</pre>
-<footer>Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.</footer>
+<h3>AI search probe (Northline)</h3><pre>- [chatgpt] What is Northline Advisory?
+  answer:
+  lifted sentence:
+  cited URLs:
+- [perplexity] What is Northline Advisory?
+  answer:
+  lifted sentence:
+  cited URLs:
+- [ai_overview] What is Northline Advisory?
+  answer:
+  lifted sentence:
+  cited URLs:
+- [copilot] What is Northline Advisory?
+  answer:
+  lifted sentence:
+  cited URLs:</pre>
+<footer>Depth: Deep (Full review: redirect chains, indexation conflicts, orphans, click depth, thin content, competitors, entity, measurement baseline, multi-engine AI search.) Packs: core, standard, deep. Read-only HTTP checks. Standard adds on-page quality, intent, and conversion. Deep adds redirect chains, indexation conflicts, competitors, Wikidata, and a measurement baseline. Field Core Web Vitals run when CRUX_API_KEY is set. AI answers are recorded in geoAnswers and repeated after changes. No forms submitted, no load tests.</footer>
 </div>
 </body>
 </html>

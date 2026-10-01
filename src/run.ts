@@ -3,10 +3,13 @@ import path from "node:path";
 import { parse as parseYaml } from "yaml";
 import { crawlSite, type CrawlResult } from "./collectors/crawl.js";
 import { analyzeSite } from "./collectors/analyze.js";
+import { enrichDeep } from "./collectors/enrich.js";
+import { depthProfile } from "./depth.js";
 import { toHtmlReport } from "./report/html.js";
 import { buildAgentQueue, toAgentMarkdown, toJsonReport } from "./report/serialize.js";
 import {
   AuditConfigSchema,
+  MeasurementSchema,
   type AuditConfig,
   type AuditReport,
   type Finding,
@@ -16,7 +19,9 @@ import {
 export async function loadConfig(configPath: string): Promise<AuditConfig> {
   const raw = await readFile(configPath, "utf8");
   const data = configPath.endsWith(".json") ? JSON.parse(raw) : parseYaml(raw);
-  return AuditConfigSchema.parse(data);
+  const parsed = AuditConfigSchema.parse(data);
+  parsed.measurement = MeasurementSchema.parse(parsed.measurement ?? {});
+  return parsed;
 }
 
 function defaultSummary(sites: SiteSection[]): string[] {
@@ -87,7 +92,11 @@ export function assembleReport(
   for (const site of config.sites) {
     const crawl = crawls.get(site.id);
     if (!crawl) throw new Error(`Missing crawl for site ${site.id}`);
-    const analysis = analyzeSite(site, crawl);
+    const analysis = analyzeSite(site, crawl, {
+      depth: config.depth,
+      measurement: config.measurement,
+      geoAnswers: config.geoAnswers.filter((a) => !a.siteId || a.siteId === site.id),
+    });
     allFindings.push(...analysis.findings);
     appendix.push(...analysis.appendix);
     siteSections.push({
@@ -127,18 +136,20 @@ export function assembleReport(
   const checked = config.sites
     .map((s) => (s.stagingUrl ? `${s.stagingUrl} (staging), ${s.url}` : s.url))
     .join("; ");
+  const profile = depthProfile(config.depth);
 
   return {
-    schemaVersion: "1.0.0",
+    schemaVersion: "1.1.0",
+    depth: config.depth,
+    coverage: [...profile.packs],
     title: config.title,
-    eyebrow: `Search & marketing audit · ${generatedAt.slice(0, 10)}`,
+    eyebrow: `Search & marketing audit · ${profile.label} · ${generatedAt.slice(0, 10)}`,
     lede:
       config.notes ??
       `Prioritised findings for ${config.sites.map((s) => s.name).join(" and ")}. Each item says what to change, why it matters, how to fix it and roughly how long it takes.`,
     meta: `Checked: ${checked}. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).`,
     generatedAt,
-    method:
-      "Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.",
+    method: `Depth: ${profile.label} (${profile.summary}) Packs: ${profile.packs.join(", ")}. Read-only HTTP checks. Standard adds on-page quality, intent, and conversion. Deep adds redirect chains, indexation conflicts, competitors, Wikidata, and a measurement baseline. Field Core Web Vitals run when CRUX_API_KEY is set. AI answers are recorded in geoAnswers and repeated after changes. No forms submitted, no load tests.`,
     summary: defaultSummary(siteSections),
     sites: siteSections,
     timeline: defaultTimeline(siteSections),
@@ -149,6 +160,7 @@ export function assembleReport(
 
 export async function runAudit(config: AuditConfig): Promise<AuditReport> {
   const crawls = new Map<string, CrawlResult>();
+  const profile = depthProfile(config.depth);
 
   for (const site of config.sites) {
     const seed = site.stagingUrl ?? site.url;
@@ -164,10 +176,15 @@ export async function runAudit(config: AuditConfig): Promise<AuditReport> {
     ];
 
     const crawl = await crawlSite(seed, {
-      maxPages: 35,
+      maxPages: profile.maxPages,
       extraUrls,
       rewriteSitemapHostToSeed: Boolean(site.stagingUrl),
+      traceRedirects: profile.packs.includes("deep"),
     });
+
+    if (profile.packs.includes("deep")) {
+      await enrichDeep(site, crawl);
+    }
 
     // If staging was crawled, also peek at production pages for comparison only
     if (site.stagingUrl && site.url !== site.stagingUrl) {

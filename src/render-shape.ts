@@ -40,6 +40,16 @@ const config: AuditConfig = {
       relatedSiteIds: [],
     },
   ],
+  depth: "deep",
+  measurement: {
+    searchConsole: true,
+    analytics: false,
+    owner: "Ada North",
+    queries: [{ query: "incident review", clicks: 4, impressions: 120, position: 18 }],
+    landingPages: [{ url: "https://northline.example/services/", sessions: 80, conversions: 0 }],
+    botPaths: ["/old-services/"],
+  },
+  geoAnswers: [],
   collectors: { crawl: true, lighthouse: false, keywords: false, geoAi: false },
 };
 
@@ -53,16 +63,35 @@ const crawl: CrawlResult = {
     page("https://staging.northline.example/", 200, HOME),
     page("https://staging.northline.example/old-services/", 404, "<html><title>Not found</title></html>"),
     page("https://staging.northline.example/book-a-call/", 404, "<html><title>Not found</title></html>"),
+    page(
+      "https://staging.northline.example/orphan/",
+      200,
+      "<html><head><title>Orphan</title><meta name=\"robots\" content=\"noindex\"></head><body><h1>Orphan</h1><p>Hidden page.</p></body></html>",
+    ),
   ],
   robotsTxt: "User-agent: *\nAllow: /\n",
   robotsStatus: 200,
-  sitemapUrls: [],
   sitemapBodies: {},
-  sitemapFound: false,
   llmsTxt: null,
   llmsStatus: 404,
   notableHeaders: { home: {} },
   errors: [],
+  redirectChains: [
+    {
+      from: "https://northline.example/old-services/",
+      hops: [
+        { url: "https://northline.example/old-services/", status: 302 },
+        { url: "https://northline.example/services/", status: 301 },
+        { url: "https://northline.example/services/", status: 200 },
+      ],
+    },
+  ],
+  competitorPages: [{ url: "https://other-northline.example/", title: "Other Northline", h1: ["Oil and gas software"] }],
+  wikidataQuery: "Northline",
+  wikidataHits: [],
+  fieldVitals: null,
+  sitemapUrls: ["https://staging.northline.example/", "https://staging.northline.example/orphan/"],
+  sitemapFound: true,
 };
 
 const report = assembleReport(config, new Map([["northline", crawl]]), "2026-10-01T00:00:00.000Z");

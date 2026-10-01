@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { loadConfig, runAudit, writeReportOutputs } from "./run.js";
+import { AuditDepthSchema } from "./types.js";
 
 const program = new Command();
 
@@ -14,15 +15,26 @@ program
   .description("Run an audit from a YAML/JSON site config")
   .requiredOption("-c, --config <path>", "Path to audit config (YAML or JSON)")
   .option("-o, --out <dir>", "Output directory", "reports/latest")
-  .action(async (opts: { config: string; out: string }) => {
+  .option("-d, --depth <level>", "Override depth: scan, standard, or deep")
+  .action(async (opts: { config: string; out: string; depth?: string }) => {
     const config = await loadConfig(opts.config);
-    console.error(`Auditing ${config.sites.length} site(s): ${config.sites.map((s) => s.name).join(", ")}`);
+    if (opts.depth) config.depth = AuditDepthSchema.parse(opts.depth);
+    console.error(
+      `Auditing ${config.sites.length} site(s) at ${config.depth}: ${config.sites.map((s) => s.name).join(", ")}`,
+    );
     const report = await runAudit(config);
     const paths = await writeReportOutputs(report, opts.out);
     console.error(`Wrote:\n  ${paths.html}\n  ${paths.json}\n  ${paths.agentMd}`);
     console.error(`Agent queue: ${report.agentQueue.length} actionable items`);
     // Machine-friendly last line
-    console.log(JSON.stringify({ out: opts.out, findings: report.agentQueue.length, generatedAt: report.generatedAt }));
+    console.log(
+      JSON.stringify({
+        out: opts.out,
+        depth: report.depth,
+        findings: report.agentQueue.length,
+        generatedAt: report.generatedAt,
+      }),
+    );
   });
 
 program.parseAsync(process.argv).catch((err) => {

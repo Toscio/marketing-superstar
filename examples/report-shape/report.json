@@ -1,16 +1,22 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
+  "depth": "deep",
+  "coverage": [
+    "core",
+    "standard",
+    "deep"
+  ],
   "title": "Northline: SEO and AI-search review",
-  "eyebrow": "Search & marketing audit · 2026-10-01",
+  "eyebrow": "Search & marketing audit · Deep · 2026-10-01",
   "lede": "Fictional sample. Each item says what to change, why it matters, how to fix it and roughly how long it takes. Read-only.",
   "meta": "Checked: https://staging.northline.example/ (staging), https://northline.example/. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).",
   "generatedAt": "2026-10-01T00:00:00.000Z",
-  "method": "Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.",
+  "method": "Depth: Deep (Full review: redirect chains, indexation conflicts, orphans, click depth, thin content, competitors, entity, measurement baseline, multi-engine AI search.) Packs: core, standard, deep. Read-only HTTP checks. Standard adds on-page quality, intent, and conversion. Deep adds redirect chains, indexation conflicts, competitors, Wikidata, and a measurement baseline. Field Core Web Vitals run when CRUX_API_KEY is set. AI answers are recorded in geoAnswers and repeated after changes. No forms submitted, no load tests.",
   "summary": [
-    "**Northline:** 5 P0 item(s), 11 findings total, 1 strengths noted.",
-    "Northline — Publish a sitemap and point robots.txt at it: Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.",
+    "**Northline:** 4 P0 item(s), 23 findings total, 0 strengths noted.",
     "Northline — Publish llms.txt: /llms.txt returns 404.",
     "Northline — Keep the staging host out of the index: Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).",
+    "Northline — Redirect the old URLs: 2 known legacy URL(s) need permanent redirects (301) onto the current IA. Examples: /old-services/, /book-a-call/",
     "Each finding says what to change, why it matters, how to fix it and roughly how long it takes. Checks are read-only: no forms submitted, no load tests."
   ],
   "sites": [
@@ -21,11 +27,11 @@
       "stagingUrl": "https://staging.northline.example/",
       "stats": [
         {
-          "value": "1",
-          "label": "pages crawled successfully (of 3)"
+          "value": "2",
+          "label": "pages crawled successfully (of 4)"
         },
         {
-          "value": "none",
+          "value": "2",
           "label": "URLs discovered via sitemap"
         },
         {
@@ -35,34 +41,32 @@
         {
           "value": "yes",
           "label": "homepage title present"
+        },
+        {
+          "value": "1",
+          "label": "Search Console queries in the baseline"
         }
       ],
-      "alreadyDoneWell": [
-        "Unique titles, one H1 pattern, and canonicals look present on crawled pages."
-      ],
+      "alreadyDoneWell": [],
       "findings": [
         {
-          "id": "northline-sitemap-missing",
-          "priority": "BLOCKER",
-          "level": "P0",
-          "category": "pre_launch",
-          "title": "Publish a sitemap and point robots.txt at it",
-          "effort": "30 min",
-          "what": "Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.",
-          "why": "A sitemap is how Google and AI crawlers learn the URL set quickly, especially after a redesign or launch.",
-          "fix": "Generate a sitemap (e.g. @astrojs/sitemap or equivalent), serve it at /sitemap-index.xml or /sitemap.xml, and add `Sitemap: <absolute-url>` to robots.txt. Submit it in Search Console after launch.",
-          "evidence": [
-            "robots status: 200",
-            "sitemap URL count: 0"
-          ],
+          "id": "northline-robots-sitemap-line",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Add Sitemap line to robots.txt",
+          "effort": "5 min",
+          "what": "A sitemap was found (undefined), but robots.txt does not declare it.",
+          "why": "Crawlers that start at robots.txt will miss the sitemap.",
+          "fix": "Add: Sitemap: undefined",
+          "evidence": [],
           "relatedUrls": [
             "https://northline.example/robots.txt"
           ],
           "artifacts": [],
           "agentAction": {
-            "type": "add_file",
-            "target": "robots.txt + sitemap",
-            "notes": "Ensure Sitemap: line uses the production absolute URL."
+            "type": "edit_html_meta",
+            "target": "robots.txt"
           }
         },
         {
@@ -85,7 +89,7 @@
             {
               "name": "starter-llms.txt",
               "kind": "llms_txt",
-              "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n"
+              "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n- [Orphan](https://staging.northline.example/orphan/): Orphan\n"
             }
           ],
           "agentAction": {
@@ -147,18 +151,21 @@
           }
         },
         {
-          "id": "northline-meta-good",
-          "priority": "IN_GOOD_SHAPE",
+          "id": "northline-meta-basics",
+          "priority": "NICE_TO_HAVE",
           "level": "P2",
           "category": "technical",
-          "title": "Titles, descriptions, headings",
-          "effort": "No action",
-          "what": "Crawled pages have titles, meta descriptions, and a single H1.",
-          "why": "This is the technical baseline most consultancy sites still miss.",
-          "fix": "Keep the pattern as new pages are added.",
+          "title": "Fix titles, meta descriptions and H1s",
+          "effort": "1–2 h",
+          "what": "1 page(s) missing meta description",
+          "why": "Titles and a single clear H1 are the baseline for both classic SEO and AI citation snippets.",
+          "fix": "Give every indexable page a unique title, a meta description, and exactly one H1 that matches the page intent.",
           "evidence": [],
           "relatedUrls": [],
-          "artifacts": []
+          "artifacts": [],
+          "agentAction": {
+            "type": "edit_html_meta"
+          }
         },
         {
           "id": "northline-org-schema",
@@ -252,32 +259,6 @@
           }
         },
         {
-          "id": "northline-geo-checks",
-          "priority": "CHECK",
-          "level": "P1",
-          "category": "geo_ai",
-          "title": "How AI search sees the brand (manual / API pass)",
-          "effort": "30–60 min",
-          "what": "Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.",
-          "why": "Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.",
-          "fix": "Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.",
-          "evidence": [
-            "What is Northline Advisory?"
-          ],
-          "relatedUrls": [],
-          "artifacts": [
-            {
-              "name": "geo-questions.md",
-              "kind": "checklist",
-              "content": "1. What is Northline Advisory?"
-            }
-          ],
-          "agentAction": {
-            "type": "manual_check",
-            "notes": "Fill GEO answers into the report"
-          }
-        },
-        {
           "id": "northline-brand-search",
           "priority": "IMPORTANT",
           "level": "P1",
@@ -295,6 +276,253 @@
           "agentAction": {
             "type": "manual_check"
           }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [
+            "https://staging.northline.example/"
+          ],
+          "artifacts": [],
+          "id": "northline-thin-pages",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "content_keywords",
+          "title": "Thin indexable pages",
+          "effort": "1–2 h",
+          "what": "1 indexable page(s) have under 80 words. Examples: https://staging.northline.example/ (5).",
+          "why": "Thin URLs rarely match a search intent and dilute the crawl.",
+          "fix": "Expand the page into a real answer, merge it into a stronger URL, or noindex it.",
+          "agentAction": {
+            "type": "edit_copy"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-no-analytics-snippet",
+          "priority": "CHECK",
+          "level": "P1",
+          "category": "measurement",
+          "title": "No analytics snippet on the homepage",
+          "effort": "30 min",
+          "what": "The homepage HTML does not reference a common analytics tag.",
+          "why": "Without a measurement baseline, later ranking work has no success metric.",
+          "fix": "Confirm analytics is loaded (it may be injected after consent) and that someone can read landing-page conversions.",
+          "agentAction": {
+            "type": "manual_check"
+          }
+        },
+        {
+          "evidence": [
+            "incident review",
+            "observability advisory"
+          ],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-keyword-on-page",
+          "priority": "CONTEXT",
+          "level": "P1",
+          "category": "content_keywords",
+          "title": "Focus themes are absent from titles and openings",
+          "effort": "ongoing",
+          "what": "These configured themes do not appear in any crawled title, H1, or opening: incident review, observability advisory.",
+          "why": "A theme that is not in the page is not a page yet. Volume data comes next, after the gap is visible.",
+          "fix": "Decide which theme is a real page with an intent, and which is only a way you describe the work.",
+          "agentAction": {
+            "type": "create_content"
+          }
+        },
+        {
+          "evidence": [
+            "302→301→200"
+          ],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-redirect-chains",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Redirect chains or temporary redirects",
+          "effort": "1 h",
+          "what": "1 URL(s) hop more than once or return 302. Example: 302 https://northline.example/old-services/ → 301 https://northline.example/services/ → 200 https://northline.example/services/.",
+          "why": "Chains waste crawl and drop equity. A 302 on a retired URL tells search the move is temporary.",
+          "fix": "Point each retired URL at its final target with a single 301.",
+          "agentAction": {
+            "type": "add_redirects"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [
+            "https://staging.northline.example/orphan/"
+          ],
+          "artifacts": [],
+          "id": "northline-orphans",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Sitemap URLs with no internal link",
+          "effort": "1 h",
+          "what": "1 crawled sitemap URL(s) are not linked from any other crawled page.",
+          "why": "Orphans are hard for people and crawlers to discover, and they often mark a template that was never wired into navigation.",
+          "fix": "Link them from a relevant hub, or remove them from the sitemap and noindex them.",
+          "agentAction": {
+            "type": "edit_copy"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [
+            "https://staging.northline.example/orphan/"
+          ],
+          "artifacts": [],
+          "id": "northline-sitemap-noindex",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Sitemap lists noindex URLs",
+          "effort": "30 min",
+          "what": "1 URL(s) are in the sitemap and also marked noindex.",
+          "why": "The sitemap asks for indexing and the tag refuses it. Search Console will report the conflict.",
+          "fix": "Remove noindex URLs from the sitemap, or remove noindex from URLs that should rank.",
+          "agentAction": {
+            "type": "add_file",
+            "target": "sitemap"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [
+            "https://other-northline.example/"
+          ],
+          "artifacts": [],
+          "id": "northline-competitor-lead",
+          "priority": "CONTEXT",
+          "level": "P1",
+          "category": "content_keywords",
+          "title": "What competing homepages lead with",
+          "effort": "—",
+          "what": "https://other-northline.example/: Oil and gas software",
+          "why": "The content gap is against the pages that already rank, not against a keyword list.",
+          "fix": "For each focus theme, open the ranking URL and note the intent it satisfies before writing.",
+          "agentAction": {
+            "type": "manual_check"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-wikidata",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "authority",
+          "title": "No Wikidata item for the brand",
+          "effort": "1–2 h",
+          "what": "A Wikidata search for \"Northline\" returned no item.",
+          "why": "Knowledge panels and several AI systems lean on a stable entity, not only on the website.",
+          "fix": "If the organisation is notable enough, create one item with the legal name, official site, and same profiles the schema lists. Otherwise make those profiles consistent so a future item is unambiguous.",
+          "agentAction": {
+            "type": "manual_check"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-field-vitals-missing",
+          "priority": "CHECK",
+          "level": "P2",
+          "category": "technical",
+          "title": "Field Core Web Vitals were not queried",
+          "effort": "15 min",
+          "what": "No Chrome UX Report sample was attached to this run.",
+          "why": "Lab Lighthouse is not a substitute for field LCP, INP, and CLS.",
+          "fix": "Set CRUX_API_KEY and re-run at deep, or paste the CrUX origin numbers into the report.",
+          "agentAction": {
+            "type": "manual_check"
+          }
+        },
+        {
+          "evidence": [
+            "incident review"
+          ],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-query-baseline",
+          "priority": "CONTEXT",
+          "level": "P1",
+          "category": "measurement",
+          "title": "Search baseline",
+          "effort": "—",
+          "what": "incident review (120 impressions, pos 18)",
+          "why": "Recommendations should protect queries that already earn impressions.",
+          "fix": "Keep these URLs stable. Re-check the same queries after the changes.",
+          "agentAction": {
+            "type": "manual_check"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [
+            "https://northline.example/services/"
+          ],
+          "artifacts": [],
+          "id": "northline-landing-conversions",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "conversion",
+          "title": "Landing pages with visits and no conversions",
+          "effort": "2–4 h",
+          "what": "https://northline.example/services/ (80 sessions)",
+          "why": "These URLs already receive demand. The gap is the page, not the crawl.",
+          "fix": "Check the promise above the fold against the query that lands here, then the action and the proof.",
+          "agentAction": {
+            "type": "edit_copy"
+          }
+        },
+        {
+          "evidence": [
+            "/old-services/"
+          ],
+          "relatedUrls": [],
+          "artifacts": [],
+          "id": "northline-bot-log",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Bot log requests URLs the crawl does not return",
+          "effort": "1 h",
+          "what": "1 logged path(s) are missing or 404 in this crawl. Examples: /old-services/.",
+          "why": "That is what the crawler actually asked for, which a sitemap sample can miss.",
+          "fix": "301 the ones that moved. Let the junk 404. Do not put them back into the sitemap.",
+          "agentAction": {
+            "type": "add_redirects"
+          }
+        },
+        {
+          "evidence": [],
+          "relatedUrls": [],
+          "artifacts": [
+            {
+              "name": "geo-probe.txt",
+              "kind": "checklist",
+              "content": "- [chatgpt] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [perplexity] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [ai_overview] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [copilot] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:"
+            }
+          ],
+          "id": "northline-geo-checks",
+          "priority": "CHECK",
+          "level": "P1",
+          "category": "geo_ai",
+          "title": "Record AI search across four engines",
+          "effort": "45 min, then again in 2–4 weeks",
+          "what": "Questions to ask in ChatGPT, Perplexity, Google AI Overview, and Copilot: What is Northline Advisory?.",
+          "why": "The engines disagree, and a single answer goes stale after the site changes.",
+          "fix": "Paste each answer into geoAnswers (engine, question, answer, citedUrls, liftedSentence). Re-run the same sheet after the fixes.",
+          "agentAction": {
+            "type": "manual_check"
+          }
         }
       ]
     }
@@ -303,19 +531,19 @@
     {
       "when": "This week",
       "columns": {
-        "Northline": "Publish a sitemap and point robots.txt at it; Publish llms.txt; Keep the staging host out of the index; Redirect the old URLs; Add an Organization (or ProfessionalService) to the schema; The contact form posts to mailto:; Search demand and content fit; How AI search sees the brand (manual / API pass)"
+        "Northline": "Publish llms.txt; Keep the staging host out of the index; Redirect the old URLs; Add an Organization (or ProfessionalService) to the schema; Add Sitemap line to robots.txt; The contact form posts to mailto:; Search demand and content fit"
       }
     },
     {
       "when": "Next 2 weeks",
       "columns": {
-        "Northline": "Win the brand search on purpose"
+        "Northline": "Win the brand search on purpose; Thin indexable pages; No analytics snippet on the homepage; Focus themes are absent from titles and openings; Redirect chains or temporary redirects"
       }
     },
     {
       "when": "Month 1–3",
       "columns": {
-        "Northline": "Publish llms.txt; Search demand and content fit; How AI search sees the brand (manual / API pass)"
+        "Northline": "Publish llms.txt; Search demand and content fit; Thin indexable pages"
       }
     }
   ],
@@ -323,12 +551,17 @@
     {
       "title": "Starter llms.txt for Northline",
       "kind": "pre",
-      "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n"
+      "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n- [Orphan](https://staging.northline.example/orphan/): Orphan\n"
     },
     {
       "title": "Sample Organization schema for Northline",
       "kind": "pre",
       "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"ProfessionalService\",\n      \"@id\": \"https://northline.example/#organization\",\n      \"name\": \"Northline\",\n      \"legalName\": \"Northline Advisory Ltd\",\n      \"url\": \"https://northline.example/\",\n      \"knowsAbout\": [\n        \"incident review\",\n        \"observability advisory\"\n      ],\n      \"sameAs\": []\n    }\n  ]\n}"
+    },
+    {
+      "title": "AI search probe (Northline)",
+      "kind": "pre",
+      "content": "- [chatgpt] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [perplexity] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [ai_overview] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [copilot] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:"
     }
   ],
   "agentQueue": [
@@ -384,30 +617,6 @@
       }
     },
     {
-      "id": "northline-sitemap-missing",
-      "priority": "BLOCKER",
-      "level": "P0",
-      "category": "pre_launch",
-      "title": "Publish a sitemap and point robots.txt at it",
-      "effort": "30 min",
-      "what": "Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.",
-      "why": "A sitemap is how Google and AI crawlers learn the URL set quickly, especially after a redesign or launch.",
-      "fix": "Generate a sitemap (e.g. @astrojs/sitemap or equivalent), serve it at /sitemap-index.xml or /sitemap.xml, and add `Sitemap: <absolute-url>` to robots.txt. Submit it in Search Console after launch.",
-      "evidence": [
-        "robots status: 200",
-        "sitemap URL count: 0"
-      ],
-      "relatedUrls": [
-        "https://northline.example/robots.txt"
-      ],
-      "artifacts": [],
-      "agentAction": {
-        "type": "add_file",
-        "target": "robots.txt + sitemap",
-        "notes": "Ensure Sitemap: line uses the production absolute URL."
-      }
-    },
-    {
       "id": "northline-llms-txt",
       "priority": "BLOCKER",
       "level": "P0",
@@ -427,7 +636,7 @@
         {
           "name": "starter-llms.txt",
           "kind": "llms_txt",
-          "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n"
+          "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n- [Orphan](https://staging.northline.example/orphan/): Orphan\n"
         }
       ],
       "agentAction": {
@@ -466,29 +675,176 @@
       }
     },
     {
+      "id": "northline-robots-sitemap-line",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Add Sitemap line to robots.txt",
+      "effort": "5 min",
+      "what": "A sitemap was found (undefined), but robots.txt does not declare it.",
+      "why": "Crawlers that start at robots.txt will miss the sitemap.",
+      "fix": "Add: Sitemap: undefined",
+      "evidence": [],
+      "relatedUrls": [
+        "https://northline.example/robots.txt"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "edit_html_meta",
+        "target": "robots.txt"
+      }
+    },
+    {
+      "evidence": [
+        "/old-services/"
+      ],
+      "relatedUrls": [],
+      "artifacts": [],
+      "id": "northline-bot-log",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Bot log requests URLs the crawl does not return",
+      "effort": "1 h",
+      "what": "1 logged path(s) are missing or 404 in this crawl. Examples: /old-services/.",
+      "why": "That is what the crawler actually asked for, which a sitemap sample can miss.",
+      "fix": "301 the ones that moved. Let the junk 404. Do not put them back into the sitemap.",
+      "agentAction": {
+        "type": "add_redirects"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [
+        "https://northline.example/services/"
+      ],
+      "artifacts": [],
+      "id": "northline-landing-conversions",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "conversion",
+      "title": "Landing pages with visits and no conversions",
+      "effort": "2–4 h",
+      "what": "https://northline.example/services/ (80 sessions)",
+      "why": "These URLs already receive demand. The gap is the page, not the crawl.",
+      "fix": "Check the promise above the fold against the query that lands here, then the action and the proof.",
+      "agentAction": {
+        "type": "edit_copy"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [],
+      "artifacts": [],
+      "id": "northline-no-analytics-snippet",
+      "priority": "CHECK",
+      "level": "P1",
+      "category": "measurement",
+      "title": "No analytics snippet on the homepage",
+      "effort": "30 min",
+      "what": "The homepage HTML does not reference a common analytics tag.",
+      "why": "Without a measurement baseline, later ranking work has no success metric.",
+      "fix": "Confirm analytics is loaded (it may be injected after consent) and that someone can read landing-page conversions.",
+      "agentAction": {
+        "type": "manual_check"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [],
+      "artifacts": [],
+      "id": "northline-wikidata",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "authority",
+      "title": "No Wikidata item for the brand",
+      "effort": "1–2 h",
+      "what": "A Wikidata search for \"Northline\" returned no item.",
+      "why": "Knowledge panels and several AI systems lean on a stable entity, not only on the website.",
+      "fix": "If the organisation is notable enough, create one item with the legal name, official site, and same profiles the schema lists. Otherwise make those profiles consistent so a future item is unambiguous.",
+      "agentAction": {
+        "type": "manual_check"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [],
+      "artifacts": [
+        {
+          "name": "geo-probe.txt",
+          "kind": "checklist",
+          "content": "- [chatgpt] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [perplexity] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [ai_overview] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:\n- [copilot] What is Northline Advisory?\n  answer:\n  lifted sentence:\n  cited URLs:"
+        }
+      ],
       "id": "northline-geo-checks",
       "priority": "CHECK",
       "level": "P1",
       "category": "geo_ai",
-      "title": "How AI search sees the brand (manual / API pass)",
-      "effort": "30–60 min",
-      "what": "Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.",
-      "why": "Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.",
-      "fix": "Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.",
+      "title": "Record AI search across four engines",
+      "effort": "45 min, then again in 2–4 weeks",
+      "what": "Questions to ask in ChatGPT, Perplexity, Google AI Overview, and Copilot: What is Northline Advisory?.",
+      "why": "The engines disagree, and a single answer goes stale after the site changes.",
+      "fix": "Paste each answer into geoAnswers (engine, question, answer, citedUrls, liftedSentence). Re-run the same sheet after the fixes.",
+      "agentAction": {
+        "type": "manual_check"
+      }
+    },
+    {
       "evidence": [
-        "What is Northline Advisory?"
+        "302→301→200"
       ],
       "relatedUrls": [],
-      "artifacts": [
-        {
-          "name": "geo-questions.md",
-          "kind": "checklist",
-          "content": "1. What is Northline Advisory?"
-        }
-      ],
+      "artifacts": [],
+      "id": "northline-redirect-chains",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Redirect chains or temporary redirects",
+      "effort": "1 h",
+      "what": "1 URL(s) hop more than once or return 302. Example: 302 https://northline.example/old-services/ → 301 https://northline.example/services/ → 200 https://northline.example/services/.",
+      "why": "Chains waste crawl and drop equity. A 302 on a retired URL tells search the move is temporary.",
+      "fix": "Point each retired URL at its final target with a single 301.",
       "agentAction": {
-        "type": "manual_check",
-        "notes": "Fill GEO answers into the report"
+        "type": "add_redirects"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [
+        "https://staging.northline.example/orphan/"
+      ],
+      "artifacts": [],
+      "id": "northline-sitemap-noindex",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Sitemap lists noindex URLs",
+      "effort": "30 min",
+      "what": "1 URL(s) are in the sitemap and also marked noindex.",
+      "why": "The sitemap asks for indexing and the tag refuses it. Search Console will report the conflict.",
+      "fix": "Remove noindex URLs from the sitemap, or remove noindex from URLs that should rank.",
+      "agentAction": {
+        "type": "add_file",
+        "target": "sitemap"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [
+        "https://staging.northline.example/orphan/"
+      ],
+      "artifacts": [],
+      "id": "northline-orphans",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Sitemap URLs with no internal link",
+      "effort": "1 h",
+      "what": "1 crawled sitemap URL(s) are not linked from any other crawled page.",
+      "why": "Orphans are hard for people and crawlers to discover, and they often mark a template that was never wired into navigation.",
+      "fix": "Link them from a relevant hub, or remove them from the sitemap and noindex them.",
+      "agentAction": {
+        "type": "edit_copy"
       }
     },
     {
@@ -511,6 +867,25 @@
       "agentAction": {
         "type": "other",
         "notes": "Wire form to CRM/endpoint"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [
+        "https://staging.northline.example/"
+      ],
+      "artifacts": [],
+      "id": "northline-thin-pages",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "content_keywords",
+      "title": "Thin indexable pages",
+      "effort": "1–2 h",
+      "what": "1 indexable page(s) have under 80 words. Examples: https://staging.northline.example/ (5).",
+      "why": "Thin URLs rarely match a search intent and dilute the crawl.",
+      "fix": "Expand the page into a real answer, merge it into a stronger URL, or noindex it.",
+      "agentAction": {
+        "type": "edit_copy"
       }
     },
     {
@@ -550,6 +925,40 @@
       "agentAction": {
         "type": "add_file",
         "target": "og-default.png"
+      }
+    },
+    {
+      "evidence": [],
+      "relatedUrls": [],
+      "artifacts": [],
+      "id": "northline-field-vitals-missing",
+      "priority": "CHECK",
+      "level": "P2",
+      "category": "technical",
+      "title": "Field Core Web Vitals were not queried",
+      "effort": "15 min",
+      "what": "No Chrome UX Report sample was attached to this run.",
+      "why": "Lab Lighthouse is not a substitute for field LCP, INP, and CLS.",
+      "fix": "Set CRUX_API_KEY and re-run at deep, or paste the CrUX origin numbers into the report.",
+      "agentAction": {
+        "type": "manual_check"
+      }
+    },
+    {
+      "id": "northline-meta-basics",
+      "priority": "NICE_TO_HAVE",
+      "level": "P2",
+      "category": "technical",
+      "title": "Fix titles, meta descriptions and H1s",
+      "effort": "1–2 h",
+      "what": "1 page(s) missing meta description",
+      "why": "Titles and a single clear H1 are the baseline for both classic SEO and AI citation snippets.",
+      "fix": "Give every indexable page a unique title, a meta description, and exactly one H1 that matches the page intent.",
+      "evidence": [],
+      "relatedUrls": [],
+      "artifacts": [],
+      "agentAction": {
+        "type": "edit_html_meta"
       }
     }
   ]

@@ -59,6 +59,44 @@ export async function fetchPage(
   }
 }
 
+export type RedirectHop = { url: string; status: number };
+
+/** Follow redirects one hop at a time. Read-only. Stops on a non-redirect or after maxHops. */
+export async function traceRedirects(start: string, maxHops = 6): Promise<RedirectHop[]> {
+  const hops: RedirectHop[] = [];
+  let current = start;
+  const seen = new Set<string>();
+
+  for (let i = 0; i < maxHops; i++) {
+    if (seen.has(current)) {
+      hops.push({ url: current, status: 0 });
+      break;
+    }
+    seen.add(current);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15_000);
+    try {
+      const res = await fetch(current, {
+        method: "GET",
+        redirect: "manual",
+        signal: controller.signal,
+        headers: {
+          "user-agent": DEFAULT_UA,
+          accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        },
+      });
+      hops.push({ url: current, status: res.status });
+      if (res.status < 300 || res.status >= 400) break;
+      const loc = res.headers.get("location");
+      if (!loc) break;
+      current = new URL(loc, current).toString();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  return hops;
+}
+
 export function absoluteUrl(base: string, href: string): string | null {
   try {
     return new URL(href, base).toString();
