@@ -1,0 +1,31 @@
+# Live audit requested for https://felelosit.hu/ (standard / medium depth).
+title: "Felelősségteljes IT: SEO and AI-search review"
+depth: standard
+notes: >-
+  Standard-depth read-only review of the live felelosit.hu site after the
+  CRM, LinkedIn, and technical-error fixes. No forms submitted, no load tests.
+sites:
+  - id: felelosit
+    name: Felelősségteljes IT
+    url: https://felelosit.hu/
+    language: hu
+    markets: [HU]
+    brandNames: [Felelősségteljes IT, felelosit]
+    legalName: Practical Solutions Kft.
+    knownOldUrls: []
+    focusKeywords:
+      - teljesítésigazolás
+      - sla jelentése
+      - informatikai szakértő
+      - szoftver átadás-átvétel
+      - magánszakértő
+    geoQuestions:
+      - "Mi az a Felelősségteljes IT?"
+      - "Felelősségteljes IT Tóth Ádám Vida András"
+      - "Informatikai szakértő teljesítési vita Magyarország"
+    relatedSiteIds: []
+collectors:
+  crawl: true
+  lighthouse: false
+  keywords: false
+  geoAi: false
