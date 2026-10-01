@@ -1,0 +1,556 @@
+{
+  "schemaVersion": "1.0.0",
+  "title": "Northline: SEO and AI-search review",
+  "eyebrow": "Search & marketing audit · 2026-10-01",
+  "lede": "Fictional sample. Each item says what to change, why it matters, how to fix it and roughly how long it takes. Read-only.",
+  "meta": "Checked: https://staging.northline.example/ (staging), https://northline.example/. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).",
+  "generatedAt": "2026-10-01T00:00:00.000Z",
+  "method": "Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.",
+  "summary": [
+    "**Northline:** 5 P0 item(s), 11 findings total, 1 strengths noted.",
+    "Northline — Publish a sitemap and point robots.txt at it: Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.",
+    "Northline — Publish llms.txt: /llms.txt returns 404.",
+    "Northline — Keep the staging host out of the index: Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).",
+    "Each finding says what to change, why it matters, how to fix it and roughly how long it takes. Checks are read-only: no forms submitted, no load tests."
+  ],
+  "sites": [
+    {
+      "siteId": "northline",
+      "name": "Northline",
+      "primaryUrl": "https://northline.example/",
+      "stagingUrl": "https://staging.northline.example/",
+      "stats": [
+        {
+          "value": "1",
+          "label": "pages crawled successfully (of 3)"
+        },
+        {
+          "value": "none",
+          "label": "URLs discovered via sitemap"
+        },
+        {
+          "value": "missing",
+          "label": "llms.txt"
+        },
+        {
+          "value": "yes",
+          "label": "homepage title present"
+        }
+      ],
+      "alreadyDoneWell": [
+        "Unique titles, one H1 pattern, and canonicals look present on crawled pages."
+      ],
+      "findings": [
+        {
+          "id": "northline-sitemap-missing",
+          "priority": "BLOCKER",
+          "level": "P0",
+          "category": "pre_launch",
+          "title": "Publish a sitemap and point robots.txt at it",
+          "effort": "30 min",
+          "what": "Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.",
+          "why": "A sitemap is how Google and AI crawlers learn the URL set quickly, especially after a redesign or launch.",
+          "fix": "Generate a sitemap (e.g. @astrojs/sitemap or equivalent), serve it at /sitemap-index.xml or /sitemap.xml, and add `Sitemap: <absolute-url>` to robots.txt. Submit it in Search Console after launch.",
+          "evidence": [
+            "robots status: 200",
+            "sitemap URL count: 0"
+          ],
+          "relatedUrls": [
+            "https://northline.example/robots.txt"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "add_file",
+            "target": "robots.txt + sitemap",
+            "notes": "Ensure Sitemap: line uses the production absolute URL."
+          }
+        },
+        {
+          "id": "northline-llms-txt",
+          "priority": "BLOCKER",
+          "level": "P0",
+          "category": "geo_ai",
+          "title": "Publish llms.txt",
+          "effort": "30 min",
+          "what": "/llms.txt returns 404.",
+          "why": "A short, human-readable summary helps AI crawlers and assistants cite the right entity, especially when repositioning or launching.",
+          "fix": "Write public/llms.txt by hand: one paragraph on who the organisation is (legal name, place, founder, what it does and does not do), then links to key pages with one-line summaries.",
+          "evidence": [
+            "llms status: 404"
+          ],
+          "relatedUrls": [
+            "https://northline.example/llms.txt"
+          ],
+          "artifacts": [
+            {
+              "name": "starter-llms.txt",
+              "kind": "llms_txt",
+              "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n"
+            }
+          ],
+          "agentAction": {
+            "type": "add_file",
+            "target": "public/llms.txt"
+          }
+        },
+        {
+          "id": "northline-staging-noindex",
+          "priority": "BLOCKER",
+          "level": "P0",
+          "category": "pre_launch",
+          "title": "Keep the staging host out of the index",
+          "effort": "15 min",
+          "what": "Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).",
+          "why": "A canonical is a hint, not a rule. If anyone links to staging, Google may index it as a duplicate, and AI crawlers often ignore canonicals.",
+          "fix": "Send `X-Robots-Tag: noindex` only when the request host is the staging host (Worker rule or Cloudflare Transform Rule). Do not put noindex in HTML that ships to production.",
+          "evidence": [
+            "staging: https://staging.northline.example/",
+            "x-robots-tag: (absent)"
+          ],
+          "relatedUrls": [
+            "https://staging.northline.example/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "configure_headers",
+            "target": "staging.northline.example"
+          }
+        },
+        {
+          "id": "northline-redirect-old-urls",
+          "priority": "BLOCKER",
+          "level": "P0",
+          "category": "pre_launch",
+          "title": "Redirect the old URLs",
+          "effort": "1–2 h",
+          "what": "2 known legacy URL(s) need permanent redirects (301) onto the current IA. Examples: /old-services/, /book-a-call/",
+          "why": "Without 301s, bookmarks, social posts and AI-answer citations become dead ends, and Google drops the URLs without passing value on.",
+          "fix": "Add a redirects file (or platform equivalent) with permanent 301s, one line per old URL. Keep it at least a year.",
+          "evidence": [
+            "/old-services/",
+            "/book-a-call/"
+          ],
+          "relatedUrls": [
+            "https://staging.northline.example/old-services/",
+            "https://staging.northline.example/book-a-call/"
+          ],
+          "artifacts": [
+            {
+              "name": "redirect-map-stub",
+              "kind": "redirect_map",
+              "content": "/old-services/  /  301\n/book-a-call/  /  301"
+            }
+          ],
+          "agentAction": {
+            "type": "add_redirects",
+            "target": "_redirects"
+          }
+        },
+        {
+          "id": "northline-meta-good",
+          "priority": "IN_GOOD_SHAPE",
+          "level": "P2",
+          "category": "technical",
+          "title": "Titles, descriptions, headings",
+          "effort": "No action",
+          "what": "Crawled pages have titles, meta descriptions, and a single H1.",
+          "why": "This is the technical baseline most consultancy sites still miss.",
+          "fix": "Keep the pattern as new pages are added.",
+          "evidence": [],
+          "relatedUrls": [],
+          "artifacts": []
+        },
+        {
+          "id": "northline-org-schema",
+          "priority": "FIRST",
+          "level": "P0",
+          "category": "entity_brand",
+          "title": "Add an Organization (or ProfessionalService) to the schema",
+          "effort": "1–2 h",
+          "what": "JSON-LD is present (WebSite) but there is no Organization / ProfessionalService entity for the business itself.",
+          "why": "Without an organisation entity, engines may treat the brand as a topic or confuse it with namesakes. AI assistants invent descriptions when the entity is unclear.",
+          "fix": "Add ProfessionalService (or Organization) with name, legalName (\"Northline Advisory Ltd\"), url, address, founder, sameAs profile links, and knowsAbout.",
+          "evidence": [
+            "WebSite"
+          ],
+          "relatedUrls": [
+            "https://staging.northline.example/"
+          ],
+          "artifacts": [
+            {
+              "name": "sample-organization-schema.json",
+              "kind": "schema_json",
+              "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"ProfessionalService\",\n      \"@id\": \"https://northline.example/#organization\",\n      \"name\": \"Northline\",\n      \"legalName\": \"Northline Advisory Ltd\",\n      \"url\": \"https://northline.example/\",\n      \"knowsAbout\": [\n        \"incident review\",\n        \"observability advisory\"\n      ],\n      \"sameAs\": []\n    }\n  ]\n}"
+            }
+          ],
+          "agentAction": {
+            "type": "edit_schema",
+            "target": "Organization"
+          }
+        },
+        {
+          "id": "northline-og-image",
+          "priority": "NICE_TO_HAVE",
+          "level": "P2",
+          "category": "technical",
+          "title": "A proper social preview image",
+          "effort": "30 min",
+          "what": "og:image is set but twitter:card is \"summary\" (prefer summary_large_image with a 1200×630 image).",
+          "why": "Shared links on LinkedIn otherwise show a cropped logo or empty preview.",
+          "fix": "Create one 1200×630 image (logo + headline), set as default og:image, use summary_large_image.",
+          "evidence": [],
+          "relatedUrls": [
+            "https://staging.northline.example/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "add_file",
+            "target": "og-default.png"
+          }
+        },
+        {
+          "id": "northline-mailto-form",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "conversion",
+          "title": "The contact form posts to mailto:",
+          "effort": "1 h",
+          "what": "Found mailto form action(s): https://staging.northline.example/ → mailto:hello@northline.example",
+          "why": "This is a conversion issue more than an SEO one, but it is the page SEO work sends people to. On many phones and locked-down work machines, mailto does nothing.",
+          "fix": "Post to a real form endpoint (HubSpot, Formspree, etc.) and show the email address as plain-text fallback.",
+          "evidence": [
+            "https://staging.northline.example/ → mailto:hello@northline.example"
+          ],
+          "relatedUrls": [
+            "https://staging.northline.example/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "other",
+            "notes": "Wire form to CRM/endpoint"
+          }
+        },
+        {
+          "id": "northline-keyword-context",
+          "priority": "CONTEXT",
+          "level": "P1",
+          "category": "content_keywords",
+          "title": "Search demand and content fit",
+          "effort": "ongoing",
+          "what": "Configured focus themes/keywords to validate with search-volume data: incident review, observability advisory.",
+          "why": "Category keywords often have tiny demand for advisory businesses; buyers search symptoms or ask AI assistants.",
+          "fix": "Pull monthly volumes (DataForSEO / Ads Keyword Planner) for the configured markets, then write problem-led pages that open with a two-sentence direct answer and link to the matching service.",
+          "evidence": [
+            "incident review",
+            "observability advisory"
+          ],
+          "relatedUrls": [],
+          "artifacts": [],
+          "agentAction": {
+            "type": "manual_check",
+            "notes": "Fill volumes via keyword collector or agent research, then prioritise content."
+          }
+        },
+        {
+          "id": "northline-geo-checks",
+          "priority": "CHECK",
+          "level": "P1",
+          "category": "geo_ai",
+          "title": "How AI search sees the brand (manual / API pass)",
+          "effort": "30–60 min",
+          "what": "Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.",
+          "why": "Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.",
+          "fix": "Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.",
+          "evidence": [
+            "What is Northline Advisory?"
+          ],
+          "relatedUrls": [],
+          "artifacts": [
+            {
+              "name": "geo-questions.md",
+              "kind": "checklist",
+              "content": "1. What is Northline Advisory?"
+            }
+          ],
+          "agentAction": {
+            "type": "manual_check",
+            "notes": "Fill GEO answers into the report"
+          }
+        },
+        {
+          "id": "northline-brand-search",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "entity_brand",
+          "title": "Win the brand search on purpose",
+          "effort": "2–4 h, then ongoing",
+          "what": "Brand strings to verify in Google (GB): Northline. Known namesakes/competitors: https://other-northline.example/.",
+          "why": "Prospects who hear the name will search it. They need to land on the right domain, not a namesake.",
+          "fix": "Put brand + place + category together in the home title or first paragraph. Align LinkedIn, Google Business Profile, and other sameAs profiles on the exact name and URL.",
+          "evidence": [],
+          "relatedUrls": [
+            "https://northline.example/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "manual_check"
+          }
+        }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "when": "This week",
+      "columns": {
+        "Northline": "Publish a sitemap and point robots.txt at it; Publish llms.txt; Keep the staging host out of the index; Redirect the old URLs; Add an Organization (or ProfessionalService) to the schema; The contact form posts to mailto:; Search demand and content fit; How AI search sees the brand (manual / API pass)"
+      }
+    },
+    {
+      "when": "Next 2 weeks",
+      "columns": {
+        "Northline": "Win the brand search on purpose"
+      }
+    },
+    {
+      "when": "Month 1–3",
+      "columns": {
+        "Northline": "Publish llms.txt; Search demand and content fit; How AI search sees the brand (manual / API pass)"
+      }
+    }
+  ],
+  "appendix": [
+    {
+      "title": "Starter llms.txt for Northline",
+      "kind": "pre",
+      "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n"
+    },
+    {
+      "title": "Sample Organization schema for Northline",
+      "kind": "pre",
+      "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"ProfessionalService\",\n      \"@id\": \"https://northline.example/#organization\",\n      \"name\": \"Northline\",\n      \"legalName\": \"Northline Advisory Ltd\",\n      \"url\": \"https://northline.example/\",\n      \"knowsAbout\": [\n        \"incident review\",\n        \"observability advisory\"\n      ],\n      \"sameAs\": []\n    }\n  ]\n}"
+    }
+  ],
+  "agentQueue": [
+    {
+      "id": "northline-org-schema",
+      "priority": "FIRST",
+      "level": "P0",
+      "category": "entity_brand",
+      "title": "Add an Organization (or ProfessionalService) to the schema",
+      "effort": "1–2 h",
+      "what": "JSON-LD is present (WebSite) but there is no Organization / ProfessionalService entity for the business itself.",
+      "why": "Without an organisation entity, engines may treat the brand as a topic or confuse it with namesakes. AI assistants invent descriptions when the entity is unclear.",
+      "fix": "Add ProfessionalService (or Organization) with name, legalName (\"Northline Advisory Ltd\"), url, address, founder, sameAs profile links, and knowsAbout.",
+      "evidence": [
+        "WebSite"
+      ],
+      "relatedUrls": [
+        "https://staging.northline.example/"
+      ],
+      "artifacts": [
+        {
+          "name": "sample-organization-schema.json",
+          "kind": "schema_json",
+          "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"ProfessionalService\",\n      \"@id\": \"https://northline.example/#organization\",\n      \"name\": \"Northline\",\n      \"legalName\": \"Northline Advisory Ltd\",\n      \"url\": \"https://northline.example/\",\n      \"knowsAbout\": [\n        \"incident review\",\n        \"observability advisory\"\n      ],\n      \"sameAs\": []\n    }\n  ]\n}"
+        }
+      ],
+      "agentAction": {
+        "type": "edit_schema",
+        "target": "Organization"
+      }
+    },
+    {
+      "id": "northline-staging-noindex",
+      "priority": "BLOCKER",
+      "level": "P0",
+      "category": "pre_launch",
+      "title": "Keep the staging host out of the index",
+      "effort": "15 min",
+      "what": "Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).",
+      "why": "A canonical is a hint, not a rule. If anyone links to staging, Google may index it as a duplicate, and AI crawlers often ignore canonicals.",
+      "fix": "Send `X-Robots-Tag: noindex` only when the request host is the staging host (Worker rule or Cloudflare Transform Rule). Do not put noindex in HTML that ships to production.",
+      "evidence": [
+        "staging: https://staging.northline.example/",
+        "x-robots-tag: (absent)"
+      ],
+      "relatedUrls": [
+        "https://staging.northline.example/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "configure_headers",
+        "target": "staging.northline.example"
+      }
+    },
+    {
+      "id": "northline-sitemap-missing",
+      "priority": "BLOCKER",
+      "level": "P0",
+      "category": "pre_launch",
+      "title": "Publish a sitemap and point robots.txt at it",
+      "effort": "30 min",
+      "what": "Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.",
+      "why": "A sitemap is how Google and AI crawlers learn the URL set quickly, especially after a redesign or launch.",
+      "fix": "Generate a sitemap (e.g. @astrojs/sitemap or equivalent), serve it at /sitemap-index.xml or /sitemap.xml, and add `Sitemap: <absolute-url>` to robots.txt. Submit it in Search Console after launch.",
+      "evidence": [
+        "robots status: 200",
+        "sitemap URL count: 0"
+      ],
+      "relatedUrls": [
+        "https://northline.example/robots.txt"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "add_file",
+        "target": "robots.txt + sitemap",
+        "notes": "Ensure Sitemap: line uses the production absolute URL."
+      }
+    },
+    {
+      "id": "northline-llms-txt",
+      "priority": "BLOCKER",
+      "level": "P0",
+      "category": "geo_ai",
+      "title": "Publish llms.txt",
+      "effort": "30 min",
+      "what": "/llms.txt returns 404.",
+      "why": "A short, human-readable summary helps AI crawlers and assistants cite the right entity, especially when repositioning or launching.",
+      "fix": "Write public/llms.txt by hand: one paragraph on who the organisation is (legal name, place, founder, what it does and does not do), then links to key pages with one-line summaries.",
+      "evidence": [
+        "llms status: 404"
+      ],
+      "relatedUrls": [
+        "https://northline.example/llms.txt"
+      ],
+      "artifacts": [
+        {
+          "name": "starter-llms.txt",
+          "kind": "llms_txt",
+          "content": "# Northline\n\n> Northline Advisory Ltd — replace this paragraph with: who you are, where,\n> who founded you, what you do, and what you explicitly do not do.\n\n## Pages\n- [Northline | Advisory](https://staging.northline.example/): We help teams.\n"
+        }
+      ],
+      "agentAction": {
+        "type": "add_file",
+        "target": "public/llms.txt"
+      }
+    },
+    {
+      "id": "northline-redirect-old-urls",
+      "priority": "BLOCKER",
+      "level": "P0",
+      "category": "pre_launch",
+      "title": "Redirect the old URLs",
+      "effort": "1–2 h",
+      "what": "2 known legacy URL(s) need permanent redirects (301) onto the current IA. Examples: /old-services/, /book-a-call/",
+      "why": "Without 301s, bookmarks, social posts and AI-answer citations become dead ends, and Google drops the URLs without passing value on.",
+      "fix": "Add a redirects file (or platform equivalent) with permanent 301s, one line per old URL. Keep it at least a year.",
+      "evidence": [
+        "/old-services/",
+        "/book-a-call/"
+      ],
+      "relatedUrls": [
+        "https://staging.northline.example/old-services/",
+        "https://staging.northline.example/book-a-call/"
+      ],
+      "artifacts": [
+        {
+          "name": "redirect-map-stub",
+          "kind": "redirect_map",
+          "content": "/old-services/  /  301\n/book-a-call/  /  301"
+        }
+      ],
+      "agentAction": {
+        "type": "add_redirects",
+        "target": "_redirects"
+      }
+    },
+    {
+      "id": "northline-geo-checks",
+      "priority": "CHECK",
+      "level": "P1",
+      "category": "geo_ai",
+      "title": "How AI search sees the brand (manual / API pass)",
+      "effort": "30–60 min",
+      "what": "Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.",
+      "why": "Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.",
+      "fix": "Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.",
+      "evidence": [
+        "What is Northline Advisory?"
+      ],
+      "relatedUrls": [],
+      "artifacts": [
+        {
+          "name": "geo-questions.md",
+          "kind": "checklist",
+          "content": "1. What is Northline Advisory?"
+        }
+      ],
+      "agentAction": {
+        "type": "manual_check",
+        "notes": "Fill GEO answers into the report"
+      }
+    },
+    {
+      "id": "northline-mailto-form",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "conversion",
+      "title": "The contact form posts to mailto:",
+      "effort": "1 h",
+      "what": "Found mailto form action(s): https://staging.northline.example/ → mailto:hello@northline.example",
+      "why": "This is a conversion issue more than an SEO one, but it is the page SEO work sends people to. On many phones and locked-down work machines, mailto does nothing.",
+      "fix": "Post to a real form endpoint (HubSpot, Formspree, etc.) and show the email address as plain-text fallback.",
+      "evidence": [
+        "https://staging.northline.example/ → mailto:hello@northline.example"
+      ],
+      "relatedUrls": [
+        "https://staging.northline.example/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "other",
+        "notes": "Wire form to CRM/endpoint"
+      }
+    },
+    {
+      "id": "northline-brand-search",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "entity_brand",
+      "title": "Win the brand search on purpose",
+      "effort": "2–4 h, then ongoing",
+      "what": "Brand strings to verify in Google (GB): Northline. Known namesakes/competitors: https://other-northline.example/.",
+      "why": "Prospects who hear the name will search it. They need to land on the right domain, not a namesake.",
+      "fix": "Put brand + place + category together in the home title or first paragraph. Align LinkedIn, Google Business Profile, and other sameAs profiles on the exact name and URL.",
+      "evidence": [],
+      "relatedUrls": [
+        "https://northline.example/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "manual_check"
+      }
+    },
+    {
+      "id": "northline-og-image",
+      "priority": "NICE_TO_HAVE",
+      "level": "P2",
+      "category": "technical",
+      "title": "A proper social preview image",
+      "effort": "30 min",
+      "what": "og:image is set but twitter:card is \"summary\" (prefer summary_large_image with a 1200×630 image).",
+      "why": "Shared links on LinkedIn otherwise show a cropped logo or empty preview.",
+      "fix": "Create one 1200×630 image (logo + headline), set as default og:image, use summary_large_image.",
+      "evidence": [],
+      "relatedUrls": [
+        "https://staging.northline.example/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "add_file",
+        "target": "og-default.png"
+      }
+    }
+  ]
+}

@@ -14,25 +14,26 @@ Each audit run writes three files:
 
 ## Quick start
 
+The product is the **audit capability**, not a check of any particular site. The reference review in `references/sample-search-review.html` is the quality bar (What / Why / Fix / Effort). A fictional, offline sample of that shape is generated with:
+
 ```bash
 npm install
-npm run audit -- --config configs/demo-site.yaml --out reports/demo
+npm run example
 ```
 
-Client example (InnovaTeQ + Felelősségteljes IT):
+That writes `examples/report-shape/` (`report.html`, `report.json`, `AGENT_QUEUE.md`) without fetching any URL.
+
+When you are asked to audit a real site, copy `configs/demo-site.yaml` and run:
 
 ```bash
-npm run audit -- --config configs/innovateq-felelosit.yaml --out reports/innovateq-felelosit
+npm run audit -- --config configs/<client>.yaml --out reports/<client>
 ```
-
-Checked-in sample output (from a live run): `examples/innovateq-felelosit/`.
-Golden human report to match in tone: `references/sample-search-review.html`.
 
 ## Repository map
 
 ```
 agents/           Playbooks for auditing vs implementing agents
-configs/          Per-client YAML (URLs, brands, old paths, GEO questions)
+configs/          Audit YAML (demo + templates/). Do not crawl a template unless asked
 schemas/          JSON Schema for report.json
 src/              Collectors, analysis rules, HTML/JSON/Markdown writers
 references/       Golden-sample human report to match in tone and structure

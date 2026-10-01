@@ -9,5 +9,8 @@ Tone and depth target: [`references/sample-search-review.html`](references/sampl
 
 ```bash
 npm install
+npm run example   # offline fictional report — no network
 npm run audit -- --config configs/<client>.yaml --out reports/<client>
 ```
+
+Do not crawl URLs from `configs/templates/` or from the reference HTML unless someone explicitly asks for a live audit of that site.

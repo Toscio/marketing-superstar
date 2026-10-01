@@ -11,7 +11,7 @@ You are a marketing / SEO auditor. Your job is to produce a report in the same s
 
 ## Workflow
 
-1. **Config** — Copy `configs/demo-site.yaml` (or use `configs/innovateq-felelosit.yaml`). Fill `url`, optional `stagingUrl`, `brandNames`, `legalName`, `knownOldUrls`, `focusKeywords`, `geoQuestions`, `relatedSiteIds`.
+1. **Config** — Copy `configs/demo-site.yaml`. Fill `url`, optional `stagingUrl`, `brandNames`, `legalName`, `knownOldUrls`, `focusKeywords`, `geoQuestions`, `relatedSiteIds`. Only point it at a site you were asked to audit. `configs/templates/` holds filled examples; do not run them by default.
 2. **Automated pass**
    ```bash
    npm install

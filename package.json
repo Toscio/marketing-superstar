@@ -10,6 +10,7 @@
     "build": "tsc",
     "audit": "tsx src/cli.ts audit",
     "audit:demo": "tsx src/cli.ts audit --config configs/demo-site.yaml --out reports/demo",
+    "example": "tsx src/render-shape.ts examples/report-shape",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/**/*.test.ts"
   },

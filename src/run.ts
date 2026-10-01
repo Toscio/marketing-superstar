@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
-import { crawlSite } from "./collectors/crawl.js";
+import { crawlSite, type CrawlResult } from "./collectors/crawl.js";
 import { analyzeSite } from "./collectors/analyze.js";
 import { toHtmlReport } from "./report/html.js";
 import { buildAgentQueue, toAgentMarkdown, toJsonReport } from "./report/serialize.js";
@@ -75,10 +75,80 @@ function defaultTimeline(sites: SiteSection[]): AuditReport["timeline"] {
   ];
 }
 
-export async function runAudit(config: AuditConfig): Promise<AuditReport> {
+export function assembleReport(
+  config: AuditConfig,
+  crawls: Map<string, CrawlResult>,
+  generatedAt = new Date().toISOString(),
+): AuditReport {
   const siteSections: SiteSection[] = [];
   const appendix: AuditReport["appendix"] = [];
   const allFindings: Finding[] = [];
+
+  for (const site of config.sites) {
+    const crawl = crawls.get(site.id);
+    if (!crawl) throw new Error(`Missing crawl for site ${site.id}`);
+    const analysis = analyzeSite(site, crawl);
+    allFindings.push(...analysis.findings);
+    appendix.push(...analysis.appendix);
+    siteSections.push({
+      siteId: site.id,
+      name: site.name,
+      primaryUrl: site.url,
+      stagingUrl: site.stagingUrl,
+      stats: analysis.stats,
+      alreadyDoneWell: analysis.alreadyDoneWell,
+      findings: analysis.findings,
+    });
+  }
+
+  if (config.sites.length > 1) {
+    const related = config.sites.filter((s) => s.relatedSiteIds.length);
+    if (related.length) {
+      const finding: Finding = {
+        id: "cross-site-entity-link",
+        priority: "IMPORTANT",
+        level: "P1",
+        category: "cross_site",
+        title: "Connect related brands through a shared person/entity",
+        effort: "1 h",
+        what: `Configured related sites: ${config.sites.map((s) => s.name).join(", ")}.`,
+        why: "Shared founders should be one Person entity referenced from each site. Do not use hreflang unless the content is the same page in different languages.",
+        fix: "Pick one Person @id on the primary site and reference it from the other. Add one bio line on each site pointing at the sibling brand where it genuinely helps the reader.",
+        evidence: related.map((s) => `${s.id} → ${s.relatedSiteIds.join(",")}`),
+        relatedUrls: config.sites.map((s) => s.url),
+        artifacts: [],
+        agentAction: { type: "edit_schema", notes: "Shared Person @id" },
+      };
+      allFindings.push(finding);
+      siteSections[0]?.findings.push(finding);
+    }
+  }
+
+  const checked = config.sites
+    .map((s) => (s.stagingUrl ? `${s.stagingUrl} (staging), ${s.url}` : s.url))
+    .join("; ");
+
+  return {
+    schemaVersion: "1.0.0",
+    title: config.title,
+    eyebrow: `Search & marketing audit · ${generatedAt.slice(0, 10)}`,
+    lede:
+      config.notes ??
+      `Prioritised findings for ${config.sites.map((s) => s.name).join(" and ")}. Each item says what to change, why it matters, how to fix it and roughly how long it takes.`,
+    meta: `Checked: ${checked}. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).`,
+    generatedAt,
+    method:
+      "Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.",
+    summary: defaultSummary(siteSections),
+    sites: siteSections,
+    timeline: defaultTimeline(siteSections),
+    appendix,
+    agentQueue: buildAgentQueue(allFindings),
+  };
+}
+
+export async function runAudit(config: AuditConfig): Promise<AuditReport> {
+  const crawls = new Map<string, CrawlResult>();
 
   for (const site of config.sites) {
     const seed = site.stagingUrl ?? site.url;
@@ -114,69 +184,10 @@ export async function runAudit(config: AuditConfig): Promise<AuditReport> {
       }
     }
 
-    const analysis = analyzeSite(site, crawl);
-    allFindings.push(...analysis.findings);
-    appendix.push(...analysis.appendix);
-
-    siteSections.push({
-      siteId: site.id,
-      name: site.name,
-      primaryUrl: site.url,
-      stagingUrl: site.stagingUrl,
-      stats: analysis.stats,
-      alreadyDoneWell: analysis.alreadyDoneWell,
-      findings: analysis.findings,
-    });
+    crawls.set(site.id, crawl);
   }
 
-  // Cross-site relation note
-  if (config.sites.length > 1) {
-    const related = config.sites.filter((s) => s.relatedSiteIds.length);
-    if (related.length) {
-      const finding: Finding = {
-        id: "cross-site-entity-link",
-        priority: "IMPORTANT",
-        level: "P1",
-        category: "cross_site",
-        title: "Connect related brands through a shared person/entity",
-        effort: "1 h",
-        what: `Configured related sites: ${config.sites.map((s) => s.name).join(", ")}.`,
-        why: "Shared founders should be one Person entity referenced from each site. Do not use hreflang unless the content is the same page in different languages.",
-        fix: "Pick one Person @id on the primary site and reference it from the other. Add one bio line on each site pointing at the sibling brand where it genuinely helps the reader.",
-        evidence: related.map((s) => `${s.id} → ${s.relatedSiteIds.join(",")}`),
-        relatedUrls: config.sites.map((s) => s.url),
-        artifacts: [],
-        agentAction: { type: "edit_schema", notes: "Shared Person @id" },
-      };
-      allFindings.push(finding);
-      siteSections[0]?.findings.push(finding);
-    }
-  }
-
-  const generatedAt = new Date().toISOString();
-  const checked = config.sites
-    .map((s) => (s.stagingUrl ? `${s.stagingUrl} (staging), ${s.url}` : s.url))
-    .join("; ");
-
-  const report: AuditReport = {
-    schemaVersion: "1.0.0",
-    title: config.title,
-    eyebrow: `Search & marketing audit · ${generatedAt.slice(0, 10)}`,
-    lede:
-      config.notes ??
-      `Prioritised findings for ${config.sites.map((s) => s.name).join(" and ")}. Each item says what to change, why it matters, how to fix it and roughly how long it takes.`,
-    meta: `Checked: ${checked}. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).`,
-    generatedAt,
-    method:
-      "Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.",
-    summary: defaultSummary(siteSections),
-    sites: siteSections,
-    timeline: defaultTimeline(siteSections),
-    appendix,
-    agentQueue: buildAgentQueue(allFindings),
-  };
-
-  return report;
+  return assembleReport(config, crawls);
 }
 
 export async function writeReportOutputs(

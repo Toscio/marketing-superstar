@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Northline: SEO and AI-search review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#17202b; --muted:#566273; --line:#dde2e8;
+  --accent:#1d6fa5; --p0:#b3261e; --p0bg:#fbe9e7; --p1:#9a5b00; --p1bg:#fdf1dc; --p2:#2e6b3a; --p2bg:#e6f2e8; --good:#2e6b3a;
+  --display:"Newsreader",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --panel:#1a2129; --fg:#e4e9ef; --muted:#9aa6b4; --line:#2c3642;
+  --accent:#6cb4e4; --p0:#ff9a8f; --p0bg:#3a1f1d; --p1:#f0bf6a; --p1bg:#36291a; --p2:#8fd19d; --p2bg:#1c3022; --good:#8fd19d; color-scheme:dark}}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-inline:16px;padding-block:40px 80px;margin:0}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.3rem;font-weight:600}
+h2{font-size:1.75rem;padding-top:28px;border-top:2px solid var(--fg)}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+code{font:0.88em var(--mono);background:var(--panel);border:1px solid var(--line);padding:0 4px;border-radius:3px;overflow-wrap:anywhere}
+.eyebrow{font:500 0.78rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.1rem;color:var(--muted);max-width:65ch}
+.meta{font:0.85rem var(--mono);color:var(--muted)}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.box ol,.box ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.stat b{display:block;font:500 1.35rem var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:.85rem;color:var(--muted)}
+.group{display:flex;flex-direction:column;gap:0}
+.item{border-top:1px solid var(--line);padding-block:18px;display:flex;flex-direction:column;gap:8px}
+.item:last-child{border-bottom:1px solid var(--line)}
+.head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tag{font:500 .72rem var(--mono);letter-spacing:.05em;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.P0{color:var(--p0);background:var(--p0bg)} .P1{color:var(--p1);background:var(--p1bg)} .P2{color:var(--p2);background:var(--p2bg)}
+.eff{font:.8rem var(--mono);color:var(--muted);margin-left:auto}
+dl{margin:0;display:grid;grid-template-columns:4.2em 1fr;gap:4px 12px}
+dt{font:500 .78rem/1.9 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+dd{margin:0;min-width:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .75rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+pre{margin:0;overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;font:.8rem/1.5 var(--mono)}
+footer{font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Search &amp; marketing audit · 2026-10-01</div>
+  <h1>Northline: SEO and AI-search review</h1>
+  <p class="lede">Fictional sample. Each item says what to change, why it matters, how to fix it and roughly how long it takes. Read-only.</p>
+  <p class="meta">Checked: https://staging.northline.example/ (staging), https://northline.example/. Automated collectors: HTTP crawl, robots/sitemap/llms.txt, on-page meta, JSON-LD. Optional: Lighthouse, keyword APIs, live AI answers (see agent checklist).</p>
+</header>
+<section class="box"><h3>Summary</h3><ol><li>**Northline:** 5 P0 item(s), 11 findings total, 1 strengths noted.</li><li>Northline — Publish a sitemap and point robots.txt at it: Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.</li><li>Northline — Publish llms.txt: /llms.txt returns 404.</li><li>Northline — Keep the staging host out of the index: Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).</li><li>Each finding says what to change, why it matters, how to fix it and roughly how long it takes. Checks are read-only: no forms submitted, no load tests.</li></ol></section>
+
+<h2>Northline <span class="meta">(https://northline.example/)</span></h2>
+<div class="stats"><div class="stat"><b>1</b><span>pages crawled successfully (of 3)</span></div>
+<div class="stat"><b>none</b><span>URLs discovered via sitemap</span></div>
+<div class="stat"><b>missing</b><span>llms.txt</span></div>
+<div class="stat"><b>yes</b><span>homepage title present</span></div></div>
+<div class="box"><h3>Already done well</h3><ul><li>Unique titles, one H1 pattern, and canonicals look present on crawled pages.</li></ul></div>
+<h3>A. Pre-launch / first actions</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Publish a sitemap and point robots.txt at it</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>Northline has no discoverable XML sitemap (checked common paths and robots.txt). robots.txt exists but has no Sitemap: line.</dd>
+<dt>Why</dt><dd>A sitemap is how Google and AI crawlers learn the URL set quickly, especially after a redesign or launch.</dd>
+<dt>Fix</dt><dd>Generate a sitemap (e.g. @astrojs/sitemap or equivalent), serve it at /sitemap-index.xml or /sitemap.xml, and add `Sitemap: &lt;absolute-url&gt;` to robots.txt. Submit it in Search Console after launch.</dd></dl>
+<p class="meta">Evidence: <code>robots status: 200</code>, <code>sitemap URL count: 0</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Keep the staging host out of the index</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>Staging host staging.northline.example appears indexable (no noindex meta and no X-Robots-Tag: noindex on the checked response).</dd>
+<dt>Why</dt><dd>A canonical is a hint, not a rule. If anyone links to staging, Google may index it as a duplicate, and AI crawlers often ignore canonicals.</dd>
+<dt>Fix</dt><dd>Send `X-Robots-Tag: noindex` only when the request host is the staging host (Worker rule or Cloudflare Transform Rule). Do not put noindex in HTML that ships to production.</dd></dl>
+<p class="meta">Evidence: <code>staging: https://staging.northline.example/</code>, <code>x-robots-tag: (absent)</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Redirect the old URLs</h3><span class="eff">Effort: 1–2 h</span></div>
+<dl><dt>What</dt><dd>2 known legacy URL(s) need permanent redirects (301) onto the current IA. Examples: /old-services/, /book-a-call/</dd>
+<dt>Why</dt><dd>Without 301s, bookmarks, social posts and AI-answer citations become dead ends, and Google drops the URLs without passing value on.</dd>
+<dt>Fix</dt><dd>Add a redirects file (or platform equivalent) with permanent 301s, one line per old URL. Keep it at least a year.</dd></dl>
+<p class="meta">Evidence: <code>/old-services/</code>, <code>/book-a-call/</code></p>
+</div>
+</div>
+<h3>B. Technical</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P2">IN GOOD SHAPE</span><h3>Titles, descriptions, headings</h3><span class="eff">Effort: No action</span></div>
+<dl><dt>What</dt><dd>Crawled pages have titles, meta descriptions, and a single H1.</dd>
+<dt>Why</dt><dd>This is the technical baseline most consultancy sites still miss.</dd>
+<dt>Fix</dt><dd>Keep the pattern as new pages are added.</dd></dl>
+
+</div>
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>A proper social preview image</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>og:image is set but twitter:card is &quot;summary&quot; (prefer summary_large_image with a 1200×630 image).</dd>
+<dt>Why</dt><dd>Shared links on LinkedIn otherwise show a cropped logo or empty preview.</dd>
+<dt>Fix</dt><dd>Create one 1200×630 image (logo + headline), set as default og:image, use summary_large_image.</dd></dl>
+
+</div>
+</div>
+<h3>C. Content and keyword fit</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>Search demand and content fit</h3><span class="eff">Effort: ongoing</span></div>
+<dl><dt>What</dt><dd>Configured focus themes/keywords to validate with search-volume data: incident review, observability advisory.</dd>
+<dt>Why</dt><dd>Category keywords often have tiny demand for advisory businesses; buyers search symptoms or ask AI assistants.</dd>
+<dt>Fix</dt><dd>Pull monthly volumes (DataForSEO / Ads Keyword Planner) for the configured markets, then write problem-led pages that open with a two-sentence direct answer and link to the matching service.</dd></dl>
+<p class="meta">Evidence: <code>incident review</code>, <code>observability advisory</code></p>
+</div>
+</div>
+<h3>D. GEO: how AI search sees the brand</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Publish llms.txt</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>/llms.txt returns 404.</dd>
+<dt>Why</dt><dd>A short, human-readable summary helps AI crawlers and assistants cite the right entity, especially when repositioning or launching.</dd>
+<dt>Fix</dt><dd>Write public/llms.txt by hand: one paragraph on who the organisation is (legal name, place, founder, what it does and does not do), then links to key pages with one-line summaries.</dd></dl>
+<p class="meta">Evidence: <code>llms status: 404</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P1">CHECK</span><h3>How AI search sees the brand (manual / API pass)</h3><span class="eff">Effort: 30–60 min</span></div>
+<dl><dt>What</dt><dd>Live ChatGPT / Perplexity / AI Overview answers were not auto-fetched in this run. Use the configured questions.</dd>
+<dt>Why</dt><dd>Assistants still describe brands from old crawls; redirects and llms.txt decide how fast that updates.</dd>
+<dt>Fix</dt><dd>Ask each question with web search enabled, record citations, and compare to the intended positioning. Re-run 2–4 weeks after major changes.</dd></dl>
+<p class="meta">Evidence: <code>What is Northline Advisory?</code></p>
+</div>
+</div>
+<h3>E. Entity and brand</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P0">FIRST</span><h3>Add an Organization (or ProfessionalService) to the schema</h3><span class="eff">Effort: 1–2 h</span></div>
+<dl><dt>What</dt><dd>JSON-LD is present (WebSite) but there is no Organization / ProfessionalService entity for the business itself.</dd>
+<dt>Why</dt><dd>Without an organisation entity, engines may treat the brand as a topic or confuse it with namesakes. AI assistants invent descriptions when the entity is unclear.</dd>
+<dt>Fix</dt><dd>Add ProfessionalService (or Organization) with name, legalName (&quot;Northline Advisory Ltd&quot;), url, address, founder, sameAs profile links, and knowsAbout.</dd></dl>
+<p class="meta">Evidence: <code>WebSite</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Win the brand search on purpose</h3><span class="eff">Effort: 2–4 h, then ongoing</span></div>
+<dl><dt>What</dt><dd>Brand strings to verify in Google (GB): Northline. Known namesakes/competitors: https://other-northline.example/.</dd>
+<dt>Why</dt><dd>Prospects who hear the name will search it. They need to land on the right domain, not a namesake.</dd>
+<dt>Fix</dt><dd>Put brand + place + category together in the home title or first paragraph. Align LinkedIn, Google Business Profile, and other sameAs profiles on the exact name and URL.</dd></dl>
+
+</div>
+</div>
+<h3>F. Conversion</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>The contact form posts to mailto:</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>Found mailto form action(s): https://staging.northline.example/ → mailto:hello@northline.example</dd>
+<dt>Why</dt><dd>This is a conversion issue more than an SEO one, but it is the page SEO work sends people to. On many phones and locked-down work machines, mailto does nothing.</dd>
+<dt>Fix</dt><dd>Post to a real form endpoint (HubSpot, Formspree, etc.) and show the email address as plain-text fallback.</dd></dl>
+<p class="meta">Evidence: <code>https://staging.northline.example/ → mailto:hello@northline.example</code></p>
+</div>
+</div>
+
+<h2>Suggested order</h2><div class="tbl"><table><tr><th>When</th><th>Northline</th></tr>
+<tr><td>This week</td><td>Publish a sitemap and point robots.txt at it; Publish llms.txt; Keep the staging host out of the index; Redirect the old URLs; Add an Organization (or ProfessionalService) to the schema; The contact form posts to mailto:; Search demand and content fit; How AI search sees the brand (manual / API pass)</td></tr>
+<tr><td>Next 2 weeks</td><td>Win the brand search on purpose</td></tr>
+<tr><td>Month 1–3</td><td>Publish llms.txt; Search demand and content fit; How AI search sees the brand (manual / API pass)</td></tr>
+</table></div>
+<h2>Appendix</h2><h3>Starter llms.txt for Northline</h3><pre># Northline
+
+&gt; Northline Advisory Ltd — replace this paragraph with: who you are, where,
+&gt; who founded you, what you do, and what you explicitly do not do.
+
+## Pages
+- [Northline | Advisory](https://staging.northline.example/): We help teams.
+</pre>
+<h3>Sample Organization schema for Northline</h3><pre>{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@graph&quot;: [
+    {
+      &quot;@type&quot;: &quot;ProfessionalService&quot;,
+      &quot;@id&quot;: &quot;https://northline.example/#organization&quot;,
+      &quot;name&quot;: &quot;Northline&quot;,
+      &quot;legalName&quot;: &quot;Northline Advisory Ltd&quot;,
+      &quot;url&quot;: &quot;https://northline.example/&quot;,
+      &quot;knowsAbout&quot;: [
+        &quot;incident review&quot;,
+        &quot;observability advisory&quot;
+      ],
+      &quot;sameAs&quot;: []
+    }
+  ]
+}</pre>
+<footer>Method: read-only HTTP checks of seed + sitemap URLs, on-page SEO extraction, robots.txt / sitemap / llms.txt, JSON-LD entity scan. Keyword volumes, backlink graphs and live ChatGPT/Perplexity answers are filled by the auditing agent when enabled. No forms submitted, no load tests.</footer>
+</div>
+</body>
+</html>
