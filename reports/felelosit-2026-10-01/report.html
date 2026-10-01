@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Felelősségteljes IT: SEO and AI-search review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#17202b; --muted:#566273; --line:#dde2e8;
+  --accent:#1d6fa5; --p0:#b3261e; --p0bg:#fbe9e7; --p1:#9a5b00; --p1bg:#fdf1dc; --p2:#2e6b3a; --p2bg:#e6f2e8; --good:#2e6b3a;
+  --display:"Newsreader",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --panel:#1a2129; --fg:#e4e9ef; --muted:#9aa6b4; --line:#2c3642;
+  --accent:#6cb4e4; --p0:#ff9a8f; --p0bg:#3a1f1d; --p1:#f0bf6a; --p1bg:#36291a; --p2:#8fd19d; --p2bg:#1c3022; --good:#8fd19d; color-scheme:dark}}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-inline:16px;padding-block:40px 80px;margin:0}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.3rem;font-weight:600}
+h2{font-size:1.75rem;padding-top:28px;border-top:2px solid var(--fg)}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+code{font:0.88em var(--mono);background:var(--panel);border:1px solid var(--line);padding:0 4px;border-radius:3px;overflow-wrap:anywhere}
+.eyebrow{font:500 0.78rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.1rem;color:var(--muted);max-width:65ch}
+.meta{font:0.85rem var(--mono);color:var(--muted)}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.box ol,.box ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.stat b{display:block;font:500 1.35rem var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:.85rem;color:var(--muted)}
+.group{display:flex;flex-direction:column;gap:0}
+.item{border-top:1px solid var(--line);padding-block:18px;display:flex;flex-direction:column;gap:8px}
+.item:last-child{border-bottom:1px solid var(--line)}
+.head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tag{font:500 .72rem var(--mono);letter-spacing:.05em;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.P0{color:var(--p0);background:var(--p0bg)} .P1{color:var(--p1);background:var(--p1bg)} .P2{color:var(--p2);background:var(--p2bg)}
+.eff{font:.8rem var(--mono);color:var(--muted);margin-left:auto}
+dl{margin:0;display:grid;grid-template-columns:4.2em 1fr;gap:4px 12px}
+dt{font:500 .78rem/1.9 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+dd{margin:0;min-width:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .75rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+pre{margin:0;overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;font:.8rem/1.5 var(--mono)}
+footer{font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Search review · Standard · 1 October 2026</div>
+  <h1>Felelősségteljes IT: SEO and AI-search review</h1>
+  <p class="lede">A standard review of the live felelosit.hu site after the CRM, LinkedIn and technical fixes. Each item says what to change, why it matters, how to fix it and roughly how long it takes. Checked read-only: no form submitted, no load test.</p>
+  <p class="meta">Checked: https://felelosit.hu/ (7 sitemap URLs), robots.txt, llms.txt, headers, JSON-LD, LinkedIn and Facebook page titles, DuckDuckGo brand queries. Lighthouse 12 mobile and desktop on the homepage. Keyword volumes and live ChatGPT or Perplexity answers were not re-pulled.</p>
+</header>
+<section class="box"><h3>Summary</h3><ol><li>The technical baseline is in good shape. Seven pages, unique titles, one H1, self-canonicals, a real noindex 404, sitemap-index.xml, llms.txt, HSTS with preload, and a strict content security policy. Lighthouse 12 on the homepage: mobile performance 98, accessibility 95, best practices 93, SEO 100. Desktop performance is 100. CLS is 0.</li><li>The contact path is a form, not a mailto. /kapcsolat posts JSON to /api/contact, with a privacy checkbox and a honeypot. The privacy notice names HubSpot as the CRM processor. The form was not submitted.</li><li>LinkedIn and Facebook exist, under the wrong name. The company pages are titled &quot;Felelős IT&quot; and &quot;Felelős It&quot;, with 2 and 1 followers. Organisation schema still does not cite either URL. That is the main remaining entity job.</li><li>The homepage already defines the offer in the first paragraph, including teljesítésigazolás and SLA. The missing line is how a magánszakértői állásfoglalás differs from an igazságügyi szakértő. Those words appear nowhere on the site.</li><li>On DuckDuckGo the homepage is first for &quot;Felelősségteljes IT&quot;. The short query &quot;felelosit&quot; is led by FileList. A stale www …/szolgaltatasok.html URL is still listed, and it 301s to /szolgaltatasok. Google.hu was not re-checked; the September finding that the privacy page ranked first is not confirmed today.</li><li>Two small leftovers: the content security policy blocks Cloudflare's insights beacon, and the legal disclaimer under the hero fails contrast (1.33). /sitemap.xml 404s, while robots.txt already points at the working sitemap index.</li><li>There is no P0. Rename the two profiles and add sameAs this week. The FAQ, the colour, and the sitemap redirect are about two hours on top.</li></ol></section>
+
+<h2>Felelősségteljes IT <span class="meta">(https://felelosit.hu/)</span></h2>
+<div class="stats"><div class="stat"><b>7</b><span>indexable URLs in sitemap-0.xml</span></div>
+<div class="stat"><b>98</b><span>Lighthouse 12 mobile performance</span></div>
+<div class="stat"><b>100</b><span>Lighthouse 12 SEO, mobile and desktop</span></div>
+<div class="stat"><b>0</b><span>cumulative layout shift</span></div>
+<div class="stat"><b>2</b><span>LinkedIn company followers, name still shortened</span></div></div>
+<div class="box"><h3>Already done well</h3><ul><li>Unique titles, one H1, a meta description and a self-referencing canonical on all seven sitemap URLs. lang=hu, with hreflang hu-HU and x-default pointing at the same Hungarian URL.</li><li>robots.txt allows crawling and declares Sitemap: https://felelosit.hu/sitemap-index.xml. The index and sitemap-0.xml both return XML.</li><li>llms.txt names Felelősségteljes IT, Practical Solutions Kft., Siklós, tax ID, founding year 2016, both managing directors, and the limit that the firm does not provide legal representation.</li><li>JSON-LD includes Organization and ProfessionalService, two Person nodes with stable @id values, Service, WebSite, WebPage or AboutPage or ContactPage, and FAQPage on the homepage, services and problems pages. legalName, taxID, foundingDate and the Siklós address match the impresszum.</li><li>Homepage security headers: HSTS max-age=31536000 with includeSubDomains and preload, CSP, X-Content-Type-Options: nosniff, X-Frame-Options: DENY, Referrer-Policy, Permissions-Policy.</li><li>http://felelosit.hu/, http://www.felelosit.hu/ and https://www.felelosit.hu/ each 301 once to https://felelosit.hu/. Legacy .html paths 301 to the extensionless URL.</li><li>Unknown paths return HTTP 404 with noindex, not a soft 200. Default Open Graph image is a 1200×630 PNG at /og-felelosit.png.</li><li>The contact form on /kapcsolat has no mailto action. It posts to /api/contact. GET that path returns 405 and Allow: POST. The privacy notice lists HubSpot for CRM. Not submitted.</li><li>The homepage opening states the offer in one sentence, and both money pages (1,811 and 1,486 words) are linked from the homepage, including the section anchors.</li><li>Ádám's about-page bio names him as founder of InnovaTeQ. Dr. Vida András's bio names VFKDataPro and states that he does not provide legal representation.</li></ul></div>
+<h3>A. Pre-launch / first actions</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>Redirect /sitemap.xml to the sitemap index</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>https://felelosit.hu/sitemap.xml returns 404 text/html (the branded noindex 404). robots.txt already has Sitemap: https://felelosit.hu/sitemap-index.xml, and that file returns 200 application/xml and points at sitemap-0.xml, which lists the seven live URLs. Lastmod on the index is 2026-09-29.</dd>
+<dt>Why</dt><dd>Google follows the Sitemap line, so this is not why pages would be missing. Crawlers and validators that try /sitemap.xml still receive a 404.</dd>
+<dt>Fix</dt><dd>301 https://felelosit.hu/sitemap.xml to https://felelosit.hu/sitemap-index.xml. Leave robots.txt as it is.</dd></dl>
+<p class="meta">Evidence: <code>GET /sitemap.xml → 404 text/html</code>, <code>GET /sitemap-index.xml → 200 application/xml</code>, <code>GET /sitemap-0.xml → 200, 7 URLs</code></p>
+</div>
+</div>
+<h3>B. Technical</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Stop the Cloudflare beacon from failing the content security policy</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>Lighthouse 12 logs a console error on the homepage: loading https://static.cloudflareinsights.com/beacon.min.js is blocked by script-src. The directive allows 'self', 'unsafe-inline', Google Tag Manager, and HubSpot script hosts. It does not allow static.cloudflareinsights.com. Best-practices score is 93 on mobile and desktop for this reason.</dd>
+<dt>Why</dt><dd>Cloudflare is injecting Web Analytics that the policy then blocks. The beacon never runs, and every page load reports a security error. Measurement via GTM (GTM-PPQWWVFK) is a separate path and is already allowed.</dd>
+<dt>Fix</dt><dd>Pick one. If Cloudflare Web Analytics should run, add https://static.cloudflareinsights.com to script-src. If GTM is the only measurement path, turn the Cloudflare Web Analytics injection off so the beacon is not requested. Do not widen script-src to https:.</dd></dl>
+<p class="meta">Evidence: <code>CSP blocks static.cloudflareinsights.com/beacon.min.js</code>, <code>Lighthouse best-practices 93, errors-in-console score 0</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>Darken the legal disclaimer under the homepage hero</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>Lighthouse accessibility is 95 on mobile and desktop. The failing node is the homepage paragraph &lt;p class=&quot;small&quot; style=&quot;margin-top:18px&quot;&gt;: &quot;Szakmai támogatást nyújtunk a jogi képviselő munkájához, de nem helyettesítjük a jogi képviseletet.&quot; Computed colours are #ced9de on #f4f7f8, contrast ratio 1.33. Images on crawled pages have alt text and width/height.</dd>
+<dt>Why</dt><dd>That sentence is the legal boundary of the offer. At 14px and ratio 1.33 it is hard to read, which is the only accessibility failure Lighthouse reported.</dd>
+<dt>Fix</dt><dd>Set that paragraph's colour to #3d5560 (about 7.3:1 on #f4f7f8) or darker. Keep the copy. Re-run Lighthouse accessibility on the homepage and expect the color-contrast audit to pass.</dd></dl>
+<p class="meta">Evidence: <code>contrast 1.33, #ced9de on #f4f7f8, 14.08px</code></p>
+</div>
+</div>
+<h3>C. Content and keyword fit</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Say how this differs from a court-appointed expert</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>None of the seven indexable pages contain &quot;magánszakértő&quot; or &quot;igazságügyi&quot;. The about page does say &quot;Nem hatósági vizsgálat&quot; and that the firm does not replace a lawyer. Homepage, services and &quot;miben segíthetünk&quot; already use teljesítésigazolás and SLA in titles or the opening paragraph. There is no standalone article for &quot;sla jelentése&quot;.</dd>
+<dt>Why</dt><dd>A lawyer searching for help with an IT delivery dispute compares the site with igazságügyi informatikai szakértők. The 30 September 2026 review found that Google.hu results for &quot;informatikai szakértő teljesítési vita&quot; were court experts and academic pages, and that &quot;informatikai szakértő&quot; had about 10 searches a month. Volumes were not pulled again on this run. The missing sentence is the distinction, not another service heading.</dd>
+<dt>Fix</dt><dd>Add one FAQ on https://felelosit.hu/miben-segithetunk, in the visible list and in that page's FAQPage JSON-LD. Use the question and answer in the appendix. Do not create a thin glossary page for &quot;sla jelentése&quot;; SLA is already in the commercial titles.</dd></dl>
+<p class="meta">Evidence: <code>magánszakértő: 0 hits on crawled pages</code>, <code>igazságügyi: 0 hits on crawled pages</code>, <code>teljesítésigazolás is in the homepage meta description and opening</code></p>
+</div>
+</div>
+<h3>D. GEO: how AI search sees the brand</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>AI answers were not re-recorded on this run</h3><span class="eff">Effort: No action</span></div>
+<dl><dt>What</dt><dd>ChatGPT, Perplexity, Google AI Overview and Copilot were not queried on 1 October 2026. The homepage opening is now a usable definition: &quot;Független IT szakértő és szerződéses támogatás IT-projektekhez: vitatott teljesítés, szoftver átadás-átvétel, teljesítésigazolás, SLA és vezetői döntés.&quot; llms.txt states the same limit: Practical Solutions Kft., founded 2016, no legal representation. The 30 September review recorded ChatGPT calling the firm an ethics initiative and Perplexity finding nothing.</dd>
+<dt>Why</dt><dd>Those answers go stale after the copy and the profiles change. A fresh four-engine probe belongs to a deep review, after the company name is consistent.</dd>
+<dt>Fix</dt><dd>No site change for this item. Repeat the three configured questions after the profile rename and paste the answers into geoAnswers.</dd></dl>
+<p class="meta">Evidence: <code>Homepage lead sentence present</code>, <code>llms.txt present and names the legal entity</code></p>
+</div>
+</div>
+<h3>E. Entity and brand</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Use one company name on LinkedIn, Facebook, and in schema</h3><span class="eff">Effort: 45 min</span></div>
+<dl><dt>What</dt><dd>The live company profiles use a shortened name. LinkedIn https://www.linkedin.com/company/felelosit/ titles itself &quot;Felelős IT&quot; (2 followers). Facebook https://www.facebook.com/felelosit/ titles itself &quot;Felelős It&quot; (1 follower). The site, the footer, llms.txt and the Organization name are &quot;Felelősségteljes IT&quot;. The Organization node has no sameAs. sameAs exists only on the two Person nodes (personal LinkedIn URLs).</dd>
+<dt>Why</dt><dd>&quot;Felelősségteljes&quot; is an ordinary Hungarian adjective, so the brand is easy to split. A shortened profile name and a schema graph that never cites the company pages leave search and AI assistants with two weak entities instead of one.</dd>
+<dt>Fix</dt><dd>In LinkedIn and Facebook admin, set the page name to exactly &quot;Felelősségteljes IT&quot;, the tagline to &quot;Mérhető. Bizonyítható. Számon kérhető.&quot;, and the website to https://felelosit.hu/. Then add sameAs on the Organization node (not instead of the Person links). A fragment is in the appendix. Leave the personal profile URLs on Tóth Ádám and Dr. Vida András as they are.</dd></dl>
+<p class="meta">Evidence: <code>LinkedIn og:title = Felelős IT | LinkedIn</code>, <code>Facebook og:title = Felelős It</code>, <code>Organization JSON-LD has no sameAs</code></p>
+</div>
+<div class="item"><div class="head"><span class="tag P1">CHECK</span><h3>Recheck the brand query in Google after the profile rename</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>DuckDuckGo on 1 October 2026, query &quot;Felelősségteljes IT&quot;: result 1 is https://felelosit.hu/ (title &quot;Informatikai szakértő IT-teljesítésre | Felelősségteljes IT&quot;), result 2 is https://www.felelosit.hu/szolgaltatasok.html, then dictionary pages for the adjective. That .html URL 301s www → https://felelosit.hu/szolgaltatasok.html → /szolgaltatasok. Query &quot;felelosit&quot; is led by FileList, with the homepage second. Google.hu was not re-queried. The 30 September 2026 review had the privacy page first on Google.hu for &quot;felelosit&quot;; that order is not confirmed today. The privacy page is still index,follow.</dd>
+<dt>Why</dt><dd>The homepage can win the phrase, and on DuckDuckGo it currently does. The short string collides with FileList, and a pre-migration URL is still listed. Search Console is the place to see whether Google still prefers the privacy URL.</dd>
+<dt>Fix</dt><dd>After the LinkedIn and Facebook rename, open the Google Search Console URL-prefix or domain property and inspect the queries &quot;Felelősségteljes IT&quot; and &quot;felelosit&quot;. Request indexing for https://felelosit.hu/ and https://felelosit.hu/szolgaltatasok. Keep the privacy page indexable unless Search Console shows it outranking the homepage for the brand query.</dd></dl>
+<p class="meta">Evidence: <code>DuckDuckGo 2026-10-01: homepage is result 1 for the phrase</code>, <code>www.felelosit.hu/szolgaltatasok.html still listed, and it 301s in two hops</code>, <code>DuckDuckGo &quot;felelosit&quot;: FileList then the homepage</code></p>
+</div>
+</div>
+
+<h2>Suggested order</h2><div class="tbl"><table><tr><th>When</th><th>Felelősségteljes IT</th></tr>
+<tr><td>This week</td><td>Rename LinkedIn and Facebook to Felelősségteljes IT and add Organization sameAs. Allow the Cloudflare beacon or turn the injection off.</td></tr>
+<tr><td>Next 2 weeks</td><td>Add the court-expert FAQ on /miben-segithetunk. Darken the disclaimer. 301 /sitemap.xml to the sitemap index.</td></tr>
+<tr><td>Month 1–3</td><td>Inspect the brand queries in Search Console and request indexing of the homepage and /szolgaltatasok. Repeat the AI questions after the profile name is consistent.</td></tr>
+</table></div>
+<h2>Appendix</h2><h3>Organization sameAs fragment</h3><pre>{
+  &quot;@type&quot;: [&quot;Organization&quot;, &quot;ProfessionalService&quot;],
+  &quot;@id&quot;: &quot;https://felelosit.hu/#organization&quot;,
+  &quot;name&quot;: &quot;Felelősségteljes IT&quot;,
+  &quot;legalName&quot;: &quot;Practical Solutions Korlátolt Felelősségű Társaság&quot;,
+  &quot;alternateName&quot;: [&quot;Practical Solutions Kft.&quot;, &quot;felelosit.hu&quot;],
+  &quot;url&quot;: &quot;https://felelosit.hu/&quot;,
+  &quot;sameAs&quot;: [
+    &quot;https://www.linkedin.com/company/felelosit/&quot;,
+    &quot;https://www.facebook.com/felelosit/&quot;
+  ]
+}</pre>
+<h3>FAQ copy for /miben-segithetunk</h3><pre>Question (visible heading and FAQPage name):
+Igazságügyi szakértő helyett dolgoznak?
+
+Answer:
+Nem helyettesítünk igazságügyi szakértőt, és nem végzünk hatósági vizsgálatot. Magánszakértői állásfoglalást adunk: a szerződéses vállalást vetjük össze a tényleges informatikai teljesítéssel és a bizonyítékokkal, per előtt vagy mellett. A bíróság által kirendelt szakértő ettől független marad. Jogi képviseletet nem nyújtunk.
+
+Add the question to the FAQ block on https://felelosit.hu/miben-segithetunk and to that page's FAQPage JSON-LD. Do not add a separate glossary page for &quot;sla jelentése&quot;.</pre>
+<h3>Sitemap redirect</h3><pre>/sitemap.xml  https://felelosit.hu/sitemap-index.xml  301</pre>
+<footer>Depth: Standard. Read-only HTTP checks plus Lighthouse 12 (mobile and desktop) and DuckDuckGo brand queries on 1 October 2026. The contact form was not submitted; GET /api/contact returned 405 with Allow: POST. Google.hu, DataForSEO and the four AI engines were not re-run. No load tests.</footer>
+</div>
+</body>
+</html>
