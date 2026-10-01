@@ -1,0 +1,31 @@
+{
+  "name": "marketing-superstar",
+  "version": "0.1.0",
+  "description": "SEO and marketing audit framework that produces agent-ready, prioritised reports",
+  "type": "module",
+  "bin": {
+    "marketing-audit": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "audit": "tsx src/cli.ts audit",
+    "audit:demo": "tsx src/cli.ts audit --config configs/demo-site.yaml --out reports/demo",
+    "example": "tsx src/render-shape.ts examples/report-shape",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "commander": "^13.1.0",
+    "yaml": "^2.7.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

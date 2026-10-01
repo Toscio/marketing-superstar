@@ -1,0 +1,390 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>InnovaTeQ and Felelősségteljes IT search review (Copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+/* Layout: one reading column, audit items as ruled entries with a priority tag; tables scroll in their own box */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#17202b; --muted:#566273; --line:#dde2e8;
+  --accent:#1d6fa5; --p0:#b3261e; --p0bg:#fbe9e7; --p1:#9a5b00; --p1bg:#fdf1dc; --p2:#2e6b3a; --p2bg:#e6f2e8; --good:#2e6b3a;
+  --display:"Newsreader",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --panel:#1a2129; --fg:#e4e9ef; --muted:#9aa6b4; --line:#2c3642;
+  --accent:#6cb4e4; --p0:#ff9a8f; --p0bg:#3a1f1d; --p1:#f0bf6a; --p1bg:#36291a; --p2:#8fd19d; --p2bg:#1c3022; --good:#8fd19d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d; --panel:#1a2129; --fg:#e4e9ef; --muted:#9aa6b4; --line:#2c3642;
+  --accent:#6cb4e4; --p0:#ff9a8f; --p0bg:#3a1f1d; --p1:#f0bf6a; --p1bg:#36291a; --p2:#8fd19d; --p2bg:#1c3022; --good:#8fd19d; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-inline:16px;padding-block:40px 80px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.3rem;font-weight:600}
+h2{font-size:1.75rem;padding-top:28px;border-top:2px solid var(--fg)}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+code{font:0.88em var(--mono);background:var(--panel);border:1px solid var(--line);padding:0 4px;border-radius:3px;overflow-wrap:anywhere}
+.eyebrow{font:500 0.78rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.1rem;color:var(--muted);max-width:65ch}
+.meta{font:0.85rem var(--mono);color:var(--muted)}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.box ol,.box ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.stat b{display:block;font:500 1.35rem var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:.85rem;color:var(--muted)}
+.group{display:flex;flex-direction:column;gap:0}
+.item{border-top:1px solid var(--line);padding-block:18px;display:flex;flex-direction:column;gap:8px}
+.item:last-child{border-bottom:1px solid var(--line)}
+.head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tag{font:500 .72rem var(--mono);letter-spacing:.05em;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.P0{color:var(--p0);background:var(--p0bg)} .P1{color:var(--p1);background:var(--p1bg)} .P2{color:var(--p2);background:var(--p2bg)}
+.eff{font:.8rem var(--mono);color:var(--muted);margin-left:auto}
+dl{margin:0;display:grid;grid-template-columns:4.2em 1fr;gap:4px 12px}
+dt{font:500 .78rem/1.9 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+dd{margin:0;min-width:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .75rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td{font-variant-numeric:tabular-nums}
+td code{white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.ok{color:var(--good)}
+blockquote{margin:0;padding:10px 14px;border-left:3px solid var(--line);color:var(--muted);font-style:italic}
+pre{margin:0;overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;font:.8rem/1.5 var(--mono)}
+footer{font-size:.85rem;color:var(--muted)}
+</style>
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Pre-launch search review · 30 September 2026</div>
+  <h1>InnovaTeQ and Felelősségteljes IT: SEO and AI-search review</h1>
+  <p class="lede">A prioritised list for the new innovateq.io (still on staging) and the live felelosit.hu. Each item says what to change, why it matters, how to fix it and roughly how long it takes. Everything was checked read-only: no forms submitted, no load tests.</p>
+  <p class="meta">Checked: staging <code>innovateq-website.innovateq-solutions.workers.dev</code>, current <code>innovateq.io</code> (WordPress), <code>felelosit.hu</code>. Data: DataForSEO (Google UK, US and Hungary), Lighthouse 12, live ChatGPT and Perplexity answers.</p>
+</header>
+
+<section class="box">
+  <h3>Summary</h3>
+  <ol>
+    <li><b>The new InnovaTeQ site is technically very good.</b> It is fast (Lighthouse performance 100 on mobile), has clean titles and one H1 per page, and already canonicalises to <code>innovateq.io</code>. Most of the work is at the switch-over, not in the build.</li>
+    <li><b>Launch blockers:</b> 18 of the 24 URLs in the current sitemap return 404 on the new site, the new site has no sitemap, and the good <code>llms.txt</code> the old site had is gone. All three are an afternoon's work.</li>
+    <li><b>There is little ranking to lose.</b> innovateq.io ranks for almost nothing in Google today (2 keywords, both outside the top 20). The real assets are the brand result and about 20 linking domains, and both go to the homepage.</li>
+    <li><b>The bigger problem is name confusion.</b> A Google search for "innovateq" is led by an unrelated Omani company (iNNOVATEQ, innovateq.digital), with an Australian and a UK namesake close behind. Entity signals (schema, profiles, consistent legal name) matter more here than keywords.</li>
+    <li><b>AI assistants describe InnovaTeQ as a training company</b>, because that is what the current site says. They will follow the new site, but only once it is crawled and the facts are stated plainly.</li>
+    <li><b>felelosit.hu is well built but not yet recognised.</b> Its schema, hreflang, sitemap and llms.txt are all in place. But Google shows the privacy page first for the brand name, Perplexity finds nothing, and ChatGPT invents a description ("an ethics initiative"). It needs indexing and entity work, then a few Hungarian explainer pages where the search demand is.</li>
+    <li><b>The two brands do not compete.</b> They serve different languages, audiences and problems. Ádám links them, and the right move is a deliberate link through him (schema and a line on each site), not hreflang.</li>
+  </ol>
+</section>
+
+<!-- ============ INNOVATEQ ============ -->
+<h2>Part 1 · InnovaTeQ (innovateq.io)</h2>
+
+<div class="stats">
+  <div class="stat"><b>100 / 100</b><span>Lighthouse performance, mobile / desktop</span></div>
+  <div class="stat"><b>1.4 s</b><span>Largest paint on mobile (old site 2.5 s)</span></div>
+  <div class="stat"><b>18 of 24</b><span>current sitemap URLs that 404 on staging</span></div>
+  <div class="stat"><b>2</b><span>Google keywords the domain ranks for today</span></div>
+</div>
+
+<h3>A. Pre-launch blockers</h3>
+<div class="group">
+
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Redirect the old URLs</h3><span class="eff">Effort: 1–2 h</span></div>
+<dl><dt>What</dt><dd>The current sitemap lists 24 URLs. On staging, 6 exist (home, about, blogs, workshops, legal notice, privacy) and 18 return 404, including the whole <code>/corporate-training/</code> section, <code>/consulting-services/</code>, <code>/frequently-asked-questions/</code> and <code>/book-a-call/</code>. The four old blog posts keep the same paths, which is good.</dd>
+<dt>Why</dt><dd>Without 301s, any bookmarks, LinkedIn posts, course links and AI-answer citations that point at these pages become dead ends, and Google drops them without passing their value on. ChatGPT currently cites <code>/corporate-training/</code> and <code>/workshops/</code> by URL.</dd>
+<dt>Fix</dt><dd>Add a <code>_redirects</code> file (Workers static assets supports it) with permanent 301s, one line per old URL. Suggested map below. Keep it at least a year.</dd></dl>
+</div>
+
+<div class="tbl"><table>
+<tr><th>Old URL</th><th>Suggested 301 target</th></tr>
+<tr><td><code>/consulting-services/</code></td><td><code>/services/</code></td></tr>
+<tr><td><code>/corporate-training/</code>, <code>/corporate-training/catalogue/</code></td><td><code>/workshops/</code></td></tr>
+<tr><td><code>/corporate-training/*</code> (9 course pages)</td><td><code>/workshops/</code>, or the matching course on <code>academy.innovateq.io</code> where one exists</td></tr>
+<tr><td><code>/book-a-call/</code>, <code>/request-tailored-offer/</code></td><td><code>/contact/</code></td></tr>
+<tr><td><code>/frequently-asked-questions/</code></td><td><code>/about/</code> (or a new FAQ block, see item C4)</td></tr>
+<tr><td><code>/partners/</code></td><td><code>/about/</code></td></tr>
+<tr><td><code>/thank-you/</code></td><td><code>/contact/</code></td></tr>
+<tr><td><code>/feed/</code>, <code>/comments/feed/</code></td><td><code>/blogs/</code> (or publish an RSS feed at <code>/rss.xml</code> and point there)</td></tr>
+<tr><td><code>/sitemap_index.xml</code>, <code>/sitemap.xml</code>, <code>/wp-sitemap.xml</code></td><td><code>/sitemap-index.xml</code> (the new one)</td></tr>
+<tr><td><code>/locations.kml</code></td><td>Let it 404 (a Rank Math artefact)</td></tr>
+</table></div>
+
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Publish a sitemap and point robots.txt at it</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd><code>/sitemap.xml</code> returns 404 on staging, and <code>robots.txt</code> holds only Cloudflare's content-signal comments with no <code>Sitemap:</code> line.</dd>
+<dt>Why</dt><dd>At switch-over, Search Console still holds the old <code>sitemap_index.xml</code>. A fresh sitemap is how Google learns the new pages quickly and drops the old ones.</dd>
+<dt>Fix</dt><dd>Add <code>@astrojs/sitemap</code> with <code>site: "https://innovateq.io"</code> (it writes <code>/sitemap-index.xml</code>), add <code>Sitemap: https://innovateq.io/sitemap-index.xml</code> to robots.txt, and after launch submit it in Search Console and remove the old one.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Keep the staging host out of the index</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>The workers.dev host is fully open: no <code>noindex</code> tag, no <code>X-Robots-Tag</code> header, and robots.txt allows everything. The canonicals already point to innovateq.io, which helps a lot.</dd>
+<dt>Why</dt><dd>A canonical is a hint, not a rule. If anyone links to the workers.dev URL, Google may index it as a duplicate, and AI crawlers ignore canonicals entirely.</dd>
+<dt>Fix</dt><dd>Send <code>X-Robots-Tag: noindex</code> only when the request host ends in <code>workers.dev</code> (a few lines in the Worker, or a Cloudflare Transform Rule). After launch, either keep that rule or turn off the workers.dev route in the Worker settings. Do not put <code>noindex</code> in the HTML itself: it would ship to production.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P0">BLOCKER</span><h3>Bring back llms.txt</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>The live site serves an <code>/llms.txt</code> (from Rank Math). The new site returns 404 for it.</dd>
+<dt>Why</dt><dd>It is a cheap, readable summary for AI crawlers and assistants. Removing it at the exact moment the positioning changes leaves them with less to go on.</dd>
+<dt>Fix</dt><dd>Write it by hand in <code>public/llms.txt</code>: one paragraph on who InnovaTeQ is (independent performance and observability advisory, Budapest, founded by Ádám Tóth, legal entity, what it does not do), then links to Services, Problems, Workshops, About and each article with a one-line summary. A starter is in the appendix.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">LAUNCH DAY</span><h3>Switch-over checklist</h3><span class="eff">Effort: 1 h on the day</span></div>
+<dl><dt>What</dt><dd>The DNS move and the steps that follow it.</dd>
+<dt>Why</dt><dd>Google notices changes faster when told, and the old WordPress install keeps publishing <code>/xmlrpc.php</code>, <code>/wp-json/</code> and feeds if it is left running on a subdomain.</dd>
+<dt>Fix</dt><dd>Keep <code>www → apex</code> as a 301 (it is today). Confirm the Search Console property is a Domain property so it survives the change. Submit the new sitemap, then use URL Inspection on the home, services and problems pages. Crawl the old sitemap list once to confirm every line gets a 301 or a 200. Keep a backup of the WordPress database, then retire it rather than leaving it live somewhere.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Use one legal name everywhere</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>The new site says "InnovaTeQ Solutions Ltd." in the schema and legal notice (with a double full stop: "Ltd.."), while Adam's one-pager and the Hungarian registers use "InnovaTeQ Solutions Kft.". The brand is also spelled "InnovateQ" on the current site title and "InnovaTeQ" on the new one.</dd>
+<dt>Why</dt><dd>Search engines and AI models match a business across the web by its name, registration number and address. Mixed names weaken the match, and here there is a real UK company called INNOVATEQ LIMITED that "Ltd." pulls towards.</dd>
+<dt>Fix</dt><dd>Use "InnovaTeQ Solutions Kft." as <code>legalName</code> (add "Ltd." as an English gloss only if Adam wants it), fix the double stop, and use the spelling "InnovaTeQ" on every profile.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>The contact form posts to <code>mailto:</code></h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>The contact form's action is <code>mailto:info@innovateq.io</code>. (Not tested, as agreed; this comes from reading the HTML.)</dd>
+<dt>Why</dt><dd>This is a conversion issue more than an SEO one, but it is the page all the SEO work sends people to. On many phones and on work machines without a mail client, a mailto form does nothing or opens an empty email.</dd>
+<dt>Fix</dt><dd>Send it to HubSpot like the newsletter form already does (the endpoint is already allowed in the CSP), and show the email address as plain text as a fallback.</dd></dl>
+</div>
+</div>
+
+<h3>B. Technical</h3>
+<div class="group">
+
+<div class="item"><div class="head"><span class="tag P2">IN GOOD SHAPE</span><h3>Titles, descriptions, headings, speed, mobile</h3><span class="eff">No action</span></div>
+<dl><dt>What</dt><dd>Every page has a unique title and meta description, exactly one H1, and a self-canonical. Lighthouse scores are 100 for performance, SEO and best practice on mobile and desktop. Largest paint is 1.4 s on mobile with no layout shift, against 2.5 s on the current WordPress site. HSTS, CSP and the other security headers are all set.</dd>
+<dt>Why</dt><dd>This is better than most consultancy sites and leaves nothing to fix on Core Web Vitals. (Field data from real Chrome users does not exist yet for a site this small, so these are lab figures.)</dd>
+<dt>Fix</dt><dd>One small thing: Lighthouse flags low colour contrast on some text (accessibility 96). Darken the light grey text a shade.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Richer structured data</h3><span class="eff">Effort: 2–3 h</span></div>
+<dl><dt>What</dt><dd>Every page carries the same two schema items: Organization (name, legal name, email, logo) and WebSite. There is no address, no <code>sameAs</code> links to profiles, no founder, no Service items and no article markup on the blog posts.</dd>
+<dt>Why</dt><dd>With a crowded name, schema is how Google and AI systems tell this InnovaTeQ apart from the Omani, Australian and UK ones. Article markup with a date and author also helps the posts get cited.</dd>
+<dt>Fix</dt><dd>Extend the Organization to <code>ProfessionalService</code> with <code>address</code> (Budapest), <code>vatID</code>, <code>taxID</code>, <code>foundingDate</code>, <code>areaServed</code>, <code>knowsAbout</code> (performance engineering, observability, incident analysis) and <code>sameAs</code> (LinkedIn company page, Facebook <code>innovateqio</code>, YouTube academy channel, academy.innovateq.io, europeantechmap.eu listing). Add a <code>Person</code> for Ádám Tóth (<code>founder</code>, <code>sameAs</code> his LinkedIn). Add <code>BlogPosting</code> with <code>datePublished</code>, <code>dateModified</code> and <code>author</code> on each post, and <code>BreadcrumbList</code> on inner pages. A sample is in the appendix.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Dates and an author on articles</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>The five posts show no publish date and no named author.</dd>
+<dt>Why</dt><dd>Google and AI engines lean on visible dates and authors to judge whether a technical article is current and written by someone who knows the subject. Ádám's name on the post is the strongest trust signal the site has.</dd>
+<dt>Fix</dt><dd>Show "Ádám Tóth · 12 March 2026" (or similar) under each post title, with a one-line bio and link to the About page at the end.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>A proper social preview image</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd><code>og:image</code> is the 270×197 logo on every page, and the Twitter card is <code>summary</code>.</dd>
+<dt>Why</dt><dd>When Adam or anyone shares a link on LinkedIn, the preview is a small, cropped logo. A 1200×630 image gets a full-width card.</dd>
+<dt>Fix</dt><dd>Make one 1200×630 image (logo plus the headline "Clarity for critical digital services"), use it as the default, and switch to <code>summary_large_image</code>.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>Internal links and images</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>Navigation is clean and every page is reachable from the menu. The home page deep-links into each problem and service. The only images are the logo, and its alt text is fine. Blog posts do not link to the service that fits them.</dd>
+<dt>Why</dt><dd>Links from articles to services tell Google which page answers the commercial question, and move readers towards contact.</dd>
+<dt>Fix</dt><dd>End each post with one sentence and a link to the matching problem or service (for example "When scaling is not the solution" → <code>/problems/#slow-unstable</code>). Link the services page back to the two or three most relevant posts.</dd></dl>
+</div>
+</div>
+
+<h3>C. Content and keyword fit</h3>
+<div class="group">
+
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>What the old domain ranks for, and what could be lost</h3><span class="eff">—</span></div>
+<dl><dt>What</dt><dd>DataForSEO finds innovateq.io ranking for 2 Google keywords in the US ("innoq" at position 49, and "what is learnworlds" at 25 via the academy subdomain) and none in the UK or Hungary. Backlinks: 44 from about 20 domains. Nearly all point to the homepage, and most are low-quality directory or spam sites. The only relevant ones are theorg.com, testingsaas.nl and kernelpanicpodcast.com, plus links into the academy.</dd>
+<dt>Why</dt><dd>The launch carries very little ranking risk. What matters is that the homepage keeps its URL (it does), that the brand search result updates to the new description, and that the redirects in section A are in place.</dd>
+<dt>Fix</dt><dd>Nothing beyond section A. Do not disavow the spam links; Google ignores them.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>The name is shared, so win the brand search on purpose</h3><span class="eff">Effort: 2–4 h, then ongoing</span></div>
+<dl><dt>What</dt><dd>Google UK for "innovateq": 1 innovateq.digital (Oman), 2 its LinkedIn, 3 innovateq.com.au, 4 academy.innovateq.io, 5 the InnovaTeQ Facebook page (Budapest), 6 a UK Companies House record. innovateq.io itself is not on page one for its own name. For "innovateq solutions" it is second. Google Hungary is similar and also shows the YouTube academy channel.</dd>
+<dt>Why</dt><dd>Prospects who hear the name from Adam will search it. They need to land on innovateq.io, not on an oil-and-gas software firm in Oman.</dd>
+<dt>Fix</dt><dd>Put "InnovaTeQ, Budapest" and "performance and observability" together in the home title or first paragraph. Create or complete a LinkedIn company page and a Google Business Profile under the exact name, both linking to innovateq.io. Use the same logo and description on Facebook, YouTube, the academy and europeantechmap.eu. Ask the handful of real partners (testingsaas.nl, theorg.com, podcast pages) to update their link text to "InnovaTeQ, performance and observability advisory".</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Search demand is tiny, so write for problems, not categories</h3><span class="eff">Effort: ongoing, about 1 article a month</span></div>
+<dl><dt>What</dt><dd>Monthly UK searches: "performance testing training" 20, "incident root cause analysis" 20, "observability consulting" 10, "performance testing consultancy" 10, "monitoring strategy" 10, "performance engineering consulting" too few to report. Category keywords will not bring buyers.</dd>
+<dt>Why</dt><dd>Buyers for this kind of advisory work search for their symptom ("why is our app slow after scaling", "incidents keep recurring") or ask an AI assistant. They rarely search for "observability consultancy".</dd>
+<dt>Fix</dt><dd>Keep writing posts named after the situations on the Problems page. "When scaling is not the solution" is exactly right. Each post should open with a two- or three-sentence direct answer, include one concrete example or number from real work (anonymised), and link to the matching service. Measure success by brand searches and enquiries, not keyword rank.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P2">DECISION</span><h3>Say where training went</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>The old site leads with "Concept-driven IT training". The new one says "It is not for organisations looking for a training catalogue", while the academy still sells courses.</dd>
+<dt>Why</dt><dd>Anyone arriving from an old training link, or an AI answer that still says "training company", should see where training now lives without being turned away.</dd>
+<dt>Fix</dt><dd>One sentence on the Workshops page: "Looking for self-paced courses? They are at academy.innovateq.io." The redirects then send the old course URLs somewhere useful.</dd></dl>
+</div>
+</div>
+
+<h3>D. GEO: how AI search sees InnovaTeQ</h3>
+<div class="group">
+
+<div class="item"><div class="head"><span class="tag P1">CONTEXT</span><h3>What the engines say today</h3><span class="eff">—</span></div>
+<dl><dt>What</dt><dd>
+<b>ChatGPT</b> (with web search): "a corporate IT training and capability development company specializing in performance engineering, observability, testing, and operations", citing <code>/about/</code>, <code>/corporate-training/</code> and <code>/workshops/</code>.<br>
+<b>Perplexity</b>: "an IT education and advisory company … role-based corporate training, hands-on workshops, online courses, and consulting", "available in English and Hungarian".<br>
+<b>Perplexity</b>, asked for independent performance and observability consultants in Hungary or Europe, lists "Ádám Tóth / InnovaTeQ (Hungary)" first. That is a good sign.<br>
+<b>Google AI Overview</b> appears on the "innovateq" results page, where the shared name makes it unreliable.</dd>
+<dt>Why</dt><dd>The engines are accurate about the old site, so they will describe the new positioning once they re-crawl it. The redirects and llms.txt decide how fast that happens and which pages they cite.</dd>
+<dt>Fix</dt><dd>Re-run these four questions two to four weeks after launch. If ChatGPT still says "training company", check that the old <code>/corporate-training/</code> URLs redirect and that the About page states the new focus in its first sentence.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Make the entity unmistakable in the first lines</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>The home and About pages describe what InnovaTeQ does well but never say where it is, who founded it, when or for whom in one quotable sentence.</dd>
+<dt>Why</dt><dd>AI answers are assembled from short passages. A self-contained sentence with name, place, founder and focus is what gets lifted and cited, and it separates InnovaTeQ from its namesakes.</dd>
+<dt>Fix</dt><dd>Open the About page with a sentence like: "InnovaTeQ Solutions Kft. is an independent performance and observability advisory practice in Budapest, founded by Ádám Tóth in [year], working with [sectors] on critical digital services in English and Hungarian."</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Add facts worth citing, and a short FAQ</h3><span class="eff">Effort: 2–3 h</span></div>
+<dl><dt>What</dt><dd>The site has strong principles but few checkable facts: no years of experience, sectors, number of engagements, certifications (for example Dynatrace), speaking or published work. The old FAQ page is gone.</dd>
+<dt>Why</dt><dd>Assistants prefer to cite pages that contain specific, verifiable statements. A question-and-answer block also matches how people phrase questions to them.</dd>
+<dt>Fix</dt><dd>Add a "Facts" line to About (years in performance engineering, sectors, languages, certifications, talks). Add five or six FAQs to Services, for example "How is this different from buying a monitoring tool?", "How long does an investigation take?", "Do you work remotely outside Hungary?", "Do you implement the fixes?", marked up as <code>FAQPage</code>. Google no longer shows FAQ rich results for most sites, but AI engines read the markup and the text.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P2">CHECK</span><h3>Cloudflare's AI settings</h3><span class="eff">Effort: 10 min</span></div>
+<dl><dt>What</dt><dd>robots.txt is Cloudflare's managed content-signals file, with no rules below the comments. Cloudflare can also block AI crawlers at the edge, separately from robots.txt.</dd>
+<dt>Why</dt><dd>If "Block AI bots" is on in the Cloudflare dashboard, ChatGPT and Perplexity cannot read the new site at all, whatever robots.txt says.</dd>
+<dt>Fix</dt><dd>In Cloudflare, under Security → Bots, leave AI crawlers allowed. If you want to keep training opt-outs, add <code>Content-Signal: search=yes, ai-input=yes, ai-train=no</code> under a <code>User-agent: *</code> line, which allows AI answers while declining training.</dd></dl>
+</div>
+</div>
+
+<!-- ============ FELELOSIT ============ -->
+<h2>Part 2 · Felelősségteljes IT (felelosit.hu)</h2>
+
+<div class="stats">
+  <div class="stat"><b>99 / 100</b><span>Lighthouse performance, mobile / desktop</span></div>
+  <div class="stat"><b>7</b><span>pages in the sitemap, all indexable</span></div>
+  <div class="stat"><b>0</b><span>Google keywords ranked so far (Hungary)</span></div>
+  <div class="stat"><b>480 / mo</b><span>searches for "teljesítésigazolás"</span></div>
+</div>
+
+<div class="box">
+  <h3>Already done well</h3>
+  <ul>
+    <li><code>lang="hu"</code>, a self-canonical and <code>hreflang="hu-HU"</code> with <code>x-default</code> on every page.</li>
+    <li>Rich schema: FAQPage with six questions, Person for both founders, Service, PostalAddress, AboutPage and ContactPage.</li>
+    <li>A hand-written <code>llms.txt</code> that states the operator, company, founding year, address and what the service does not do. This is a model for InnovaTeQ's.</li>
+    <li>A sitemap referenced from robots.txt, descriptive Hungarian titles, one H1 per page, and 580 to 2,200 words per page.</li>
+    <li>Clear limits ("Jogi képviseletet nem nyújtunk") on every page, which builds trust with both people and AI.</li>
+  </ul>
+</div>
+
+<div class="group">
+<div class="item"><div class="head"><span class="tag P0">FIRST</span><h3>Get the homepage recognised for the brand name</h3><span class="eff">Effort: 30 min, then wait</span></div>
+<dl><dt>What</dt><dd>Google.hu for "felelosit": the privacy notice (<code>/adatkezelesi-tajekoztato</code>) is result 1 and result 2 is a spam page on an unrelated Polish domain. For "Felelősségteljes IT Tóth Ádám Vida András", the homepage is fourth, after the privacy notice, companywall.hu and Ádám's LinkedIn.</dd>
+<dt>Why</dt><dd>This is typical of a very new site, but it means anyone who searches the name after a meeting lands on a privacy policy.</dd>
+<dt>Fix</dt><dd>Verify the domain in Google Search Console, submit <code>sitemap-index.xml</code>, and request indexing for the home, services and help pages. Set <code>noindex</code> on the privacy notice and impressum (keep them linked). Link to the homepage from the founders' LinkedIn profiles and the companywall.hu listing.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P0">FIRST</span><h3>Add an Organization to the schema</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>The schema describes the people, the service and the address, but has no <code>Organization</code> (or <code>ProfessionalService</code>) item for the business itself.</dd>
+<dt>Why</dt><dd>"Felelősségteljes IT" reads as a generic phrase ("responsible IT"). Without an organisation entity, engines treat it as a topic, not a business. ChatGPT describes it as "an initiative focused on ethics and responsibility in the IT sector", which is wrong, and Perplexity says it cannot find reliable information.</dd>
+<dt>Fix</dt><dd>Add <code>ProfessionalService</code> with <code>name</code> "Felelősségteljes IT", <code>alternateName</code> "felelosit.hu", <code>legalName</code> "Practical Solutions Kft.", <code>taxID</code>, <code>foundingDate</code> 2016, <code>address</code> (Siklós), <code>areaServed</code> Hungary, <code>founder</code> pointing at the two Person items, and <code>sameAs</code> the companywall.hu listing and a LinkedIn company page once one exists.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>A defining sentence at the top of the homepage</h3><span class="eff">Effort: 15 min</span></div>
+<dl><dt>What</dt><dd>The H1 ("Informatikai szakértő a teljesítés és az átadás-átvétel tisztázásához") says what it does, but the brand name and the words "független szakértői vélemény" do not appear together in one sentence near the top.</dd>
+<dt>Why</dt><dd>It is the sentence AI engines will quote. Right now they fill the gap by guessing from the name.</dd>
+<dt>Fix</dt><dd>Add one line under the H1, for example: "A Felelősségteljes IT (Practical Solutions Kft.) független informatikai szakértői támogatást ad IT-teljesítési vitákhoz, szoftver átadás-átvételhez és SLA-kérdésekhez Magyarországon."</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Say clearly that this is not court-appointed expert work</h3><span class="eff">Effort: 30 min</span></div>
+<dl><dt>What</dt><dd>The Google.hu results for "informatikai szakértő teljesítési vita" are all court-appointed experts (<em>igazságügyi informatikai szakértő</em>) and academic papers on them. The site's closest target term, "informatikai szakértő", has only about 10 searches a month.</dd>
+<dt>Why</dt><dd>Searchers and AI engines will compare felelosit.hu with court experts. The site already says it is not legal representation, but it does not say how it relates to a court-appointed expert, which is the first question a lawyer will ask.</dd>
+<dt>Fix</dt><dd>Add an FAQ: "Igazságügyi szakértő helyett?" (Instead of a court expert?), answered plainly: a private expert opinion (<em>magánszakértői vélemény</em>) before or alongside litigation, and when a court expert is still needed. This also targets the phrase "magánszakértő".</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Write for the Hungarian searches that exist</h3><span class="eff">Effort: 3–4 h per article</span></div>
+<dl><dt>What</dt><dd>Monthly Google searches in Hungary: "sla" 1,300, "teljesítésigazolás" 480, "sla jelentése" 390, "it audit" 30, "it tanácsadás" 30, "szoftverfejlesztési szerződés" 20, "informatikai tanácsadás" 20 (a high advertising bid, €9.51 a click, so buyers use it). There is no blog or article section.</dd>
+<dt>Why</dt><dd>"Teljesítésigazolás" and "SLA" are the site's exact subject, and people search for them to understand a term, often just before a dispute. A clear explainer is the easiest route to rankings and AI citations.</dd>
+<dt>Fix</dt><dd>Start a small <em>Tudástár</em> (knowledge base) with three pages: "Mi az SLA, és mit jelent a gyakorlatban?", "Teljesítésigazolás IT-projektben: mikor adható ki, és mikor ne?" and "Szoftver átadás-átvétel: mit kell dokumentálni?". Each opens with a two-sentence answer, includes a checklist, and links to the matching service.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P2">NICE TO HAVE</span><h3>Minor technical items</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>Lighthouse flags unused and legacy JavaScript, images not sized for the screen, and some low-contrast text (accessibility 96). URLs have no trailing slash while <code>/</code> does, which is fine as long as it stays consistent.</dd>
+<dt>Why</dt><dd>None of this affects ranking now. It is polish.</dd>
+<dt>Fix</dt><dd>Serve the logo at its display size in WebP and darken the light grey text. Leave the rest.</dd></dl>
+</div>
+</div>
+
+<h3>How the two sites relate</h3>
+<div class="group">
+<div class="item"><div class="head"><span class="tag P2">NO CONFLICT</span><h3>Overlap and cannibalisation</h3><span class="eff">—</span></div>
+<dl><dt>What</dt><dd>InnovaTeQ is English, aimed at engineering and technology leaders, about why services slow down or fail. Felelősségteljes IT is Hungarian, aimed at management and lawyers, about proving whether IT was delivered as contracted. They share a founder, Ádám, and neighbouring themes (SLAs, monitoring evidence), but not keywords, pages or language.</dd>
+<dt>Why</dt><dd>They cannot compete in search, and hreflang does not apply. Hreflang is only for the same content in different languages, and linking these two with it would confuse Google.</dd>
+<dt>Fix</dt><dd>No hreflang between them. Keep felelosit.hu's own <code>hu-HU</code> and <code>x-default</code> tags as they are.</dd></dl>
+</div>
+
+<div class="item"><div class="head"><span class="tag P1">IMPORTANT</span><h3>Connect them through Ádám</h3><span class="eff">Effort: 1 h</span></div>
+<dl><dt>What</dt><dd>Neither site links to the other. felelosit.hu mentions InnovaTeQ only inside Ádám's LinkedIn URL. InnovaTeQ's Services page has a "representation" section and says it does not provide legal representation, which is where felelosit.hu fits.</dd>
+<dt>Why</dt><dd>Each brand makes the other more credible: InnovaTeQ shows the technical depth behind Felelősségteljes IT's expert opinions, and Felelősségteljes IT shows InnovaTeQ has a contract and legal partner in Hungary. A linked person entity is also how AI engines learn that the same expert runs both.</dd>
+<dt>Fix</dt><dd>Give Ádám one Person <code>@id</code> (for example <code>https://innovateq.io/#adam-toth</code>) and reference it from felelosit.hu's schema, with <code>worksFor</code> both organisations and <code>sameAs</code> his LinkedIn. Add one line to Ádám's bio on each site ("also founder of InnovaTeQ, performance and observability advisory" / "társalapító: Felelősségteljes IT, IT-szerződéses és teljesítési szakértés"). On InnovaTeQ's Services page, under representation, add: "For Hungarian contract and SLA disputes, see our partner practice Felelősségteljes IT."</dd></dl>
+</div>
+</div>
+
+<!-- ============ PLAN ============ -->
+<h2>Suggested order</h2>
+<div class="tbl"><table>
+<tr><th>When</th><th>InnovaTeQ</th><th>Felelősségteljes IT</th></tr>
+<tr><td>Before launch</td><td>301 map, sitemap, workers.dev noindex header, llms.txt, legal-name fix, contact form</td><td>Search Console and indexing, Organization schema, noindex the privacy page</td></tr>
+<tr><td>Launch day</td><td>DNS switch, submit sitemap, inspect key URLs, crawl the old URL list</td><td>—</td></tr>
+<tr><td>First 2 weeks</td><td>Richer schema, article dates and author, About facts and FAQ, profile clean-up, OG image</td><td>Defining sentence, court-expert FAQ, cross-links and shared Person</td></tr>
+<tr><td>Month 1–3</td><td>One problem-led article a month; re-check ChatGPT and Perplexity</td><td>Three Tudástár explainers (SLA, teljesítésigazolás, átadás-átvétel)</td></tr>
+</table></div>
+
+<h2>Appendix</h2>
+<h3>Starter llms.txt for innovateq.io</h3>
+<pre># InnovaTeQ
+
+> InnovaTeQ Solutions Kft. is an independent performance and observability
+> advisory practice in Budapest, Hungary, founded by Ádám Tóth. It helps
+> organisations understand why critical digital services slow down or fail,
+> and decide what to do next. It does not sell monitoring products, run
+> operations or provide legal representation.
+
+## Pages
+- [Problems we solve](https://innovateq.io/problems/): slow or unstable services, recurring incidents, late detection, monitoring blind spots.
+- [Services](https://innovateq.io/services/): investigation, operational risk, monitoring strategy, representation, decision support.
+- [Workshops](https://innovateq.io/workshops/): focused sessions tailored to each client.
+- [About](https://innovateq.io/about/): who we are, who it is for, what we don't do.
+- [Contact](https://innovateq.io/contact/)
+
+## Articles
+- [When scaling is not the solution](https://innovateq.io/blogs/when-scaling-is-not-the-solution/)
+- [The 5 building blocks of business observability](https://innovateq.io/blogs/5-building-blocks-business-observability/)
+- [Why observability in internal systems is critical](https://innovateq.io/blogs/why-observability-in-internal-systems-is-critical/)
+- [Why observability must evolve with your system](https://innovateq.io/blogs/why-observability-must-evolve-with-your-system/)
+- [Communication in performance engineering](https://innovateq.io/blogs/communication-in-performance-engineering/)
+
+## Related
+- Courses: https://academy.innovateq.io/
+- Hungarian IT contract and SLA disputes: https://felelosit.hu/</pre>
+
+<h3>Sample Organization schema for innovateq.io</h3>
+<pre>{
+  "@context": "https://schema.org",
+  "@graph": [{
+    "@type": "ProfessionalService",
+    "@id": "https://innovateq.io/#organization",
+    "name": "InnovaTeQ",
+    "legalName": "InnovaTeQ Solutions Kft.",
+    "url": "https://innovateq.io",
+    "email": "info@innovateq.io",
+    "logo": "https://innovateq.io/images/logo.png",
+    "vatID": "HU32342101",
+    "address": { "@type": "PostalAddress", "streetAddress": "Asztag utca 9. 1/7",
+                 "postalCode": "1162", "addressLocality": "Budapest", "addressCountry": "HU" },
+    "areaServed": ["HU", "EU", "GB"],
+    "knowsAbout": ["Performance engineering", "Observability", "Incident analysis", "Monitoring strategy"],
+    "founder": { "@id": "https://innovateq.io/#adam-toth" },
+    "sameAs": ["https://www.facebook.com/innovateqio/",
+               "https://www.youtube.com/@academy.innovateq",
+               "https://academy.innovateq.io/"]
+  }, {
+    "@type": "Person",
+    "@id": "https://innovateq.io/#adam-toth",
+    "name": "Ádám Tóth",
+    "jobTitle": "Founder",
+    "worksFor": [{ "@id": "https://innovateq.io/#organization" },
+                 { "@type": "Organization", "name": "Felelősségteljes IT", "url": "https://felelosit.hu/" }],
+    "sameAs": ["https://www.linkedin.com/in/adam-toth-innovateq/"]
+  }]
+}</pre>
+
+<footer>Method: live HTTP checks of every sitemap URL, Lighthouse 12 lab runs (mobile and desktop), DataForSEO ranked keywords, backlinks, Google organic results for Google UK, US and Hungary, Google Ads search volumes (UK English, Hungary Hungarian), and live ChatGPT (gpt-4o-mini with search) and Perplexity (sonar) answers on 30 September 2026. Search volumes are monthly averages; AI answers vary from run to run.</footer>
+</div>
+
+</body></html>
