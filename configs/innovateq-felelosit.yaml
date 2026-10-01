@@ -1,0 +1,67 @@
+title: "InnovaTeQ and Felelősségteljes IT: SEO and AI-search review"
+client: InnovaTeQ / Practical Solutions
+notes: >-
+  A prioritised list for innovateq.io and felelosit.hu. Each item says what to
+  change, why it matters, how to fix it and roughly how long it takes.
+  Everything is checked read-only: no forms submitted, no load tests.
+sites:
+  - id: innovateq
+    name: InnovaTeQ
+    url: https://innovateq.io/
+    stagingUrl: https://innovateq-website.innovateq-solutions.workers.dev/
+    language: en
+    markets: [GB, US, HU]
+    brandNames: [InnovaTeQ, InnovateQ, InnovaTeQ Solutions]
+    legalName: InnovaTeQ Solutions Kft.
+    competitors:
+      - https://innovateq.digital/
+      - https://innovateq.com.au/
+    knownOldUrls:
+      - /consulting-services/
+      - /corporate-training/
+      - /corporate-training/catalogue/
+      - /book-a-call/
+      - /request-tailored-offer/
+      - /frequently-asked-questions/
+      - /partners/
+      - /thank-you/
+      - /feed/
+      - /sitemap_index.xml
+    focusKeywords:
+      - performance engineering consulting
+      - observability consulting
+      - incident root cause analysis
+      - monitoring strategy
+      - performance testing consultancy
+    geoQuestions:
+      - "What is InnovaTeQ?"
+      - "Who is Ádám Tóth InnovaTeQ?"
+      - "Independent performance and observability consultants in Hungary or Europe"
+      - "Is InnovaTeQ a training company?"
+    relatedSiteIds: [felelosit]
+
+  - id: felelosit
+    name: Felelősségteljes IT
+    url: https://felelosit.hu/
+    language: hu
+    markets: [HU]
+    brandNames: [Felelősségteljes IT, felelosit]
+    legalName: Practical Solutions Kft.
+    knownOldUrls: []
+    focusKeywords:
+      - teljesítésigazolás
+      - sla jelentése
+      - informatikai szakértő
+      - szoftver átadás-átvétel
+      - magánszakértő
+    geoQuestions:
+      - "Mi az a Felelősségteljes IT?"
+      - "Felelősségteljes IT Tóth Ádám Vida András"
+      - "Informatikai szakértő teljesítési vita Magyarország"
+    relatedSiteIds: [innovateq]
+
+collectors:
+  crawl: true
+  lighthouse: false
+  keywords: false
+  geoAi: false

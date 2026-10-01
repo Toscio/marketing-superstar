@@ -1,0 +1,18 @@
+title: "Demo audit — example.com"
+notes: "Sanity-check config against a public demo host. Replace with a real client config."
+sites:
+  - id: example
+    name: Example Domain
+    url: https://example.com/
+    language: en
+    markets: [US]
+    brandNames: [Example Domain]
+    focusKeywords: [example domain]
+    geoQuestions:
+      - "What is example.com?"
+    knownOldUrls: []
+collectors:
+  crawl: true
+  lighthouse: false
+  keywords: false
+  geoAi: false
