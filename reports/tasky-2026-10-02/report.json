@@ -1,0 +1,1031 @@
+{
+  "schemaVersion": "1.1.0",
+  "depth": "deep",
+  "coverage": [
+    "core",
+    "standard",
+    "deep"
+  ],
+  "title": "Tasky: SEO and AI-search review",
+  "eyebrow": "Search & marketing audit · Deep · 2026-10-02",
+  "lede": "A prioritised review of the live Tasky site (www.tasky.com). Each item says what to change, why it matters, how to fix it and roughly how long it takes. Checked read-only on 2 October 2026: no forms submitted, no accounts created, no load tests.",
+  "meta": "Checked 2 October 2026, read-only: https://www.tasky.com/ and the linked HTML, robots.txt, llms.txt, common paths, redirect hops, response headers. Lighthouse 12.8.2 local lab (mobile and desktop). Brand queries on DuckDuckGo the same day. No forms submitted, no account created, no load test. No Search Console, no keyword-volume API, no Chrome UX Report field sample. ChatGPT, Perplexity, AI Overview and Copilot were not quoted in this revision.",
+  "generatedAt": "2026-10-02T15:06:17.712Z",
+  "method": "Depth: deep. Crawl of the live www host (6 HTML responses, no sitemap). Manual checks the crawler does not score: empty 200 shells, X-Robots-Tag on /beta and on /board/<id>, the HTTP apex hop, the OG image dimensions (401×475), bot user-agents, and the footer legal line. Lighthouse 12.8.2 via headless Chrome. PageSpeed Insights quota was exceeded, so the lab numbers are local. Field CrUX was not queried. AI-search answers are not in this revision; the questions to repeat are in the GEO finding. No forms submitted, no load tests.",
+  "summary": [
+    "The site is fast, and the offer is already well written on /product. Lighthouse 12.8.2 scores the homepage 97 for performance on mobile and 99 on desktop, with accessibility, best practices and SEO at 100. /product is about 600 words and says what Clearboard does.",
+    "The homepage does not defend the name. The title is \"Tasky\", the H1 is \"Let the project speak.\", and the one sentence that explains the product is not in the title. Other products already use the name: trytasky.com, tasky.uz, taskytodo.com, tasky.net, tasky.school, tasky.cl.",
+    "The URL that currently carries the product name is empty. On 2 October 2026 DuckDuckGo listed https://www.tasky.com/try first for \"Tasky Clearboard\". That response is a 1,942-byte shell: no H1, no description, and the default og:title \"Tasky Clearboard\".",
+    "Unknown paths do the same. /privacy, /terms, /about, /pricing, /blog and the bare /board URL return HTTP 200 with that shell and no noindex. There is no sitemap. /beta, /beta-terms, /board/<id> and /view/<id> are already noindex, which is right.",
+    "Nothing structured says which Tasky this is. There is no JSON-LD. llms.txt does not name DPR Ltd. or Hungary, and its links are relative. The legal name appears in the footer. LinkedIn pages named Tasky belong to other companies; do not attach them.",
+    "Two URLs should be indexed: / and /product. Give them titles that say Clearboard, publish a sitemap of those two, 404 the shells, and add Organization plus SoftwareApplication schema. A privacy notice does not exist yet. The beta terms are noindex and are not a substitute.",
+    "There is no Search Console export and no keyword-volume API on this run, so this is not a traffic forecast. Lab speed needs nothing. The work is indexation, titles and the entity."
+  ],
+  "sites": [
+    {
+      "siteId": "tasky",
+      "name": "Tasky",
+      "primaryUrl": "https://www.tasky.com/",
+      "stats": [
+        {
+          "value": "97 / 99",
+          "label": "Lighthouse performance, mobile / desktop"
+        },
+        {
+          "value": "2.1 s",
+          "label": "largest paint on mobile (desktop 0.7 s)"
+        },
+        {
+          "value": "2",
+          "label": "pages worth indexing (home and /product)"
+        },
+        {
+          "value": "none",
+          "label": "sitemap"
+        },
+        {
+          "value": "200 shell",
+          "label": "/try, the URL a Clearboard search lands on"
+        }
+      ],
+      "alreadyDoneWell": [
+        "Lighthouse 12.8.2 on the homepage: performance 97 mobile and 99 desktop, accessibility 100, best practices 100, SEO 100. CLS is 0.002. Speed is not the job.",
+        "https://tasky.com returns one 308 to https://www.tasky.com. Canonicals on / and /product already use the www host.",
+        "HSTS is on (max-age=15724800; includeSubDomains).",
+        "/beta and /beta-terms send X-Robots-Tag: noindex, nofollow. /board/<id> and /view/<id> do too.",
+        "llms.txt exists, describes the paste-to-board behaviour, and says user boards are not public material.",
+        "/product is about 600 words, with one H1 and a meta description that already says \"paste meeting notes\".",
+        "The homepage already has a sentence worth quoting: \"Tasky reads tasks, people and dependencies from the way you already talk about work — then draws them into living boards.\"",
+        "The primary actions are real links (\"Draw my board\" and \"Join the beta\"), not a form that posts to mailto.",
+        "The homepage loads the Cloudflare Web Analytics beacon. This review could not open the dashboard.",
+        "GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Googlebot and Google-Extended all get HTTP 200. robots.txt does not block them.",
+        "The footer names the legal entity: \"Tasky is a product of DPR Ltd.\" The beta terms add Hungary and support@tasky.com."
+      ],
+      "findings": [
+        {
+          "id": "tasky-soft-200",
+          "priority": "BLOCKER",
+          "level": "P0",
+          "category": "pre_launch",
+          "title": "Stop returning 200 for empty URLs",
+          "effort": "2–3 h",
+          "what": "Any path the app does not server-render comes back as HTTP 200 with a 1,942-byte Nuxt shell: title \"Tasky\", no H1, no meta description, no canonical, and og:title \"Tasky Clearboard\". That includes /try, /privacy, /terms, /about, /pricing, /blog, /docs, /contact, /home, /admin, /board and /view. /try is the URL DuckDuckGo listed first for \"Tasky Clearboard\" on 2 October 2026. /board/<id> and /view/<id> already send X-Robots-Tag: noindex, nofollow. The bare /board and /view paths do not. /beta and /beta-terms do send noindex, nofollow.",
+          "why": "Search and AI crawlers treat a 200 as a page. The product name currently points at a shell with nothing to quote, and invented URLs such as /privacy can be indexed as if Tasky had a privacy policy. llms.txt says boards are not indexed; the bare /board URL contradicts that.",
+          "fix": "In Nuxt routeRules (or server middleware): return a real 404 for unknown paths. Send X-Robots-Tag: noindex, nofollow on /try, /home, /admin, /context, /offline, /feedback, and on the /board and /view prefixes including the path with no id. Do not Disallow those paths in robots.txt — Google has to fetch the noindex. Keep /beta and /beta-terms noindex and out of the sitemap. /try can stay as the app; it should not be an indexable document until the HTML contains the product.",
+          "evidence": [
+            "GET /try → 200, 1942 bytes, title Tasky, no x-robots-tag",
+            "GET /privacy /terms /about /pricing /blog /home /board /view → same shell, no x-robots-tag",
+            "GET /board/example and /view/example → 200 + x-robots-tag: noindex, nofollow",
+            "GET /beta and /beta-terms → x-robots-tag: noindex, nofollow",
+            "DuckDuckGo \"Tasky Clearboard\" on 2 Oct 2026: first result https://www.tasky.com/try"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/try",
+            "https://www.tasky.com/privacy",
+            "https://www.tasky.com/board",
+            "https://www.tasky.com/view"
+          ],
+          "artifacts": [
+            {
+              "name": "url-status-map.txt",
+              "kind": "other",
+              "content": "# What each URL should do. Checked 2 October 2026.\n\nKeep, index, put in the sitemap\n200  https://www.tasky.com/            title today: Tasky. About 80 words.\n200  https://www.tasky.com/product     title today: Tasky — What it does. About 600 words.\n\nReal pages, already noindex — keep noindex, leave out of the sitemap\n200  https://www.tasky.com/beta            X-Robots-Tag: noindex, nofollow\n200  https://www.tasky.com/beta-terms      X-Robots-Tag: noindex, nofollow\n\nApp or user content — noindex the whole prefix, including the bare path\n200  https://www.tasky.com/try             1942-byte shell, indexable, no H1\n200  https://www.tasky.com/home            1942-byte shell, indexable (manifest start_url)\n200  https://www.tasky.com/board           1942-byte shell, indexable\n200  https://www.tasky.com/board/example   noindex, nofollow  (the :id pattern already works)\n200  https://www.tasky.com/view            1942-byte shell, indexable\n200  https://www.tasky.com/view/example    noindex, nofollow\n200  https://www.tasky.com/admin           shell, indexable\n200  https://www.tasky.com/context         shell, indexable\n200  https://www.tasky.com/offline         shell, indexable\n200  https://www.tasky.com/feedback        shell, indexable\n\nShould be real documents, or a genuine 404 until they exist. Today they are indexable shells.\n200  https://www.tasky.com/privacy\n200  https://www.tasky.com/terms\n200  https://www.tasky.com/about\n200  https://www.tasky.com/pricing\n200  https://www.tasky.com/blog\n200  https://www.tasky.com/docs\n200  https://www.tasky.com/contact\n\nSign-in is a redirect, not a page. Keep it out of the sitemap.\n302  https://www.tasky.com/api/auth/keycloak  → auth.tasky.com (Keycloak)\n\nHost\n308  http://tasky.com/        → http://www.tasky.com/     (stays on http)\n308  http://www.tasky.com/    → https://www.tasky.com/\n308  https://tasky.com/       → https://www.tasky.com/    (one hop, good)\n"
+            }
+          ],
+          "agentAction": {
+            "type": "configure_headers",
+            "target": "nuxt routeRules",
+            "notes": "404 unknown paths. noindex app shells and /board /view prefixes. Do not Disallow them in robots.txt."
+          }
+        },
+        {
+          "id": "tasky-sitemap-missing",
+          "priority": "BLOCKER",
+          "level": "P0",
+          "category": "pre_launch",
+          "title": "Publish a sitemap of the two pages that should rank",
+          "effort": "30 min",
+          "what": "robots.txt is 24 bytes (\"User-Agent: *\" / \"Disallow:\") and has no Sitemap line. /sitemap.xml, /sitemap-index.xml and /sitemap_index.xml return 404. The only HTML documents worth indexing today are https://www.tasky.com/ and https://www.tasky.com/product.",
+          "why": "With no sitemap, discovery is whatever a crawler follows or invents. The empty shells are 200s, so a sitemap is also how you tell Google the real set and, in Search Console, which URLs you stand behind.",
+          "fix": "Serve a urlset at https://www.tasky.com/sitemap.xml containing only / and /product. Add \"Sitemap: https://www.tasky.com/sitemap.xml\" to robots.txt. Leave out /beta, /beta-terms, /try, /board, /view, /api/auth/keycloak, and every shell. Submit the file in a Domain property for tasky.com after it exists.",
+          "evidence": [
+            "robots.txt status 200, no Sitemap: line",
+            "sitemap candidates 404"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/robots.txt",
+            "https://www.tasky.com/",
+            "https://www.tasky.com/product"
+          ],
+          "artifacts": [
+            {
+              "name": "robots.txt",
+              "kind": "other",
+              "content": "User-Agent: *\nDisallow:\n\nSitemap: https://www.tasky.com/sitemap.xml\n"
+            },
+            {
+              "name": "sitemap.xml",
+              "kind": "other",
+              "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url><loc>https://www.tasky.com/</loc></url>\n  <url><loc>https://www.tasky.com/product</loc></url>\n</urlset>\n"
+            }
+          ],
+          "agentAction": {
+            "type": "add_file",
+            "target": "robots.txt + sitemap.xml",
+            "notes": "Only / and /product. Absolute Sitemap URL on the www host."
+          }
+        },
+        {
+          "id": "tasky-titles",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Put Clearboard in the titles",
+          "effort": "30 min",
+          "what": "The homepage <title> is \"Tasky\". The H1 is \"Let the project speak.\" The meta description is already the right sentence. /product is titled \"Tasky — What it does\" while its description (\"Paste meeting notes, a long email, a messy task list…\") and H1 (\"Paste your chaos. Get a board.\") are specific. Both pages set og:title to \"Tasky Clearboard\" and twitter:card to summary. /try has no H1 and no description in the HTML. The sign-in URL is a 302 to Keycloak, not a missing document.",
+          "why": "The title is what a brand search and an AI citation show. \"Tasky\" alone does not separate this product from the other Taskys, and the poetic H1 does not either. The good sentence is already written; it is just not in the title.",
+          "fix": "Use the title and description lines in the appendix. Keep both H1s. Keep both meta descriptions. Do not spend time giving /try or the Keycloak redirect a marketing title: noindex /try, and leave the 302 alone.",
+          "evidence": [
+            "home title: Tasky",
+            "home H1: Let the project speak.",
+            "product title: Tasky — What it does",
+            "product description already names meeting notes, email, and a task list"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://www.tasky.com/product"
+          ],
+          "artifacts": [
+            {
+              "name": "titles.txt",
+              "kind": "copy",
+              "content": "# Titles and descriptions to ship\n\nhttps://www.tasky.com/\n  <title>Tasky Clearboard — paste notes, get a living board</title>\n  meta description (already good, keep it):\n  Tasky reads tasks, people and dependencies from the way you already talk about work — then draws them into living boards.\n  H1 can stay \"Let the project speak.\" The title has to carry the category, because the H1 does not.\n\nhttps://www.tasky.com/product\n  <title>Paste meeting notes, get a board — Tasky Clearboard</title>\n  meta description (already good, keep it):\n  Paste meeting notes, a long email, a messy task list. Tasky reads the tasks, the people and what depends on what — and draws the board in seconds.\n  H1 \"Paste your chaos. Get a board.\" is fine.\n\nog:image on both: absolute https://www.tasky.com/og.png at 1200×630.\nog:title: Tasky Clearboard — paste notes, get a living board\ntwitter:card: summary_large_image\n"
+            }
+          ],
+          "agentAction": {
+            "type": "edit_html_meta",
+            "target": "index and product pages"
+          }
+        },
+        {
+          "id": "tasky-og-image",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "technical",
+          "title": "Replace the share image",
+          "effort": "45 min",
+          "what": "og:image is the relative URL /pwa-512x512.png. The file is a PNG of 401×475 pixels and 111 KB, not 512×512 and not 1200×630. twitter:card is summary, so clients that honour it will use a small card. The same tags are on the empty shell, which is why a shell can outrank the homepage for the product name.",
+          "why": "Shared links and some brand-result treatments show this image. A square app icon with no sentence does not say what Tasky is, and a relative og:image is dropped by some scrapers.",
+          "fix": "Make one 1200×630 PNG or JPG (the sentence \"Paste notes, get a living board\" plus the wordmark). Serve it at https://www.tasky.com/og.png and reference that absolute URL. Set twitter:card to summary_large_image. Use it as the default on / and /product only, not on the app shell.",
+          "evidence": [
+            "PNG IHDR 401×475, 111491 bytes",
+            "og:image content=/pwa-512x512.png",
+            "twitter:card summary"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/pwa-512x512.png"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "add_file",
+            "target": "public/og.png",
+            "notes": "1200×630, absolute og:image, summary_large_image"
+          }
+        },
+        {
+          "id": "tasky-http-chain",
+          "priority": "NICE_TO_HAVE",
+          "level": "P2",
+          "category": "technical",
+          "title": "Send the HTTP apex straight to https://www",
+          "effort": "15 min",
+          "what": "https://tasky.com/ returns one 308 to https://www.tasky.com/. http://tasky.com/ returns a 308 to http://www.tasky.com/, and only the next hop upgrades to HTTPS. Canonicals on / and /product are already https://www.tasky.com/….",
+          "why": "Two hops, the first of them still on HTTP, is a small leak. Anyone who types the bare host, and any old link, should land on the canonical URL in one step.",
+          "fix": "Change the HTTP apex rule so Location is https://www.tasky.com/ (one 308). Leave the HTTPS apex → www rule as it is.",
+          "evidence": [
+            "http://tasky.com/ → 308 Location: http://www.tasky.com",
+            "http://www.tasky.com/ → 308 Location: https://www.tasky.com",
+            "https://tasky.com/ → 308 Location: https://www.tasky.com"
+          ],
+          "relatedUrls": [
+            "http://tasky.com/",
+            "https://www.tasky.com/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "add_redirects",
+            "target": "http://tasky.com/",
+            "notes": "Single 308 to https://www.tasky.com/"
+          }
+        },
+        {
+          "id": "tasky-security-headers",
+          "priority": "NICE_TO_HAVE",
+          "level": "P2",
+          "category": "technical",
+          "title": "Add nosniff and a content security policy",
+          "effort": "1–2 h",
+          "what": "The homepage already sends strict-transport-security: max-age=15724800; includeSubDomains (about 182 days, no preload). It does not send content-security-policy, x-content-type-options, or referrer-policy. auth.tasky.com does send nosniff and referrer-policy.",
+          "why": "These are not ranking factors. The marketing host is the one that embeds Keycloak, Turnstile, Stripe and the Cloudflare beacon, so it is the response that should say what it is willing to run.",
+          "fix": "On HTML responses from www.tasky.com, add X-Content-Type-Options: nosniff and Referrer-Policy: strict-origin-when-cross-origin. Add a Content-Security-Policy that allows the origins the app already uses (auth.tasky.com, the Turnstile script, the Stripe donation link, static.cloudflareinsights.com) and nothing else. Do not drop HSTS. Raise max-age to 31536000 only if every subdomain can stay on HTTPS.",
+          "evidence": [
+            "homepage HSTS present",
+            "no CSP, no nosniff, no referrer-policy on www",
+            "auth.tasky.com sends nosniff and referrer-policy"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://auth.tasky.com/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "configure_headers",
+            "target": "www.tasky.com"
+          }
+        },
+        {
+          "id": "tasky-image-alt",
+          "priority": "NICE_TO_HAVE",
+          "level": "P2",
+          "category": "technical",
+          "title": "Name the homepage wordmark",
+          "effort": "10 min",
+          "what": "The homepage logo /tasky-logo-transparent-dark-text-bubble.png has alt=\"\". The same file on /product has alt=\"Tasky\". It is the only image the crawl flagged.",
+          "why": "The homepage H1 does not say Tasky. An empty alt on the wordmark removes the name from the accessible name of the page header.",
+          "fix": "Set alt=\"Tasky\" on the homepage wordmark, matching /product.",
+          "evidence": [
+            "home img alt empty",
+            "product img alt=Tasky"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://www.tasky.com/product"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "edit_html_meta",
+            "target": "homepage logo"
+          }
+        },
+        {
+          "id": "tasky-home-copy",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "content_keywords",
+          "title": "The explanation lives on /product, not on the homepage",
+          "effort": "1–2 h",
+          "what": "The homepage HTML is about 80 words. The useful sentence is already there: \"Tasky reads tasks, people and dependencies from the way you already talk about work — then draws them into living boards.\" /product is about 600 words and says the thing a searcher needs: paste meeting notes, a long email or a messy list; it works in Hungarian; Clearboard is the drawing and Workspace is where it goes; Clearboard is €0; Workspace is free during the beta and the trial starts when you open it. None of the configured problem phrases appear in a title or H1.",
+          "why": "The homepage is the URL a brand search should land on. A slogan and one sentence will not be what an assistant quotes when someone asks how to turn notes into a board, and /product is one click deeper with a vague title.",
+          "fix": "Keep the voice. Add three or four sentences under the hero that a stranger can quote: what you paste, what you get (tasks, people, dependencies), that no account is required for a draft, and that Workspace is the beta. Point the title at the same facts. Do not start a generic task-management blog. If a third URL is added later, make it one page that answers \"turn meeting notes into a board\" and link it from /product.",
+          "evidence": [
+            "home ~80 words, H1 is a slogan",
+            "product ~600 words, description already leads with meeting notes",
+            "no keyword-volume API on this run; volumes are not invented here"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://www.tasky.com/product"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "edit_copy",
+            "target": "homepage opening"
+          }
+        },
+        {
+          "id": "tasky-category-serp",
+          "priority": "CONTEXT",
+          "level": "P1",
+          "category": "content_keywords",
+          "title": "The problem query is answered by recipes, not by Tasky",
+          "effort": "No action",
+          "what": "A web search on 2 October 2026 for \"turn meeting notes into a project board\" returned guides about Gemini, Claude, Zapier, Asana, Notion and Todoist. tasky.com was not among them. Namesake homepages lead with a different product: trytasky.com \"Plan life in seconds\", tasky.uz \"Task management that actually works\", taskytodo.com \"One place to capture and organize tasks.\"",
+          "why": "That is the demand Tasky is built for, and today it is described as a workflow between a chat model and someone else's board. Ranking for it is a later content job. It is not the first job while the brand URL itself is ambiguous.",
+          "fix": "No new article in this pass. After the title, sitemap and schema are live, one page on /product (or a single child URL) should use the phrase \"meeting notes\" in the title — the description already does.",
+          "evidence": [
+            "category results were automation recipes, not tasky.com",
+            "trytasky.com H1: Plan life in seconds",
+            "taskytodo.com H1: One place to capture and organize tasks"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/product",
+            "https://trytasky.com/",
+            "https://tasky.uz/",
+            "https://www.taskytodo.com/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "create_content",
+            "notes": "Defer. One page, after indexation fixes."
+          }
+        },
+        {
+          "id": "tasky-llms-quality",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "geo_ai",
+          "title": "Say who Tasky is, and who it is not, in llms.txt",
+          "effort": "30 min",
+          "what": "https://www.tasky.com/llms.txt returns 200 and 569 bytes of text/plain. It describes the paste-to-board behaviour and correctly says /board and /view are user content and should not be treated as public. It does not name DPR Ltd. or Hungary, the links are relative (/ and /product), and it does not say which other Taskys it is not.",
+          "why": "Assistants looking for \"Tasky\" already have a crowd of other products. A file they can quote needs the legal name, the country, the two product names, and an explicit limit. Relative links are easy to mis-resolve.",
+          "fix": "Replace the file with the starter in the appendix. Keep the warning about user boards. Use absolute URLs.",
+          "evidence": [
+            "GET /llms.txt 200, 569 bytes, text/plain",
+            "no legalName, relative links"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/llms.txt"
+          ],
+          "artifacts": [
+            {
+              "name": "llms.txt",
+              "kind": "llms_txt",
+              "content": "# Tasky\n\n> Tasky is a product of DPR Ltd. (Hungary). Tasky Clearboard reads tasks, people and\n> dependencies out of text you already have — a meeting note, an email, a messy list —\n> and draws them as a board. Tasky Workspace is where that board becomes a room: chat,\n> presence, invites and a history. Clearboard is free. Workspace is free for testers\n> while the beta runs.\n>\n> This is not a calendar to-do list, and it is not any other product that uses the name\n> Tasky. Those include trytasky.com, tasky.uz, taskytodo.com, tasky.net, tasky.school\n> and tasky.cl.\n\n## Pages\n\n- [Tasky](https://www.tasky.com/): what it is, and the way in\n- [What it does](https://www.tasky.com/product): paste to board, and what a Workspace adds\n\n## Leave alone\n\n- /beta and /beta-terms are noindex. They explain the tester programme; they are not the product pitch.\n- Boards live at /board/<id> and shared links at /view/<id>. Both are user content, both send noindex, and nothing there is public material.\n"
+            }
+          ],
+          "agentAction": {
+            "type": "add_file",
+            "target": "public/llms.txt"
+          }
+        },
+        {
+          "id": "tasky-geo-checks",
+          "priority": "CHECK",
+          "level": "P1",
+          "category": "geo_ai",
+          "title": "AI engines were not quoted in this run",
+          "effort": "45 min, then again after the title change",
+          "what": "ChatGPT, Perplexity, Google AI Overview and Copilot were not captured with citations in this pass. What is already visible without those engines: a web search for \"What is Tasky Clearboard\" does not describe this product, and the tasky.com hit in that search is titled only \"Tasky\". GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Googlebot and Google-Extended all receive HTTP 200 on the homepage. robots.txt has no Content-Signal lines and does not block them.",
+          "why": "The engines will invent a Tasky, or cite a namesake, until the homepage title and the schema say which one this is. Bot access is already open, so the gap is the page, not a firewall.",
+          "fix": "After the title and llms.txt changes, ask the four engines the questions in the appendix and record the cited URLs. Success is a citation of https://www.tasky.com/ or /product, with Clearboard described as paste-to-board, and no claim that this Tasky is trytasky.com, tasky.uz or tasky.cl.",
+          "evidence": [
+            "bot UAs on / returned 200: GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Googlebot, Google-Extended",
+            "web search snippet for https://www.tasky.com/ was the single word Tasky"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://www.tasky.com/llms.txt"
+          ],
+          "artifacts": [
+            {
+              "name": "geo-probe.txt",
+              "kind": "checklist",
+              "content": "Ask each engine, with search turned on. Date the answer. Record the cited URLs.\n\n- What is Tasky?\n- What is Tasky Clearboard at tasky.com?\n- Who makes tasky.com?\n- How do I turn meeting notes into a project board?\n\nEngines: ChatGPT, Perplexity, Google AI Overview, Copilot.\n"
+            }
+          ],
+          "agentAction": {
+            "type": "manual_check",
+            "notes": "Repeat after titles, schema and llms.txt ship."
+          }
+        },
+        {
+          "id": "tasky-org-schema",
+          "priority": "FIRST",
+          "level": "P0",
+          "category": "entity_brand",
+          "title": "Add Organization and SoftwareApplication schema",
+          "effort": "1 h",
+          "what": "No JSON-LD on the crawled pages. The only machine-readable identity is the footer line \"Tasky is a product of DPR Ltd.\" and, on the noindexed beta terms, \"DPR Ltd. (Hungary)\" plus support@tasky.com. The manifest description is the generic \"AI-powered project management\", and its start_url is /home, which is an empty shell.",
+          "why": "The brand string matches a lot of other products and a handful of unrelated Wikidata items (a person, rivers, a mountain, a village). Without an Organization and a SoftwareApplication tied to https://www.tasky.com/, a model has nothing stable to attach Clearboard to.",
+          "fix": "Paste the appendix JSON-LD into the homepage and /product. Use Organization plus SoftwareApplication, not ProfessionalService: this is a product, not a consultancy. Do not invent a street address or a founder; the site does not publish either. Point the manifest start_url at / (or /try if it must open the app) and set its description to the same sentence as the meta description.",
+          "evidence": [
+            "no application/ld+json on / or /product",
+            "manifest name Tasky, description AI-powered project management, start_url /home"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://www.tasky.com/manifest.webmanifest"
+          ],
+          "artifacts": [
+            {
+              "name": "organization-software.json",
+              "kind": "schema_json",
+              "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"Organization\",\n      \"@id\": \"https://www.tasky.com/#organization\",\n      \"name\": \"Tasky\",\n      \"legalName\": \"DPR Ltd.\",\n      \"url\": \"https://www.tasky.com/\",\n      \"email\": \"support@tasky.com\",\n      \"address\": {\n        \"@type\": \"PostalAddress\",\n        \"addressCountry\": \"HU\"\n      },\n      \"brand\": [\"Tasky Clearboard\", \"Tasky Workspace\"],\n      \"knowsAbout\": [\n        \"turning meeting notes into a project board\",\n        \"reading tasks, people and dependencies from plain text\"\n      ]\n    },\n    {\n      \"@type\": \"SoftwareApplication\",\n      \"@id\": \"https://www.tasky.com/#clearboard\",\n      \"name\": \"Tasky Clearboard\",\n      \"applicationCategory\": \"BusinessApplication\",\n      \"operatingSystem\": \"Web\",\n      \"url\": \"https://www.tasky.com/product\",\n      \"description\": \"Paste meeting notes, an email or a messy task list. Tasky reads the tasks, the people and the dependencies and draws a board.\",\n      \"offers\": {\n        \"@type\": \"Offer\",\n        \"price\": \"0\",\n        \"priceCurrency\": \"EUR\",\n        \"description\": \"Clearboard is free. Drafts without an account live for 24 hours.\"\n      },\n      \"publisher\": { \"@id\": \"https://www.tasky.com/#organization\" }\n    },\n    {\n      \"@type\": \"WebSite\",\n      \"@id\": \"https://www.tasky.com/#website\",\n      \"url\": \"https://www.tasky.com/\",\n      \"name\": \"Tasky\",\n      \"publisher\": { \"@id\": \"https://www.tasky.com/#organization\" }\n    }\n  ]\n}\n"
+            }
+          ],
+          "agentAction": {
+            "type": "edit_schema",
+            "target": "homepage and /product",
+            "notes": "Organization + SoftwareApplication + WebSite"
+          }
+        },
+        {
+          "id": "tasky-brand-serp",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "entity_brand",
+          "title": "The domain can rank and still be indistinguishable",
+          "effort": "2–3 h, then ongoing",
+          "what": "On DuckDuckGo, 2 October 2026, \"Tasky\" listed https://www.tasky.com/ first and /product second, then taskyai.vercel.app, tasky.school, taskytodo.com, tasky.digital, the Wiktionary entry for \"tasky\", app.tasky.bot, tasky.net and tasky.software. \"Tasky Clearboard\" listed /try first and the homepage second, then unrelated sign-in pages. A separate web index for the bare word \"Tasky\" led with trytasky.com, tasky.uz, tasky.net and an iOS app, and did not show tasky.com on the first screen. No sameAs profile in the HTML. LinkedIn company pages named Tasky that do show up belong to other businesses (tasky.cl, tasky.cloud).",
+          "why": "Owning the first DuckDuckGo row is not the same as being recognised. The row is titled \"Tasky\" and the product-name query prefers the empty /try URL. Attaching the wrong LinkedIn page would make the confusion permanent.",
+          "fix": "Ship the title, the share image and the schema first. Then create one profile (LinkedIn company, or whatever the owner actually uses) with the name Tasky, the URL https://www.tasky.com/, and the Clearboard sentence. Do not link tasky.cl, tasky.cloud, trytasky.com or the app-store listings. Add that profile URL to Organization.sameAs only after it exists. There is no Wikidata item for this company; the five name hits are unrelated. A Wikidata item is optional and only worth it once the site states the same facts.",
+          "evidence": [
+            "DDG Tasky 2026-10-02: tasky.com, tasky.com/product, then namesakes",
+            "DDG Tasky Clearboard 2026-10-02: tasky.com/try first",
+            "Wikidata hits are not this product: Q12520065, Q23825491, Q20827599, Q32214636, Q138536493"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://trytasky.com/",
+            "https://tasky.uz/",
+            "https://www.taskytodo.com/",
+            "https://www.tasky.net/en/home"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "manual_check",
+            "notes": "New profile only. Do not reuse another Tasky's LinkedIn."
+          }
+        },
+        {
+          "id": "tasky-privacy",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "conversion",
+          "title": "Publish a privacy notice and terms, or stop answering those URLs",
+          "effort": "half a day",
+          "what": "The footer links to beta terms, a payments anchor, and mailto:support@tasky.com. It does not link to a privacy notice or general terms. /privacy and /terms return the empty 200 shell. The beta terms (last updated 8 September 2026, noindex) name DPR Ltd. (Hungary), say boards stay yours in Clearboard, describe anonymised template learning, and point billing disputes at support@tasky.com and Stripe. They are not a privacy notice, and they are marked noindex.",
+          "why": "Clearboard asks people to paste meeting notes and emails. A 200 at /privacy that is a blank page is worse than a 404: it looks like a policy and says nothing. The beta terms cannot be cited as the public policy while they send noindex.",
+          "fix": "Write /privacy and /terms as real HTML, in the same voice as the beta terms, and link both from the footer. Cover what is pasted, how long a draft without an account is kept (the homepage says 24 hours), the template-learning sentence that is already on the beta terms, and Stripe for voluntary support payments. Until those pages exist, the URLs should 404, not return the shell. This review did not draft legal text.",
+          "evidence": [
+            "footer: beta terms, payments, support@tasky.com, DPR Ltd.",
+            "/privacy and /terms are 1942-byte shells",
+            "beta terms noindex, last updated 8 September 2026"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/beta-terms",
+            "https://www.tasky.com/privacy",
+            "https://www.tasky.com/terms"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "create_content",
+            "target": "/privacy and /terms",
+            "notes": "Real HTML or a 404. Do not leave the shell."
+          }
+        },
+        {
+          "id": "tasky-contact",
+          "priority": "NICE_TO_HAVE",
+          "level": "P2",
+          "category": "conversion",
+          "title": "Keep the email visible as text",
+          "effort": "30 min",
+          "what": "There is no contact form and no /contact page (that URL is a shell). The only reach-a-person path on the marketing pages is mailto:support@tasky.com. The primary actions are real links: \"Draw my board →\" and \"Join the beta →\" / \"Sign in to join\". They do not post to mailto.",
+          "why": "The product actions are fine. The gap is support: a mailto link does nothing on a machine without a mail client, and a blank /contact URL may get indexed.",
+          "fix": "Put support@tasky.com in the footer as visible text, not only as a link. Either build a one-field form that posts to the server, or 404 /contact until you do. Do not change \"Draw my board\" — it is the right action.",
+          "evidence": [
+            "footer mailto:support@tasky.com",
+            "/contact is an empty 200",
+            "homepage and /product both link to /try and /beta"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/",
+            "https://www.tasky.com/contact"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "edit_copy",
+            "target": "footer email"
+          }
+        },
+        {
+          "id": "tasky-no-search-baseline",
+          "priority": "IMPORTANT",
+          "level": "P1",
+          "category": "measurement",
+          "title": "Open a Domain property and look at it once",
+          "effort": "30 min",
+          "what": "This review had no Search Console export. searchConsole access was not available. There is no keyword-volume source on this run either, so nothing here is a traffic forecast.",
+          "why": "The site is small enough that a wrong noindex or a sitemap of shells would show up immediately as indexed URLs. Without the property, the next check is another crawl.",
+          "fix": "Add a Domain property for tasky.com (it covers apex and www, and the HTTP→HTTPS move). After the sitemap is live, submit it and inspect / , /product and /try. /try should drop out of the index. Paste the query export into measurement.queries if you run this audit again.",
+          "evidence": [
+            "measurement.searchConsole false",
+            "no queries attached"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "submit_gsc",
+            "notes": "Domain property, not a URL-prefix on only one host."
+          }
+        },
+        {
+          "id": "tasky-field-vitals",
+          "priority": "CHECK",
+          "level": "P2",
+          "category": "measurement",
+          "title": "Lab speed is already fine; field data was not available",
+          "effort": "15 min",
+          "what": "Lighthouse 12.8.2 on https://www.tasky.com/ on 2 October 2026: mobile performance 97, accessibility 100, best practices 100, SEO 100, LCP 2.1 s, CLS 0.002, TBT 20 ms. Desktop performance 99, LCP 0.7 s, CLS 0.002, TBT 0 ms. Chrome UX Report was not queried (no CRUX_API_KEY). The PageSpeed Insights API returned quota exceeded, so these numbers are local Lighthouse, not Google's hosted run. The SEO 100 is the homepage document only; it does not see the missing sitemap or the shells.",
+          "why": "There is no performance project here. Treating the homepage SEO score as a site-wide pass would hide the indexation bugs.",
+          "fix": "No speed work. When a CrUX key exists, confirm phone LCP, INP and CLS for the origin. Do not block the indexation fixes on that.",
+          "evidence": [
+            "Lighthouse 12.8.2 mobile 97/100/100/100 LCP 2.1s CLS 0.002",
+            "Lighthouse 12.8.2 desktop 99/100/100/100 LCP 0.7s CLS 0.002"
+          ],
+          "relatedUrls": [
+            "https://www.tasky.com/"
+          ],
+          "artifacts": [],
+          "agentAction": {
+            "type": "manual_check",
+            "notes": "Field CrUX later. No lab speed work now."
+          }
+        }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "when": "This week",
+      "columns": {
+        "Tasky": "404 the empty shells and noindex /try, /home, /board and /view; sitemap of / and /product; Organization + SoftwareApplication schema; homepage and product titles"
+      }
+    },
+    {
+      "when": "Next 2 weeks",
+      "columns": {
+        "Tasky": "Rewrite llms.txt with DPR Ltd., Hungary, and who it is not; privacy and terms as real pages; 1200×630 share image; one profile that points at www.tasky.com"
+      }
+    },
+    {
+      "when": "Month 1–3",
+      "columns": {
+        "Tasky": "Search Console Domain property, inspect /try until it drops; one page aimed at meeting notes → board; repeat the four AI-search questions"
+      }
+    }
+  ],
+  "appendix": [
+    {
+      "title": "URL status map",
+      "kind": "pre",
+      "content": "# What each URL should do. Checked 2 October 2026.\n\nKeep, index, put in the sitemap\n200  https://www.tasky.com/            title today: Tasky. About 80 words.\n200  https://www.tasky.com/product     title today: Tasky — What it does. About 600 words.\n\nReal pages, already noindex — keep noindex, leave out of the sitemap\n200  https://www.tasky.com/beta            X-Robots-Tag: noindex, nofollow\n200  https://www.tasky.com/beta-terms      X-Robots-Tag: noindex, nofollow\n\nApp or user content — noindex the whole prefix, including the bare path\n200  https://www.tasky.com/try             1942-byte shell, indexable, no H1\n200  https://www.tasky.com/home            1942-byte shell, indexable (manifest start_url)\n200  https://www.tasky.com/board           1942-byte shell, indexable\n200  https://www.tasky.com/board/example   noindex, nofollow  (the :id pattern already works)\n200  https://www.tasky.com/view            1942-byte shell, indexable\n200  https://www.tasky.com/view/example    noindex, nofollow\n200  https://www.tasky.com/admin           shell, indexable\n200  https://www.tasky.com/context         shell, indexable\n200  https://www.tasky.com/offline         shell, indexable\n200  https://www.tasky.com/feedback        shell, indexable\n\nShould be real documents, or a genuine 404 until they exist. Today they are indexable shells.\n200  https://www.tasky.com/privacy\n200  https://www.tasky.com/terms\n200  https://www.tasky.com/about\n200  https://www.tasky.com/pricing\n200  https://www.tasky.com/blog\n200  https://www.tasky.com/docs\n200  https://www.tasky.com/contact\n\nSign-in is a redirect, not a page. Keep it out of the sitemap.\n302  https://www.tasky.com/api/auth/keycloak  → auth.tasky.com (Keycloak)\n\nHost\n308  http://tasky.com/        → http://www.tasky.com/     (stays on http)\n308  http://www.tasky.com/    → https://www.tasky.com/\n308  https://tasky.com/       → https://www.tasky.com/    (one hop, good)\n"
+    },
+    {
+      "title": "Titles to ship",
+      "kind": "pre",
+      "content": "# Titles and descriptions to ship\n\nhttps://www.tasky.com/\n  <title>Tasky Clearboard — paste notes, get a living board</title>\n  meta description (already good, keep it):\n  Tasky reads tasks, people and dependencies from the way you already talk about work — then draws them into living boards.\n  H1 can stay \"Let the project speak.\" The title has to carry the category, because the H1 does not.\n\nhttps://www.tasky.com/product\n  <title>Paste meeting notes, get a board — Tasky Clearboard</title>\n  meta description (already good, keep it):\n  Paste meeting notes, a long email, a messy task list. Tasky reads the tasks, the people and what depends on what — and draws the board in seconds.\n  H1 \"Paste your chaos. Get a board.\" is fine.\n\nog:image on both: absolute https://www.tasky.com/og.png at 1200×630.\nog:title: Tasky Clearboard — paste notes, get a living board\ntwitter:card: summary_large_image\n"
+    },
+    {
+      "title": "llms.txt",
+      "kind": "pre",
+      "content": "# Tasky\n\n> Tasky is a product of DPR Ltd. (Hungary). Tasky Clearboard reads tasks, people and\n> dependencies out of text you already have — a meeting note, an email, a messy list —\n> and draws them as a board. Tasky Workspace is where that board becomes a room: chat,\n> presence, invites and a history. Clearboard is free. Workspace is free for testers\n> while the beta runs.\n>\n> This is not a calendar to-do list, and it is not any other product that uses the name\n> Tasky. Those include trytasky.com, tasky.uz, taskytodo.com, tasky.net, tasky.school\n> and tasky.cl.\n\n## Pages\n\n- [Tasky](https://www.tasky.com/): what it is, and the way in\n- [What it does](https://www.tasky.com/product): paste to board, and what a Workspace adds\n\n## Leave alone\n\n- /beta and /beta-terms are noindex. They explain the tester programme; they are not the product pitch.\n- Boards live at /board/<id> and shared links at /view/<id>. Both are user content, both send noindex, and nothing there is public material.\n"
+    },
+    {
+      "title": "Organization and SoftwareApplication",
+      "kind": "json",
+      "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"Organization\",\n      \"@id\": \"https://www.tasky.com/#organization\",\n      \"name\": \"Tasky\",\n      \"legalName\": \"DPR Ltd.\",\n      \"url\": \"https://www.tasky.com/\",\n      \"email\": \"support@tasky.com\",\n      \"address\": {\n        \"@type\": \"PostalAddress\",\n        \"addressCountry\": \"HU\"\n      },\n      \"brand\": [\"Tasky Clearboard\", \"Tasky Workspace\"],\n      \"knowsAbout\": [\n        \"turning meeting notes into a project board\",\n        \"reading tasks, people and dependencies from plain text\"\n      ]\n    },\n    {\n      \"@type\": \"SoftwareApplication\",\n      \"@id\": \"https://www.tasky.com/#clearboard\",\n      \"name\": \"Tasky Clearboard\",\n      \"applicationCategory\": \"BusinessApplication\",\n      \"operatingSystem\": \"Web\",\n      \"url\": \"https://www.tasky.com/product\",\n      \"description\": \"Paste meeting notes, an email or a messy task list. Tasky reads the tasks, the people and the dependencies and draws a board.\",\n      \"offers\": {\n        \"@type\": \"Offer\",\n        \"price\": \"0\",\n        \"priceCurrency\": \"EUR\",\n        \"description\": \"Clearboard is free. Drafts without an account live for 24 hours.\"\n      },\n      \"publisher\": { \"@id\": \"https://www.tasky.com/#organization\" }\n    },\n    {\n      \"@type\": \"WebSite\",\n      \"@id\": \"https://www.tasky.com/#website\",\n      \"url\": \"https://www.tasky.com/\",\n      \"name\": \"Tasky\",\n      \"publisher\": { \"@id\": \"https://www.tasky.com/#organization\" }\n    }\n  ]\n}\n"
+    }
+  ],
+  "agentQueue": [
+    {
+      "id": "tasky-org-schema",
+      "priority": "FIRST",
+      "level": "P0",
+      "category": "entity_brand",
+      "title": "Add Organization and SoftwareApplication schema",
+      "effort": "1 h",
+      "what": "No JSON-LD on the crawled pages. The only machine-readable identity is the footer line \"Tasky is a product of DPR Ltd.\" and, on the noindexed beta terms, \"DPR Ltd. (Hungary)\" plus support@tasky.com. The manifest description is the generic \"AI-powered project management\", and its start_url is /home, which is an empty shell.",
+      "why": "The brand string matches a lot of other products and a handful of unrelated Wikidata items (a person, rivers, a mountain, a village). Without an Organization and a SoftwareApplication tied to https://www.tasky.com/, a model has nothing stable to attach Clearboard to.",
+      "fix": "Paste the appendix JSON-LD into the homepage and /product. Use Organization plus SoftwareApplication, not ProfessionalService: this is a product, not a consultancy. Do not invent a street address or a founder; the site does not publish either. Point the manifest start_url at / (or /try if it must open the app) and set its description to the same sentence as the meta description.",
+      "evidence": [
+        "no application/ld+json on / or /product",
+        "manifest name Tasky, description AI-powered project management, start_url /home"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://www.tasky.com/manifest.webmanifest"
+      ],
+      "artifacts": [
+        {
+          "name": "organization-software.json",
+          "kind": "schema_json",
+          "content": "{\n  \"@context\": \"https://schema.org\",\n  \"@graph\": [\n    {\n      \"@type\": \"Organization\",\n      \"@id\": \"https://www.tasky.com/#organization\",\n      \"name\": \"Tasky\",\n      \"legalName\": \"DPR Ltd.\",\n      \"url\": \"https://www.tasky.com/\",\n      \"email\": \"support@tasky.com\",\n      \"address\": {\n        \"@type\": \"PostalAddress\",\n        \"addressCountry\": \"HU\"\n      },\n      \"brand\": [\"Tasky Clearboard\", \"Tasky Workspace\"],\n      \"knowsAbout\": [\n        \"turning meeting notes into a project board\",\n        \"reading tasks, people and dependencies from plain text\"\n      ]\n    },\n    {\n      \"@type\": \"SoftwareApplication\",\n      \"@id\": \"https://www.tasky.com/#clearboard\",\n      \"name\": \"Tasky Clearboard\",\n      \"applicationCategory\": \"BusinessApplication\",\n      \"operatingSystem\": \"Web\",\n      \"url\": \"https://www.tasky.com/product\",\n      \"description\": \"Paste meeting notes, an email or a messy task list. Tasky reads the tasks, the people and the dependencies and draws a board.\",\n      \"offers\": {\n        \"@type\": \"Offer\",\n        \"price\": \"0\",\n        \"priceCurrency\": \"EUR\",\n        \"description\": \"Clearboard is free. Drafts without an account live for 24 hours.\"\n      },\n      \"publisher\": { \"@id\": \"https://www.tasky.com/#organization\" }\n    },\n    {\n      \"@type\": \"WebSite\",\n      \"@id\": \"https://www.tasky.com/#website\",\n      \"url\": \"https://www.tasky.com/\",\n      \"name\": \"Tasky\",\n      \"publisher\": { \"@id\": \"https://www.tasky.com/#organization\" }\n    }\n  ]\n}\n"
+        }
+      ],
+      "agentAction": {
+        "type": "edit_schema",
+        "target": "homepage and /product",
+        "notes": "Organization + SoftwareApplication + WebSite"
+      }
+    },
+    {
+      "id": "tasky-sitemap-missing",
+      "priority": "BLOCKER",
+      "level": "P0",
+      "category": "pre_launch",
+      "title": "Publish a sitemap of the two pages that should rank",
+      "effort": "30 min",
+      "what": "robots.txt is 24 bytes (\"User-Agent: *\" / \"Disallow:\") and has no Sitemap line. /sitemap.xml, /sitemap-index.xml and /sitemap_index.xml return 404. The only HTML documents worth indexing today are https://www.tasky.com/ and https://www.tasky.com/product.",
+      "why": "With no sitemap, discovery is whatever a crawler follows or invents. The empty shells are 200s, so a sitemap is also how you tell Google the real set and, in Search Console, which URLs you stand behind.",
+      "fix": "Serve a urlset at https://www.tasky.com/sitemap.xml containing only / and /product. Add \"Sitemap: https://www.tasky.com/sitemap.xml\" to robots.txt. Leave out /beta, /beta-terms, /try, /board, /view, /api/auth/keycloak, and every shell. Submit the file in a Domain property for tasky.com after it exists.",
+      "evidence": [
+        "robots.txt status 200, no Sitemap: line",
+        "sitemap candidates 404"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/robots.txt",
+        "https://www.tasky.com/",
+        "https://www.tasky.com/product"
+      ],
+      "artifacts": [
+        {
+          "name": "robots.txt",
+          "kind": "other",
+          "content": "User-Agent: *\nDisallow:\n\nSitemap: https://www.tasky.com/sitemap.xml\n"
+        },
+        {
+          "name": "sitemap.xml",
+          "kind": "other",
+          "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url><loc>https://www.tasky.com/</loc></url>\n  <url><loc>https://www.tasky.com/product</loc></url>\n</urlset>\n"
+        }
+      ],
+      "agentAction": {
+        "type": "add_file",
+        "target": "robots.txt + sitemap.xml",
+        "notes": "Only / and /product. Absolute Sitemap URL on the www host."
+      }
+    },
+    {
+      "id": "tasky-soft-200",
+      "priority": "BLOCKER",
+      "level": "P0",
+      "category": "pre_launch",
+      "title": "Stop returning 200 for empty URLs",
+      "effort": "2–3 h",
+      "what": "Any path the app does not server-render comes back as HTTP 200 with a 1,942-byte Nuxt shell: title \"Tasky\", no H1, no meta description, no canonical, and og:title \"Tasky Clearboard\". That includes /try, /privacy, /terms, /about, /pricing, /blog, /docs, /contact, /home, /admin, /board and /view. /try is the URL DuckDuckGo listed first for \"Tasky Clearboard\" on 2 October 2026. /board/<id> and /view/<id> already send X-Robots-Tag: noindex, nofollow. The bare /board and /view paths do not. /beta and /beta-terms do send noindex, nofollow.",
+      "why": "Search and AI crawlers treat a 200 as a page. The product name currently points at a shell with nothing to quote, and invented URLs such as /privacy can be indexed as if Tasky had a privacy policy. llms.txt says boards are not indexed; the bare /board URL contradicts that.",
+      "fix": "In Nuxt routeRules (or server middleware): return a real 404 for unknown paths. Send X-Robots-Tag: noindex, nofollow on /try, /home, /admin, /context, /offline, /feedback, and on the /board and /view prefixes including the path with no id. Do not Disallow those paths in robots.txt — Google has to fetch the noindex. Keep /beta and /beta-terms noindex and out of the sitemap. /try can stay as the app; it should not be an indexable document until the HTML contains the product.",
+      "evidence": [
+        "GET /try → 200, 1942 bytes, title Tasky, no x-robots-tag",
+        "GET /privacy /terms /about /pricing /blog /home /board /view → same shell, no x-robots-tag",
+        "GET /board/example and /view/example → 200 + x-robots-tag: noindex, nofollow",
+        "GET /beta and /beta-terms → x-robots-tag: noindex, nofollow",
+        "DuckDuckGo \"Tasky Clearboard\" on 2 Oct 2026: first result https://www.tasky.com/try"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/try",
+        "https://www.tasky.com/privacy",
+        "https://www.tasky.com/board",
+        "https://www.tasky.com/view"
+      ],
+      "artifacts": [
+        {
+          "name": "url-status-map.txt",
+          "kind": "other",
+          "content": "# What each URL should do. Checked 2 October 2026.\n\nKeep, index, put in the sitemap\n200  https://www.tasky.com/            title today: Tasky. About 80 words.\n200  https://www.tasky.com/product     title today: Tasky — What it does. About 600 words.\n\nReal pages, already noindex — keep noindex, leave out of the sitemap\n200  https://www.tasky.com/beta            X-Robots-Tag: noindex, nofollow\n200  https://www.tasky.com/beta-terms      X-Robots-Tag: noindex, nofollow\n\nApp or user content — noindex the whole prefix, including the bare path\n200  https://www.tasky.com/try             1942-byte shell, indexable, no H1\n200  https://www.tasky.com/home            1942-byte shell, indexable (manifest start_url)\n200  https://www.tasky.com/board           1942-byte shell, indexable\n200  https://www.tasky.com/board/example   noindex, nofollow  (the :id pattern already works)\n200  https://www.tasky.com/view            1942-byte shell, indexable\n200  https://www.tasky.com/view/example    noindex, nofollow\n200  https://www.tasky.com/admin           shell, indexable\n200  https://www.tasky.com/context         shell, indexable\n200  https://www.tasky.com/offline         shell, indexable\n200  https://www.tasky.com/feedback        shell, indexable\n\nShould be real documents, or a genuine 404 until they exist. Today they are indexable shells.\n200  https://www.tasky.com/privacy\n200  https://www.tasky.com/terms\n200  https://www.tasky.com/about\n200  https://www.tasky.com/pricing\n200  https://www.tasky.com/blog\n200  https://www.tasky.com/docs\n200  https://www.tasky.com/contact\n\nSign-in is a redirect, not a page. Keep it out of the sitemap.\n302  https://www.tasky.com/api/auth/keycloak  → auth.tasky.com (Keycloak)\n\nHost\n308  http://tasky.com/        → http://www.tasky.com/     (stays on http)\n308  http://www.tasky.com/    → https://www.tasky.com/\n308  https://tasky.com/       → https://www.tasky.com/    (one hop, good)\n"
+        }
+      ],
+      "agentAction": {
+        "type": "configure_headers",
+        "target": "nuxt routeRules",
+        "notes": "404 unknown paths. noindex app shells and /board /view prefixes. Do not Disallow them in robots.txt."
+      }
+    },
+    {
+      "id": "tasky-geo-checks",
+      "priority": "CHECK",
+      "level": "P1",
+      "category": "geo_ai",
+      "title": "AI engines were not quoted in this run",
+      "effort": "45 min, then again after the title change",
+      "what": "ChatGPT, Perplexity, Google AI Overview and Copilot were not captured with citations in this pass. What is already visible without those engines: a web search for \"What is Tasky Clearboard\" does not describe this product, and the tasky.com hit in that search is titled only \"Tasky\". GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Googlebot and Google-Extended all receive HTTP 200 on the homepage. robots.txt has no Content-Signal lines and does not block them.",
+      "why": "The engines will invent a Tasky, or cite a namesake, until the homepage title and the schema say which one this is. Bot access is already open, so the gap is the page, not a firewall.",
+      "fix": "After the title and llms.txt changes, ask the four engines the questions in the appendix and record the cited URLs. Success is a citation of https://www.tasky.com/ or /product, with Clearboard described as paste-to-board, and no claim that this Tasky is trytasky.com, tasky.uz or tasky.cl.",
+      "evidence": [
+        "bot UAs on / returned 200: GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Googlebot, Google-Extended",
+        "web search snippet for https://www.tasky.com/ was the single word Tasky"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://www.tasky.com/llms.txt"
+      ],
+      "artifacts": [
+        {
+          "name": "geo-probe.txt",
+          "kind": "checklist",
+          "content": "Ask each engine, with search turned on. Date the answer. Record the cited URLs.\n\n- What is Tasky?\n- What is Tasky Clearboard at tasky.com?\n- Who makes tasky.com?\n- How do I turn meeting notes into a project board?\n\nEngines: ChatGPT, Perplexity, Google AI Overview, Copilot.\n"
+        }
+      ],
+      "agentAction": {
+        "type": "manual_check",
+        "notes": "Repeat after titles, schema and llms.txt ship."
+      }
+    },
+    {
+      "id": "tasky-no-search-baseline",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "measurement",
+      "title": "Open a Domain property and look at it once",
+      "effort": "30 min",
+      "what": "This review had no Search Console export. searchConsole access was not available. There is no keyword-volume source on this run either, so nothing here is a traffic forecast.",
+      "why": "The site is small enough that a wrong noindex or a sitemap of shells would show up immediately as indexed URLs. Without the property, the next check is another crawl.",
+      "fix": "Add a Domain property for tasky.com (it covers apex and www, and the HTTP→HTTPS move). After the sitemap is live, submit it and inspect / , /product and /try. /try should drop out of the index. Paste the query export into measurement.queries if you run this audit again.",
+      "evidence": [
+        "measurement.searchConsole false",
+        "no queries attached"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "submit_gsc",
+        "notes": "Domain property, not a URL-prefix on only one host."
+      }
+    },
+    {
+      "id": "tasky-privacy",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "conversion",
+      "title": "Publish a privacy notice and terms, or stop answering those URLs",
+      "effort": "half a day",
+      "what": "The footer links to beta terms, a payments anchor, and mailto:support@tasky.com. It does not link to a privacy notice or general terms. /privacy and /terms return the empty 200 shell. The beta terms (last updated 8 September 2026, noindex) name DPR Ltd. (Hungary), say boards stay yours in Clearboard, describe anonymised template learning, and point billing disputes at support@tasky.com and Stripe. They are not a privacy notice, and they are marked noindex.",
+      "why": "Clearboard asks people to paste meeting notes and emails. A 200 at /privacy that is a blank page is worse than a 404: it looks like a policy and says nothing. The beta terms cannot be cited as the public policy while they send noindex.",
+      "fix": "Write /privacy and /terms as real HTML, in the same voice as the beta terms, and link both from the footer. Cover what is pasted, how long a draft without an account is kept (the homepage says 24 hours), the template-learning sentence that is already on the beta terms, and Stripe for voluntary support payments. Until those pages exist, the URLs should 404, not return the shell. This review did not draft legal text.",
+      "evidence": [
+        "footer: beta terms, payments, support@tasky.com, DPR Ltd.",
+        "/privacy and /terms are 1942-byte shells",
+        "beta terms noindex, last updated 8 September 2026"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/beta-terms",
+        "https://www.tasky.com/privacy",
+        "https://www.tasky.com/terms"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "create_content",
+        "target": "/privacy and /terms",
+        "notes": "Real HTML or a 404. Do not leave the shell."
+      }
+    },
+    {
+      "id": "tasky-titles",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Put Clearboard in the titles",
+      "effort": "30 min",
+      "what": "The homepage <title> is \"Tasky\". The H1 is \"Let the project speak.\" The meta description is already the right sentence. /product is titled \"Tasky — What it does\" while its description (\"Paste meeting notes, a long email, a messy task list…\") and H1 (\"Paste your chaos. Get a board.\") are specific. Both pages set og:title to \"Tasky Clearboard\" and twitter:card to summary. /try has no H1 and no description in the HTML. The sign-in URL is a 302 to Keycloak, not a missing document.",
+      "why": "The title is what a brand search and an AI citation show. \"Tasky\" alone does not separate this product from the other Taskys, and the poetic H1 does not either. The good sentence is already written; it is just not in the title.",
+      "fix": "Use the title and description lines in the appendix. Keep both H1s. Keep both meta descriptions. Do not spend time giving /try or the Keycloak redirect a marketing title: noindex /try, and leave the 302 alone.",
+      "evidence": [
+        "home title: Tasky",
+        "home H1: Let the project speak.",
+        "product title: Tasky — What it does",
+        "product description already names meeting notes, email, and a task list"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://www.tasky.com/product"
+      ],
+      "artifacts": [
+        {
+          "name": "titles.txt",
+          "kind": "copy",
+          "content": "# Titles and descriptions to ship\n\nhttps://www.tasky.com/\n  <title>Tasky Clearboard — paste notes, get a living board</title>\n  meta description (already good, keep it):\n  Tasky reads tasks, people and dependencies from the way you already talk about work — then draws them into living boards.\n  H1 can stay \"Let the project speak.\" The title has to carry the category, because the H1 does not.\n\nhttps://www.tasky.com/product\n  <title>Paste meeting notes, get a board — Tasky Clearboard</title>\n  meta description (already good, keep it):\n  Paste meeting notes, a long email, a messy task list. Tasky reads the tasks, the people and what depends on what — and draws the board in seconds.\n  H1 \"Paste your chaos. Get a board.\" is fine.\n\nog:image on both: absolute https://www.tasky.com/og.png at 1200×630.\nog:title: Tasky Clearboard — paste notes, get a living board\ntwitter:card: summary_large_image\n"
+        }
+      ],
+      "agentAction": {
+        "type": "edit_html_meta",
+        "target": "index and product pages"
+      }
+    },
+    {
+      "id": "tasky-og-image",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "technical",
+      "title": "Replace the share image",
+      "effort": "45 min",
+      "what": "og:image is the relative URL /pwa-512x512.png. The file is a PNG of 401×475 pixels and 111 KB, not 512×512 and not 1200×630. twitter:card is summary, so clients that honour it will use a small card. The same tags are on the empty shell, which is why a shell can outrank the homepage for the product name.",
+      "why": "Shared links and some brand-result treatments show this image. A square app icon with no sentence does not say what Tasky is, and a relative og:image is dropped by some scrapers.",
+      "fix": "Make one 1200×630 PNG or JPG (the sentence \"Paste notes, get a living board\" plus the wordmark). Serve it at https://www.tasky.com/og.png and reference that absolute URL. Set twitter:card to summary_large_image. Use it as the default on / and /product only, not on the app shell.",
+      "evidence": [
+        "PNG IHDR 401×475, 111491 bytes",
+        "og:image content=/pwa-512x512.png",
+        "twitter:card summary"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/pwa-512x512.png"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "add_file",
+        "target": "public/og.png",
+        "notes": "1200×630, absolute og:image, summary_large_image"
+      }
+    },
+    {
+      "id": "tasky-llms-quality",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "geo_ai",
+      "title": "Say who Tasky is, and who it is not, in llms.txt",
+      "effort": "30 min",
+      "what": "https://www.tasky.com/llms.txt returns 200 and 569 bytes of text/plain. It describes the paste-to-board behaviour and correctly says /board and /view are user content and should not be treated as public. It does not name DPR Ltd. or Hungary, the links are relative (/ and /product), and it does not say which other Taskys it is not.",
+      "why": "Assistants looking for \"Tasky\" already have a crowd of other products. A file they can quote needs the legal name, the country, the two product names, and an explicit limit. Relative links are easy to mis-resolve.",
+      "fix": "Replace the file with the starter in the appendix. Keep the warning about user boards. Use absolute URLs.",
+      "evidence": [
+        "GET /llms.txt 200, 569 bytes, text/plain",
+        "no legalName, relative links"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/llms.txt"
+      ],
+      "artifacts": [
+        {
+          "name": "llms.txt",
+          "kind": "llms_txt",
+          "content": "# Tasky\n\n> Tasky is a product of DPR Ltd. (Hungary). Tasky Clearboard reads tasks, people and\n> dependencies out of text you already have — a meeting note, an email, a messy list —\n> and draws them as a board. Tasky Workspace is where that board becomes a room: chat,\n> presence, invites and a history. Clearboard is free. Workspace is free for testers\n> while the beta runs.\n>\n> This is not a calendar to-do list, and it is not any other product that uses the name\n> Tasky. Those include trytasky.com, tasky.uz, taskytodo.com, tasky.net, tasky.school\n> and tasky.cl.\n\n## Pages\n\n- [Tasky](https://www.tasky.com/): what it is, and the way in\n- [What it does](https://www.tasky.com/product): paste to board, and what a Workspace adds\n\n## Leave alone\n\n- /beta and /beta-terms are noindex. They explain the tester programme; they are not the product pitch.\n- Boards live at /board/<id> and shared links at /view/<id>. Both are user content, both send noindex, and nothing there is public material.\n"
+        }
+      ],
+      "agentAction": {
+        "type": "add_file",
+        "target": "public/llms.txt"
+      }
+    },
+    {
+      "id": "tasky-brand-serp",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "entity_brand",
+      "title": "The domain can rank and still be indistinguishable",
+      "effort": "2–3 h, then ongoing",
+      "what": "On DuckDuckGo, 2 October 2026, \"Tasky\" listed https://www.tasky.com/ first and /product second, then taskyai.vercel.app, tasky.school, taskytodo.com, tasky.digital, the Wiktionary entry for \"tasky\", app.tasky.bot, tasky.net and tasky.software. \"Tasky Clearboard\" listed /try first and the homepage second, then unrelated sign-in pages. A separate web index for the bare word \"Tasky\" led with trytasky.com, tasky.uz, tasky.net and an iOS app, and did not show tasky.com on the first screen. No sameAs profile in the HTML. LinkedIn company pages named Tasky that do show up belong to other businesses (tasky.cl, tasky.cloud).",
+      "why": "Owning the first DuckDuckGo row is not the same as being recognised. The row is titled \"Tasky\" and the product-name query prefers the empty /try URL. Attaching the wrong LinkedIn page would make the confusion permanent.",
+      "fix": "Ship the title, the share image and the schema first. Then create one profile (LinkedIn company, or whatever the owner actually uses) with the name Tasky, the URL https://www.tasky.com/, and the Clearboard sentence. Do not link tasky.cl, tasky.cloud, trytasky.com or the app-store listings. Add that profile URL to Organization.sameAs only after it exists. There is no Wikidata item for this company; the five name hits are unrelated. A Wikidata item is optional and only worth it once the site states the same facts.",
+      "evidence": [
+        "DDG Tasky 2026-10-02: tasky.com, tasky.com/product, then namesakes",
+        "DDG Tasky Clearboard 2026-10-02: tasky.com/try first",
+        "Wikidata hits are not this product: Q12520065, Q23825491, Q20827599, Q32214636, Q138536493"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://trytasky.com/",
+        "https://tasky.uz/",
+        "https://www.taskytodo.com/",
+        "https://www.tasky.net/en/home"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "manual_check",
+        "notes": "New profile only. Do not reuse another Tasky's LinkedIn."
+      }
+    },
+    {
+      "id": "tasky-home-copy",
+      "priority": "IMPORTANT",
+      "level": "P1",
+      "category": "content_keywords",
+      "title": "The explanation lives on /product, not on the homepage",
+      "effort": "1–2 h",
+      "what": "The homepage HTML is about 80 words. The useful sentence is already there: \"Tasky reads tasks, people and dependencies from the way you already talk about work — then draws them into living boards.\" /product is about 600 words and says the thing a searcher needs: paste meeting notes, a long email or a messy list; it works in Hungarian; Clearboard is the drawing and Workspace is where it goes; Clearboard is €0; Workspace is free during the beta and the trial starts when you open it. None of the configured problem phrases appear in a title or H1.",
+      "why": "The homepage is the URL a brand search should land on. A slogan and one sentence will not be what an assistant quotes when someone asks how to turn notes into a board, and /product is one click deeper with a vague title.",
+      "fix": "Keep the voice. Add three or four sentences under the hero that a stranger can quote: what you paste, what you get (tasks, people, dependencies), that no account is required for a draft, and that Workspace is the beta. Point the title at the same facts. Do not start a generic task-management blog. If a third URL is added later, make it one page that answers \"turn meeting notes into a board\" and link it from /product.",
+      "evidence": [
+        "home ~80 words, H1 is a slogan",
+        "product ~600 words, description already leads with meeting notes",
+        "no keyword-volume API on this run; volumes are not invented here"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://www.tasky.com/product"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "edit_copy",
+        "target": "homepage opening"
+      }
+    },
+    {
+      "id": "tasky-security-headers",
+      "priority": "NICE_TO_HAVE",
+      "level": "P2",
+      "category": "technical",
+      "title": "Add nosniff and a content security policy",
+      "effort": "1–2 h",
+      "what": "The homepage already sends strict-transport-security: max-age=15724800; includeSubDomains (about 182 days, no preload). It does not send content-security-policy, x-content-type-options, or referrer-policy. auth.tasky.com does send nosniff and referrer-policy.",
+      "why": "These are not ranking factors. The marketing host is the one that embeds Keycloak, Turnstile, Stripe and the Cloudflare beacon, so it is the response that should say what it is willing to run.",
+      "fix": "On HTML responses from www.tasky.com, add X-Content-Type-Options: nosniff and Referrer-Policy: strict-origin-when-cross-origin. Add a Content-Security-Policy that allows the origins the app already uses (auth.tasky.com, the Turnstile script, the Stripe donation link, static.cloudflareinsights.com) and nothing else. Do not drop HSTS. Raise max-age to 31536000 only if every subdomain can stay on HTTPS.",
+      "evidence": [
+        "homepage HSTS present",
+        "no CSP, no nosniff, no referrer-policy on www",
+        "auth.tasky.com sends nosniff and referrer-policy"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://auth.tasky.com/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "configure_headers",
+        "target": "www.tasky.com"
+      }
+    },
+    {
+      "id": "tasky-contact",
+      "priority": "NICE_TO_HAVE",
+      "level": "P2",
+      "category": "conversion",
+      "title": "Keep the email visible as text",
+      "effort": "30 min",
+      "what": "There is no contact form and no /contact page (that URL is a shell). The only reach-a-person path on the marketing pages is mailto:support@tasky.com. The primary actions are real links: \"Draw my board →\" and \"Join the beta →\" / \"Sign in to join\". They do not post to mailto.",
+      "why": "The product actions are fine. The gap is support: a mailto link does nothing on a machine without a mail client, and a blank /contact URL may get indexed.",
+      "fix": "Put support@tasky.com in the footer as visible text, not only as a link. Either build a one-field form that posts to the server, or 404 /contact until you do. Do not change \"Draw my board\" — it is the right action.",
+      "evidence": [
+        "footer mailto:support@tasky.com",
+        "/contact is an empty 200",
+        "homepage and /product both link to /try and /beta"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://www.tasky.com/contact"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "edit_copy",
+        "target": "footer email"
+      }
+    },
+    {
+      "id": "tasky-field-vitals",
+      "priority": "CHECK",
+      "level": "P2",
+      "category": "measurement",
+      "title": "Lab speed is already fine; field data was not available",
+      "effort": "15 min",
+      "what": "Lighthouse 12.8.2 on https://www.tasky.com/ on 2 October 2026: mobile performance 97, accessibility 100, best practices 100, SEO 100, LCP 2.1 s, CLS 0.002, TBT 20 ms. Desktop performance 99, LCP 0.7 s, CLS 0.002, TBT 0 ms. Chrome UX Report was not queried (no CRUX_API_KEY). The PageSpeed Insights API returned quota exceeded, so these numbers are local Lighthouse, not Google's hosted run. The SEO 100 is the homepage document only; it does not see the missing sitemap or the shells.",
+      "why": "There is no performance project here. Treating the homepage SEO score as a site-wide pass would hide the indexation bugs.",
+      "fix": "No speed work. When a CrUX key exists, confirm phone LCP, INP and CLS for the origin. Do not block the indexation fixes on that.",
+      "evidence": [
+        "Lighthouse 12.8.2 mobile 97/100/100/100 LCP 2.1s CLS 0.002",
+        "Lighthouse 12.8.2 desktop 99/100/100/100 LCP 0.7s CLS 0.002"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "manual_check",
+        "notes": "Field CrUX later. No lab speed work now."
+      }
+    },
+    {
+      "id": "tasky-image-alt",
+      "priority": "NICE_TO_HAVE",
+      "level": "P2",
+      "category": "technical",
+      "title": "Name the homepage wordmark",
+      "effort": "10 min",
+      "what": "The homepage logo /tasky-logo-transparent-dark-text-bubble.png has alt=\"\". The same file on /product has alt=\"Tasky\". It is the only image the crawl flagged.",
+      "why": "The homepage H1 does not say Tasky. An empty alt on the wordmark removes the name from the accessible name of the page header.",
+      "fix": "Set alt=\"Tasky\" on the homepage wordmark, matching /product.",
+      "evidence": [
+        "home img alt empty",
+        "product img alt=Tasky"
+      ],
+      "relatedUrls": [
+        "https://www.tasky.com/",
+        "https://www.tasky.com/product"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "edit_html_meta",
+        "target": "homepage logo"
+      }
+    },
+    {
+      "id": "tasky-http-chain",
+      "priority": "NICE_TO_HAVE",
+      "level": "P2",
+      "category": "technical",
+      "title": "Send the HTTP apex straight to https://www",
+      "effort": "15 min",
+      "what": "https://tasky.com/ returns one 308 to https://www.tasky.com/. http://tasky.com/ returns a 308 to http://www.tasky.com/, and only the next hop upgrades to HTTPS. Canonicals on / and /product are already https://www.tasky.com/….",
+      "why": "Two hops, the first of them still on HTTP, is a small leak. Anyone who types the bare host, and any old link, should land on the canonical URL in one step.",
+      "fix": "Change the HTTP apex rule so Location is https://www.tasky.com/ (one 308). Leave the HTTPS apex → www rule as it is.",
+      "evidence": [
+        "http://tasky.com/ → 308 Location: http://www.tasky.com",
+        "http://www.tasky.com/ → 308 Location: https://www.tasky.com",
+        "https://tasky.com/ → 308 Location: https://www.tasky.com"
+      ],
+      "relatedUrls": [
+        "http://tasky.com/",
+        "https://www.tasky.com/"
+      ],
+      "artifacts": [],
+      "agentAction": {
+        "type": "add_redirects",
+        "target": "http://tasky.com/",
+        "notes": "Single 308 to https://www.tasky.com/"
+      }
+    }
+  ]
+}

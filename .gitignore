@@ -1,6 +1,8 @@
 node_modules/
 dist/
-reports/
+reports/*
+!reports/tasky-2026-10-02/
+!reports/tasky-2026-10-02/**
 *.log
 .env
 .env.*

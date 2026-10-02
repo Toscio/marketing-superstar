@@ -1,0 +1,45 @@
+# Live audit of https://www.tasky.com/ — requested directly. Read-only.
+title: "Tasky: SEO and AI-search review"
+client: Tasky / DPR Ltd.
+depth: deep
+notes: >-
+  A prioritised review of the live Tasky site (www.tasky.com). Each item says
+  what to change, why it matters, how to fix it and roughly how long it takes.
+  Checked read-only on 2 October 2026: no forms submitted, no accounts created,
+  no load tests.
+sites:
+  - id: tasky
+    name: Tasky
+    url: https://www.tasky.com/
+    language: en
+    markets: [HU, US, GB]
+    brandNames:
+      - Tasky
+      - Tasky Clearboard
+      - Tasky Workspace
+    legalName: DPR Ltd.
+    competitors:
+      - https://trytasky.com/
+      - https://tasky.uz/
+      - https://www.taskytodo.com/
+    knownOldUrls: []
+    focusKeywords:
+      - turn meeting notes into tasks
+      - paste meeting notes into a board
+      - AI project board from notes
+      - extract tasks from email
+      - living project board
+    geoQuestions:
+      - "What is Tasky?"
+      - "What is Tasky Clearboard at tasky.com?"
+      - "Who makes tasky.com?"
+      - "How do I turn meeting notes into a project board?"
+measurement:
+  searchConsole: false
+  analytics: false
+  owner: "DPR Ltd. (site owner; dashboard access was not available for this review)"
+collectors:
+  crawl: true
+  lighthouse: false
+  keywords: false
+  geoAi: false
